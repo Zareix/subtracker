@@ -12,7 +12,6 @@ import type { auth } from "~/lib/auth";
 export type AuthProvider = "password" | "passkey" | `oauth-${string}`;
 
 export const authClient = createAuthClient({
-  // baseURL: env.NEXT_PUBLIC_AUTH_URL,
   plugins: [
     inferAdditionalFields<typeof auth>(),
     passkeyClient(),
