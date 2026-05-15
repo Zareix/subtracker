@@ -29,7 +29,13 @@ function CalendarPage() {
 			</header>
 			<div className="mt-2">
 				{subscriptionsQuery.isLoading ? (
-					<p>{m.calendar_loading()}</p>
+					<Calendar
+						mode="single"
+						startMonth={subMonths(new Date(), 1)}
+						endMonth={addMonths(new Date(), 1)}
+						className="w-full rounded-lg border sm:max-w-md"
+						buttonVariant="ghost"
+					/>
 				) : subscriptionsQuery.isError || !subscriptionsQuery.data ? (
 					<p>{m.calendar_error()}</p>
 				) : (

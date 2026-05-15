@@ -116,7 +116,11 @@ function AdminPage() {
 							{usersQuery.isLoading && (
 								<TableRow>
 									<TableCell>
-										<Skeleton className="h-10 w-16" />
+										<Avatar className="size-8 rounded-lg">
+											<AvatarFallback className="rounded-lg">
+												...
+											</AvatarFallback>
+										</Avatar>
 									</TableCell>
 									<TableCell>
 										<Skeleton className="h-4 w-20" />

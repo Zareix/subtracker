@@ -8,6 +8,7 @@ import { SearchBar } from "~/components/subscriptions/search-bar";
 import { SortButton } from "~/components/subscriptions/sort";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { getSubscriptions } from "~/functions/subscriptions.functions";
 import { m } from "~/paraglide/messages";
@@ -15,21 +16,30 @@ import { m } from "~/paraglide/messages";
 export const Route = createFileRoute("/_private/")({ component: HomePage });
 
 const LoadingSkeleton = () => (
-	<Card className="mt-3 border-none from-card opacity-50 shadow-none ring-transparent">
-		<CardContent>
-			<div className="flex items-center gap-2">
-				<Skeleton className="h-10 w-14" />
-				<div className="flex grow flex-col gap-1">
-					<Skeleton className="h-6 w-20 md:w-28" />
-					<div className="flex items-center gap-1 text-muted-foreground text-sm">
-						<Calendar1Icon size={16} />
-						<Skeleton className="h-4 w-16" />
+	<>
+		<div className="mx-auto flex max-w-[90vw] items-center justify-center overflow-x-hidden">
+			<Separator className="w-32 h-px" />
+			<Button variant="outline" size="sm" disabled>
+				{m.subscription_list_show_previous()}
+			</Button>
+			<Separator className="w-32 h-px" />
+		</div>
+		<Card className="mt-3 border-none from-card opacity-50 shadow-none ring-transparent">
+			<CardContent>
+				<div className="flex items-center gap-2">
+					<Skeleton className="h-10 w-14" />
+					<div className="flex grow flex-col gap-1">
+						<Skeleton className="h-6 w-20 md:w-28" />
+						<div className="flex items-center gap-1 text-muted-foreground text-sm">
+							<Calendar1Icon size={16} />
+							<Skeleton className="h-4 w-16" />
+						</div>
 					</div>
+					<Skeleton className="h-6 w-12" />
 				</div>
-				<Skeleton className="h-6 w-12" />
-			</div>
-		</CardContent>
-	</Card>
+			</CardContent>
+		</Card>
+	</>
 );
 
 function HomePage() {

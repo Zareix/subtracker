@@ -193,7 +193,7 @@ const StatsCard = ({
 				</CardTitle>
 				{description && (
 					<Popover>
-						<PopoverTrigger className="mb-auto">
+						<PopoverTrigger>
 							<InfoIcon size={20} className="text-muted-foreground" />
 						</PopoverTrigger>
 						<PopoverContent
@@ -302,7 +302,7 @@ const MonthlyStatsCard = ({
 					</CardTitle>
 				</CardHeader>
 				<CardContent className="flex-1 pb-0">
-					<div className="mx-auto flex aspect-square max-h-62.5 items-center justify-center">
+					<div className="mx-auto flex aspect-square max-h-60 items-center justify-center">
 						<Skeleton className="h-10 w-24" />
 					</div>
 				</CardContent>

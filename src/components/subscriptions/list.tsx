@@ -89,30 +89,34 @@ export const SubscriptionList = ({ subscriptions }: Props) => {
 
 	return (
 		<>
-			{arePreviousPaymentsShown
-				? previousSubOfThisMonth.map((subscription) => (
-						<React.Fragment key={subscription.id}>
-							<SubscriptionListItem
-								subscription={subscription}
-								userBaseCurrency={userBaseCurrency}
-								isPrevious
-							/>
-							<Separator className="w-full" />
-						</React.Fragment>
-					))
-				: previousSubOfThisMonth.length > 0 && (
-						<div className="mx-auto flex max-w-[90vw] items-center justify-center overflow-x-hidden">
-							<Separator className="w-32 h-px" />
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => setArePreviousPaymentsShown(true)}
-							>
-								{m.subscription_list_show_previous()}
-							</Button>
-							<Separator className="w-32 h-px" />
-						</div>
-					)}
+			{arePreviousPaymentsShown &&
+				previousSubOfThisMonth.map((subscription, i) => (
+					<React.Fragment key={subscription.id}>
+						<SubscriptionListItem
+							subscription={subscription}
+							userBaseCurrency={userBaseCurrency}
+							isPrevious
+						/>
+						{i < previousSubOfThisMonth.length - 1 && (
+							<Separator className="w-full h-px" />
+						)}
+					</React.Fragment>
+				))}
+			{previousSubOfThisMonth.length > 0 && (
+				<div className="mx-auto flex max-w-[90vw] items-center justify-center overflow-x-hidden">
+					<Separator className="w-32 h-px" />
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => setArePreviousPaymentsShown((v) => !v)}
+					>
+						{arePreviousPaymentsShown
+							? m.subscription_list_hide_previous()
+							: m.subscription_list_show_previous()}
+					</Button>
+					<Separator className="w-32 h-px" />
+				</div>
+			)}
 			{subs.map((subscription) => (
 				<React.Fragment key={subscription.id}>
 					<SubscriptionListItem

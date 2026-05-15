@@ -209,5 +209,6 @@
   "subscription_list_duplicate": "Duplicate",
   "subscription_list_edit": "Edit",
   "subscription_list_empty": "No subscriptions found",
-  "subscription_list_show_previous": "Show previous payments"
+  "subscription_list_show_previous": "Show previous payments",
+  "subscription_list_hide_previous": "Hide previous payments"
 }

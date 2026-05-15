@@ -209,5 +209,6 @@
   "subscription_list_duplicate": "Dupliquer",
   "subscription_list_edit": "Modifier",
   "subscription_list_empty": "Aucun abonnement trouvé",
-  "subscription_list_show_previous": "Afficher les paiements précédents"
+  "subscription_list_show_previous": "Afficher les paiements précédents",
+  "subscription_list_hide_previous": "Cacher les paiements précédents"
 }

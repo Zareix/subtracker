@@ -8,12 +8,12 @@ import {
 	useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { DateLocaleHandler } from "~/components/date-locale";
 import { Toaster } from "~/components/ui/sonner";
 import { ThemeProvider } from "~/components/ui/theme-provider";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { getLocale } from "~/paraglide/runtime";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
-
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -92,6 +92,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 							"bg-background/80 backdrop-blur-sm border-border text-foreground",
 					}}
 				/>
+				<DateLocaleHandler />
 				<TanStackDevtools
 					config={{ position: "bottom-right" }}
 					plugins={[
