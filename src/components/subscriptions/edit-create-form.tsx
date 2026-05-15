@@ -239,7 +239,7 @@ export const EditCreateForm = ({
                     categoriesQuery.data?.map((p) => ({
                       value: p.id.toString(),
                       label: (
-                        <>
+                        <div className="flex items-center gap-1">
                           {p.icon && (
                             <CategoryIcon
                               icon={p.icon}
@@ -247,7 +247,7 @@ export const EditCreateForm = ({
                             />
                           )}
                           {p.name}
-                        </>
+                        </div>
                       ),
                     })) ?? []
                   }
@@ -403,7 +403,20 @@ export const EditCreateForm = ({
                   items={
                     paymentMethodsQuery.data?.map((p) => ({
                       value: p.id.toString(),
-                      label: p.name,
+                      label: (
+                        <div className="flex items-center gap-1">
+                          {p.image && (
+                            <img
+                              src={p.image}
+                              alt={p.name}
+                              width={20}
+                              height={20}
+                              className="max-h-5 max-w-5 object-contain"
+                            />
+                          )}
+                          {p.name}
+                        </div>
+                      ),
                     })) ?? []
                   }
                 >

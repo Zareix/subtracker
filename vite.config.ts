@@ -9,28 +9,31 @@ import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 
 const config = defineConfig({
-	resolve: { tsconfigPaths: true },
-	plugins: [
-		devtools(),
-		paraglideVitePlugin({
-			project: "./project.inlang",
-			outdir: "./src/paraglide",
-			strategy: ["url", "baseLocale"],
-			urlPatterns: [
-				{
-					pattern: "/:path(.*)?",
-					localized: [
-						["en", "/en/:path(.*)?"],
-						["fr", "/fr/:path(.*)?"],
-					],
-				},
-			],
-		}),
-		nitro({ rollupConfig: { external: [/^@sentry\//] } }),
-		tailwindcss(),
-		tanstackStart(),
-		viteReact(),
-	],
+  resolve: { tsconfigPaths: true },
+  plugins: [
+    devtools(),
+    paraglideVitePlugin({
+      project: "./project.inlang",
+      outdir: "./src/paraglide",
+      strategy: ["url", "baseLocale"],
+      urlPatterns: [
+        {
+          pattern: "/:path(.*)?",
+          localized: [
+            ["en", "/en/:path(.*)?"],
+            ["fr", "/fr/:path(.*)?"],
+          ],
+        },
+      ],
+    }),
+    nitro({
+      preset: "bun",
+      rollupConfig: { external: [/^@sentry\//] },
+    }),
+    tailwindcss(),
+    tanstackStart(),
+    viteReact(),
+  ],
 });
 
 export default config;

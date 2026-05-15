@@ -205,7 +205,7 @@ const StatsCard = ({
                 <ul className="mt-2 flex flex-col gap-1 border-t pt-2">
                   {breakdown.map((item) => (
                     <li key={item.id} className="flex items-center gap-2">
-                      {item.image ? (
+                      {item.image && (
                         <img
                           src={item.image}
                           alt={item.name}
@@ -213,8 +213,6 @@ const StatsCard = ({
                           height={20}
                           className="max-h-5 w-auto max-w-7 object-contain"
                         />
-                      ) : (
-                        <div className="h-5 w-7 shrink-0" />
                       )}
                       <span className="grow text-sm">{item.name}</span>
                       <span className="font-medium text-sm tabular-nums">

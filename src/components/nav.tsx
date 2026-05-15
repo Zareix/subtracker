@@ -48,7 +48,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "~/components/ui/sidebar";
-import { THEMES, ThemeIcon } from "~/components/ui/theme-provider";
+import { ThemeIcon } from "~/components/ui/theme-provider";
 import { authClient } from "~/lib/auth-client";
 import { Currencies, type Currency } from "~/lib/constant";
 import { useIsMobile } from "~/lib/hooks/use-mobile";
@@ -101,8 +101,7 @@ export function AppSidebar() {
   const locale = getLocale();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
-  const searchParams = new URLSearchParams(searchStr);
+  const search = useRouterState({ select: (s) => s.location.search });
   const session = authClient.useSession();
   const { setTheme, theme } = useTheme();
   const queryClient = useQueryClient();
@@ -143,16 +142,7 @@ export function AppSidebar() {
       });
   };
 
-  const query =
-    searchParams.size === 0
-      ? undefined
-      : {
-          ...Object.fromEntries(
-            [...searchParams].filter((s) =>
-              ["paymentMethods", "users", "categories"].includes(s[0]),
-            ),
-          ),
-        };
+  const query = search;
 
   return (
     <Sidebar side="left" collapsible="icon">
@@ -392,11 +382,11 @@ export function AppSidebar() {
 
 const NavbarItem = ({
   pathname,
-  searchParams,
+  search,
   ...item
 }: (typeof NAV_ITEMS)[number] & {
   pathname: string | null;
-  searchParams: URLSearchParams;
+  search: Record<string, any>;
 }) => (
   <Button
     key={item.title()}
@@ -406,11 +396,7 @@ const NavbarItem = ({
     render={
       <Link
         to={item.url}
-        search={
-          item.keepParams
-            ? { ...Object.fromEntries([...searchParams]) }
-            : undefined
-        }
+        search={item.keepParams ? search : undefined}
         className="flex h-full items-center justify-center gap-2 font-bold text-xl"
       >
         <item.icon size={26} />
@@ -421,8 +407,7 @@ const NavbarItem = ({
 
 export const Navbar = () => {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
-  const searchParams = new URLSearchParams(searchStr);
+  const search = useRouterState({ select: (s) => s.location.search });
 
   const navBarItems = NAV_ITEMS.filter((item) =>
     "role" in item ? item.role === "user" : true,
@@ -438,7 +423,7 @@ export const Navbar = () => {
               key={item.title()}
               {...item}
               pathname={pathname}
-              searchParams={searchParams}
+              search={search}
             />
           ))}
         <CreateSubscriptionDialog
@@ -458,7 +443,7 @@ export const Navbar = () => {
               key={item.title()}
               {...item}
               pathname={pathname}
-              searchParams={searchParams}
+              search={search}
             />
           ))}
         <SidebarTrigger className="h-full w-full px-3 py-1.5 [&_svg]:size-6.5" />

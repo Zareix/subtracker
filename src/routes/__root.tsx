@@ -3,7 +3,9 @@ import type { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
   HeadContent,
+  Link,
   Scripts,
+  useRouter,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
@@ -38,7 +40,41 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   }),
 
   shellComponent: RootDocument,
+  notFoundComponent: NotFound,
+  errorComponent: RootError,
 });
+
+function NotFound() {
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center gap-4">
+      <h1 className="font-bold text-4xl">404</h1>
+      <p className="text-muted-foreground">Page not found</p>
+      <Link to="/" className="text-primary underline underline-offset-4">
+        Go home
+      </Link>
+    </div>
+  );
+}
+
+function RootError({ error }: { error: unknown }) {
+  const router = useRouter();
+  const message =
+    error instanceof Error ? error.message : "An unexpected error occurred";
+
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center gap-4">
+      <h1 className="font-bold text-4xl">Something went wrong</h1>
+      <p className="max-w-md text-center text-muted-foreground">{message}</p>
+      <button
+        type="button"
+        onClick={() => router.invalidate()}
+        className="text-primary underline underline-offset-4"
+      >
+        Try again
+      </button>
+    </div>
+  );
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -51,6 +87,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
         <Toaster
+          richColors
           toastOptions={{
             className:
               "bg-background/80 backdrop-blur-sm border-border text-foreground",

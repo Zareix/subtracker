@@ -28,16 +28,18 @@ export const SortButton = () => {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon-lg">
             {sort?.endsWith("ASC") ? (
               <SortAscIcon
-                size={24}
-                className={cn(sort ? "fill-primary text-primary" : "text-foreground")}
+                className={cn(
+                  sort ? "fill-primary text-primary" : "text-foreground",
+                )}
               />
             ) : (
               <SortDescIcon
-                size={24}
-                className={cn(sort ? "fill-primary text-primary" : "text-foreground")}
+                className={cn(
+                  sort ? "fill-primary text-primary" : "text-foreground",
+                )}
               />
             )}
           </Button>
@@ -52,7 +54,11 @@ export const SortButton = () => {
             onValueChange={(v) => setSort(v === sort ? null : (v as Sort))}
           >
             {SORTS.map((s) => (
-              <DropdownMenuRadioItem key={s.key} value={s.key} className="capitalize">
+              <DropdownMenuRadioItem
+                key={s.key}
+                value={s.key}
+                className="capitalize"
+              >
                 {SORT_LABELS[s.key]()}
               </DropdownMenuRadioItem>
             ))}

@@ -77,7 +77,7 @@ export const FiltersButton = ({
         <PopoverTrigger
           render={
             <Button
-              size="icon"
+              size="icon-lg"
               variant="ghost"
               disabled={
                 usersQuery.isLoading ||
@@ -86,7 +86,6 @@ export const FiltersButton = ({
               }
             >
               <FilterIcon
-                size={24}
                 className={cn(
                   hasActiveFilters
                     ? "fill-primary text-primary"

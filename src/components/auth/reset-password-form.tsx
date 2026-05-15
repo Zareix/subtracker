@@ -12,12 +12,13 @@ export function ResetPasswordForm({ token }: { token: string }) {
   const [error, setError] = useState<string | null>(null);
 
   const resetMutation = useMutation({
-    mutationFn: () => authClient.resetPassword({ newPassword: password, token }),
+    mutationFn: () =>
+      authClient.resetPassword({ newPassword: password, token }),
     onSuccess: (res) => {
       if (res.error) {
         setError(res.error.message ?? m.reset_password_error_failed());
       } else {
-          navigate({ to: "/login" });
+        navigate({ to: "/login" });
       }
     },
     onError: () => setError(m.reset_password_error_failed()),
@@ -34,7 +35,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
         </div>
         <CardTitle>{m.reset_password_title()}</CardTitle>
       </CardHeader>
-      <CardContent className="mt-2">
+      <CardContent className="mt-2 py-4">
         <form
           onSubmit={(e) => {
             e.preventDefault();

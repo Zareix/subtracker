@@ -69,7 +69,10 @@ export function LoginForm({ redirect = "/" }: { redirect?: string }) {
       return;
     }
     authClient
-      .requestPasswordReset({ email: email.trim(), redirectTo: "/reset-password" })
+      .requestPasswordReset({
+        email: email.trim(),
+        redirectTo: "/reset-password",
+      })
       .then((res) => {
         if (res.error) throw new Error(res.error.message);
         setError(null);
@@ -79,7 +82,9 @@ export function LoginForm({ redirect = "/" }: { redirect?: string }) {
   };
 
   if (providersQuery.isLoading) {
-    return <div className="h-64 w-full max-w-sm animate-pulse rounded-xl bg-muted" />;
+    return (
+      <div className="h-64 w-full max-w-sm animate-pulse rounded-xl bg-muted" />
+    );
   }
 
   if (providersQuery.isError || !providersQuery.data) {
@@ -105,7 +110,7 @@ export function LoginForm({ redirect = "/" }: { redirect?: string }) {
         </div>
         <CardTitle>{m.login_title()}</CardTitle>
       </CardHeader>
-      <CardContent className="mt-2 grid gap-3">
+      <CardContent className="mt-2 grid gap-3 py-4">
         {error && (
           <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
             {error}
@@ -130,7 +135,10 @@ export function LoginForm({ redirect = "/" }: { redirect?: string }) {
                   className="flex flex-col gap-4"
                 >
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="login-email" className="text-sm font-medium">
+                    <label
+                      htmlFor="login-email"
+                      className="text-sm font-medium"
+                    >
                       Email
                     </label>
                     <input
@@ -179,9 +187,7 @@ export function LoginForm({ redirect = "/" }: { redirect?: string }) {
                     >
                       {m.login_button()}
                     </button>
-                    {lastMethod === "email" && (
-                      <LastUsedBadge />
-                    )}
+                    {lastMethod === "email" && <LastUsedBadge />}
                   </div>
                 </form>
                 <div className="relative my-2 flex items-center gap-2 text-xs text-muted-foreground">
@@ -224,7 +230,9 @@ export function LoginForm({ redirect = "/" }: { redirect?: string }) {
                   className="relative w-full inline-flex h-9 items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-50"
                 >
                   <AuthProvidersIcon providerId={provider} />
-                  {m.login_with_oauth({ provider: provider.replace("oauth-", "") })}
+                  {m.login_with_oauth({
+                    provider: provider.replace("oauth-", ""),
+                  })}
                 </button>
                 {lastMethod === provider.replace("oauth-", "") && (
                   <LastUsedBadge />

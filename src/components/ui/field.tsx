@@ -97,4 +97,14 @@ function FieldError({
   );
 }
 
-export { Field, FieldError, FieldGroup, FieldLabel };
+function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
+  return (
+    <p
+      data-slot="field-description"
+      className={cn("text-muted-foreground text-sm", className)}
+      {...props}
+    />
+  );
+}
+
+export { Field, FieldDescription, FieldError, FieldGroup, FieldLabel };

@@ -229,7 +229,7 @@ const SubscriptionListItem = ({
                     ? filters.paymentMethods
                     : filters.paymentMethods[0] ===
                         subscription.paymentMethod.id
-                      ? []
+                      ? undefined
                       : [subscription.paymentMethod.id],
               })
             }
@@ -256,7 +256,7 @@ const SubscriptionListItem = ({
                   filters.categories.length > 1
                     ? filters.categories
                     : filters.categories[0] === subscription.category.id
-                      ? []
+                      ? undefined
                       : [subscription.category.id],
               })
             }
