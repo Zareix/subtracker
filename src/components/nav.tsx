@@ -58,38 +58,38 @@ import { getLocale, setLocale } from "~/paraglide/runtime";
 
 export const NAV_ITEMS = [
   {
-    titleKey: m.nav_home(),
+    title: m.nav_home,
     url: "/",
     icon: HomeIcon,
     keepParams: true,
   },
   {
-    titleKey: m.nav_calendar(),
+    title: m.nav_calendar,
     url: "/calendar",
     icon: Calendar1Icon,
     keepParams: false,
   },
   {
-    titleKey: m.nav_stats(),
+    title: m.nav_stats,
     url: "/stats",
     icon: ChartColumnIcon,
     keepParams: true,
   },
   {
-    titleKey: m.nav_settings(),
+    title: m.nav_settings,
     url: "/settings",
     icon: WrenchIcon,
     keepParams: false,
   },
   {
-    titleKey: m.nav_admin(),
+    title: m.nav_admin,
     url: "/admin",
     icon: ShieldIcon,
     role: "admin",
     keepParams: false,
   },
   {
-    titleKey: m.nav_profile(),
+    title: m.nav_profile,
     url: "/profile",
     icon: UserCircle2Icon,
     role: "user",
@@ -182,7 +182,7 @@ export function AppSidebar() {
               {NAV_ITEMS.filter((item) =>
                 "role" in item ? item.role === session.data?.user.role : true,
               ).map((item) => (
-                <SidebarMenuItem key={item.titleKey}>
+                <SidebarMenuItem key={item.title()}>
                   <SidebarMenuButton
                     isActive={pathname === item.url}
                     render={
@@ -191,7 +191,7 @@ export function AppSidebar() {
                         search={item.keepParams ? query : undefined}
                       >
                         <item.icon />
-                        <span>{item.titleKey}</span>
+                        <span>{item.title()}</span>
                       </Link>
                     }
                   />
@@ -205,14 +205,14 @@ export function AppSidebar() {
         {session.data && (
           <SidebarMenu>
             <SidebarMenuItem>
-              {/*<CreateSubscriptionDialog
+              <CreateSubscriptionDialog
                 trigger={
                   <SidebarMenuButton className="flex">
                     <PlusIcon />
                     <span>{m.nav_add_subscription()}</span>
                   </SidebarMenuButton>
                 }
-              />*/}
+              />
             </SidebarMenuItem>
             <SidebarMenuItem>
               <DropdownMenu>
@@ -314,7 +314,6 @@ export function AppSidebar() {
                         </DropdownMenuSubContent>
                       </DropdownMenuPortal>
                     </DropdownMenuSub>
-                    {/* Currency submenu */}
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger>
                         <span className="mr-2">
@@ -348,7 +347,6 @@ export function AppSidebar() {
                         </DropdownMenuSubContent>
                       </DropdownMenuPortal>
                     </DropdownMenuSub>
-                    {/* Language submenu */}
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger>
                         <LanguagesIcon className="size-4" />
@@ -401,7 +399,7 @@ const NavbarItem = ({
   searchParams: URLSearchParams;
 }) => (
   <Button
-    key={item.titleKey}
+    key={item.title()}
     variant="link"
     className={cn(pathname === item.url ? "text-primary" : "text-foreground")}
     nativeButton={false}
@@ -437,13 +435,13 @@ export const Navbar = () => {
           .filter((_, i) => i < middleIndex)
           .map((item) => (
             <NavbarItem
-              key={item.titleKey}
+              key={item.title()}
               {...item}
               pathname={pathname}
               searchParams={searchParams}
             />
           ))}
-        {/*<CreateSubscriptionDialog
+        <CreateSubscriptionDialog
           trigger={
             <Button
               variant="link"
@@ -452,12 +450,12 @@ export const Navbar = () => {
               <PlusIcon />
             </Button>
           }
-        />*/}
+        />
         {navBarItems
           .filter((_, i) => i >= middleIndex && i < 3)
           .map((item) => (
             <NavbarItem
-              key={item.titleKey}
+              key={item.title()}
               {...item}
               pathname={pathname}
               searchParams={searchParams}

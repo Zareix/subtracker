@@ -14,6 +14,8 @@ import { Route as PrivateRouteRouteImport } from './routes/_private/route'
 import { Route as PrivateIndexRouteImport } from './routes/_private/index'
 import { Route as PublicResetPasswordRouteImport } from './routes/_public/reset-password'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
+import { Route as PrivateStatsRouteImport } from './routes/_private/stats'
+import { Route as PrivateCalendarRouteImport } from './routes/_private/calendar'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -39,6 +41,16 @@ const PublicLoginRoute = PublicLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PublicRouteRoute,
 } as any)
+const PrivateStatsRoute = PrivateStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateCalendarRoute = PrivateCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -47,12 +59,16 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof PrivateIndexRoute
+  '/calendar': typeof PrivateCalendarRoute
+  '/stats': typeof PrivateStatsRoute
   '/login': typeof PublicLoginRoute
   '/reset-password': typeof PublicResetPasswordRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PrivateIndexRoute
+  '/calendar': typeof PrivateCalendarRoute
+  '/stats': typeof PrivateStatsRoute
   '/login': typeof PublicLoginRoute
   '/reset-password': typeof PublicResetPasswordRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -61,6 +77,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_private': typeof PrivateRouteRouteWithChildren
   '/_public': typeof PublicRouteRouteWithChildren
+  '/_private/calendar': typeof PrivateCalendarRoute
+  '/_private/stats': typeof PrivateStatsRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/reset-password': typeof PublicResetPasswordRoute
   '/_private/': typeof PrivateIndexRoute
@@ -68,13 +86,27 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/reset-password' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/calendar'
+    | '/stats'
+    | '/login'
+    | '/reset-password'
+    | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/reset-password' | '/api/auth/$'
+  to:
+    | '/'
+    | '/calendar'
+    | '/stats'
+    | '/login'
+    | '/reset-password'
+    | '/api/auth/$'
   id:
     | '__root__'
     | '/_private'
     | '/_public'
+    | '/_private/calendar'
+    | '/_private/stats'
     | '/_public/login'
     | '/_public/reset-password'
     | '/_private/'
@@ -124,6 +156,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLoginRouteImport
       parentRoute: typeof PublicRouteRoute
     }
+    '/_private/stats': {
+      id: '/_private/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof PrivateStatsRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    '/_private/calendar': {
+      id: '/_private/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof PrivateCalendarRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -135,10 +181,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface PrivateRouteRouteChildren {
+  PrivateCalendarRoute: typeof PrivateCalendarRoute
+  PrivateStatsRoute: typeof PrivateStatsRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
+  PrivateCalendarRoute: PrivateCalendarRoute,
+  PrivateStatsRoute: PrivateStatsRoute,
   PrivateIndexRoute: PrivateIndexRoute,
 }
 

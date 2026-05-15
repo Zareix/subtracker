@@ -1,9 +1,15 @@
-import { parseAsStringEnum, useQueryState } from "nuqs";
-import { SORTS } from "~/lib/constant";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import type { Sort } from "~/lib/constant";
 
 export const useSort = () => {
-	return useQueryState(
-		"sort",
-		parseAsStringEnum(SORTS.map((s) => s.key)).withDefault("NEXT_PAYMENT_DATE"),
-	);
+  const search = useSearch({ from: "/_private" });
+  const navigate = useNavigate();
+
+  const sort: Sort = (search.sort as Sort) ?? "NEXT_PAYMENT_DATE";
+
+  const setSort = (value: Sort | null) => {
+    navigate({ search: (prev) => ({ ...prev, sort: value ?? undefined }) });
+  };
+
+  return [sort, setSort] as const;
 };

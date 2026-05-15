@@ -5,10 +5,9 @@ import {
 	isSameMonth,
 	isThisMonth,
 } from "date-fns";
+import type { SubscriptionItem } from "~/functions/subscriptions.functions";
 import type { Filters } from "~/lib/hooks/use-filters";
 import { rounded } from "~/lib/utils";
-
-type Subscription = RouterOutputs["subscription"]["getAll"][number];
 
 export type BreakdownItem = {
 	id: number;
@@ -18,7 +17,7 @@ export type BreakdownItem = {
 };
 
 const getRetainPrice = (
-	subscription: Subscription,
+	subscription: SubscriptionItem,
 	multiplier: number,
 	filters: Pick<Filters, "users">,
 ): number => {
@@ -43,7 +42,7 @@ const getScheduleMultiplierYear = (schedule: string): number => {
 };
 
 export const getStats = (
-	subscriptions: RouterOutputs["subscription"]["getAll"],
+	subscriptions: SubscriptionItem[],
 	filters: Pick<Filters, "users">,
 ) => {
 	const now = new Date();
@@ -51,8 +50,8 @@ export const getStats = (
 	const nextMonthDate = addMonths(now, 1);
 
 	const toBreakdown = (
-		subs: typeof subscriptions,
-		multiplier: (s: Subscription) => number,
+		subs: SubscriptionItem[],
+		multiplier: (s: SubscriptionItem) => number,
 	): BreakdownItem[] =>
 		subs.map((sub) => ({
 			id: sub.id,

@@ -1,55 +1,34 @@
-import {
-	parseAsArrayOf,
-	parseAsInteger,
-	parseAsString,
-	parseAsStringLiteral,
-	useQueryState,
-} from "nuqs";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { SCHEDULES, type Schedule } from "~/lib/constant";
 
 export const useFilters = () => {
-	const [schedule, setSchedule] = useQueryState(
-		"schedule",
-		parseAsStringLiteral<Schedule>(SCHEDULES),
-	);
-	const [paymentMethods, setPaymentMethods] = useQueryState(
-		"paymentMethods",
-		parseAsArrayOf(parseAsInteger).withDefault([]),
-	);
-	const [users, setUsers] = useQueryState("users", parseAsString);
-	const [categories, setCategories] = useQueryState(
-		"categories",
-		parseAsArrayOf(parseAsInteger).withDefault([]),
-	);
-	const [search, setSearch] = useQueryState(
-		"search",
-		parseAsString.withDefault(""),
-	);
+  const search = useSearch({ from: "/_private" });
+  const navigate = useNavigate();
 
-	const setFilters = (filters: {
-		schedule: typeof schedule;
-		paymentMethods: typeof paymentMethods;
-		users: typeof users;
-		categories: typeof categories;
-		search: typeof search;
-	}) => {
-		setSchedule(filters.schedule).catch(console.error);
-		setPaymentMethods(filters.paymentMethods).catch(console.error);
-		setUsers(filters.users).catch(console.error);
-		setCategories(filters.categories).catch(console.error);
-		setSearch(filters.search).catch(console.error);
-	};
+  const filters = {
+    schedule: search.schedule ?? null,
+    paymentMethods: search.paymentMethods ?? [],
+    users: search.users ?? null,
+    categories: search.categories ?? [],
+    search: search.search ?? "",
+  };
 
-	return [
-		{
-			schedule,
-			paymentMethods,
-			users,
-			categories,
-			search,
-		},
-		setFilters,
-	] as const;
+  const setFilters = (next: Partial<typeof filters>) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        ...next,
+        schedule:
+          next.schedule !== undefined
+            ? (next.schedule ?? undefined)
+            : prev.schedule,
+        users:
+          next.users !== undefined ? (next.users ?? undefined) : prev.users,
+      }),
+    });
+  };
+
+  return [filters, setFilters] as const;
 };
 
 export type Filters = ReturnType<typeof useFilters>[0];

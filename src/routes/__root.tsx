@@ -14,7 +14,6 @@ import { TooltipProvider } from "~/components/ui/tooltip";
 import { Toaster } from "~/components/ui/sonner";
 
 import appCss from "../styles.css?url";
-import { SidebarProvider } from "~/components/ui/sidebar";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -49,9 +48,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TooltipProvider>
-            <SidebarProvider>{children}</SidebarProvider>
-          </TooltipProvider>
+          <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
         <Toaster
           toastOptions={{
