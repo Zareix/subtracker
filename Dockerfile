@@ -1,4 +1,4 @@
-FROM oven/bun:1.3.12 AS builder
+FROM oven/bun:1.3.14 AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ ENV NODE_ENV=production
 RUN bun run build
 
 
-FROM oven/bun:1.3.12-distroless AS runner
+FROM oven/bun:1.3.14-distroless AS runner
 
 WORKDIR /app
 
