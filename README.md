@@ -5,7 +5,7 @@
 ```yaml
 services:
   subtracker:
-    image: ghcr.io/zareix/sub-tracker:v1.0.0
+    image: ghcr.io/zareix/subtracker:v1.0.0
     environment:
       - TZ=Europe/Paris
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET} # generate with `openssl rand -hex 32`

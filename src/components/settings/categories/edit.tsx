@@ -6,20 +6,22 @@ import { WrapperDialogVaul } from "~/components/ui/vaul-dialog";
 import { m } from "~/paraglide/messages";
 
 type Props = {
-  category: { id: number; name: string; icon: string | null };
+	category: { id: number; name: string; icon: string | null };
 };
 
 export const EditCategoryDialog = ({ category }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  return (
-    <WrapperDialogVaul isOpen={isOpen} setIsOpen={setIsOpen}>
-      <WrapperDialogVaul.Trigger>
-        <Button variant="ghost" className="w-8" size="icon">
-          <EditIcon size={20} />
-        </Button>
-      </WrapperDialogVaul.Trigger>
-      <WrapperDialogVaul.Title>{m.settings_categories_edit()}</WrapperDialogVaul.Title>
-      <EditCreateForm onFinished={() => setIsOpen(false)} category={category} />
-    </WrapperDialogVaul>
-  );
+	const [isOpen, setIsOpen] = useState(false);
+	return (
+		<WrapperDialogVaul isOpen={isOpen} setIsOpen={setIsOpen}>
+			<WrapperDialogVaul.Trigger>
+				<Button variant="ghost" className="w-8" size="icon">
+					<EditIcon size={20} />
+				</Button>
+			</WrapperDialogVaul.Trigger>
+			<WrapperDialogVaul.Title>
+				{m.settings_categories_edit()}
+			</WrapperDialogVaul.Title>
+			<EditCreateForm onFinished={() => setIsOpen(false)} category={category} />
+		</WrapperDialogVaul>
+	);
 };
