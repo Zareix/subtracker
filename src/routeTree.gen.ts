@@ -12,12 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as PrivateRouteRouteImport } from './routes/_private/route'
 import { Route as PrivateIndexRouteImport } from './routes/_private/index'
+import { Route as ApiStatsRouteImport } from './routes/api/stats'
 import { Route as ApiFilesRouteImport } from './routes/api/files'
 import { Route as PublicResetPasswordRouteImport } from './routes/_public/reset-password'
 import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PrivateStatsRouteImport } from './routes/_private/stats'
 import { Route as PrivateSettingsRouteImport } from './routes/_private/settings'
+import { Route as PrivateProfileRouteImport } from './routes/_private/profile'
 import { Route as PrivateCalendarRouteImport } from './routes/_private/calendar'
+import { Route as PrivateAdminRouteImport } from './routes/_private/admin'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
@@ -32,6 +35,11 @@ const PrivateIndexRoute = PrivateIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PrivateRouteRoute,
+} as any)
+const ApiStatsRoute = ApiStatsRouteImport.update({
+  id: '/api/stats',
+  path: '/api/stats',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiFilesRoute = ApiFilesRouteImport.update({
   id: '/api/files',
@@ -58,9 +66,19 @@ const PrivateSettingsRoute = PrivateSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
+const PrivateProfileRoute = PrivateProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 const PrivateCalendarRoute = PrivateCalendarRouteImport.update({
   id: '/calendar',
   path: '/calendar',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateAdminRoute = PrivateAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -71,34 +89,43 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof PrivateIndexRoute
+  '/admin': typeof PrivateAdminRoute
   '/calendar': typeof PrivateCalendarRoute
+  '/profile': typeof PrivateProfileRoute
   '/settings': typeof PrivateSettingsRoute
   '/stats': typeof PrivateStatsRoute
   '/login': typeof PublicLoginRoute
   '/reset-password': typeof PublicResetPasswordRoute
   '/api/files': typeof ApiFilesRoute
+  '/api/stats': typeof ApiStatsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PrivateIndexRoute
+  '/admin': typeof PrivateAdminRoute
   '/calendar': typeof PrivateCalendarRoute
+  '/profile': typeof PrivateProfileRoute
   '/settings': typeof PrivateSettingsRoute
   '/stats': typeof PrivateStatsRoute
   '/login': typeof PublicLoginRoute
   '/reset-password': typeof PublicResetPasswordRoute
   '/api/files': typeof ApiFilesRoute
+  '/api/stats': typeof ApiStatsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_private': typeof PrivateRouteRouteWithChildren
   '/_public': typeof PublicRouteRouteWithChildren
+  '/_private/admin': typeof PrivateAdminRoute
   '/_private/calendar': typeof PrivateCalendarRoute
+  '/_private/profile': typeof PrivateProfileRoute
   '/_private/settings': typeof PrivateSettingsRoute
   '/_private/stats': typeof PrivateStatsRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/reset-password': typeof PublicResetPasswordRoute
   '/api/files': typeof ApiFilesRoute
+  '/api/stats': typeof ApiStatsRoute
   '/_private/': typeof PrivateIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -106,33 +133,42 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/calendar'
+    | '/profile'
     | '/settings'
     | '/stats'
     | '/login'
     | '/reset-password'
     | '/api/files'
+    | '/api/stats'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/calendar'
+    | '/profile'
     | '/settings'
     | '/stats'
     | '/login'
     | '/reset-password'
     | '/api/files'
+    | '/api/stats'
     | '/api/auth/$'
   id:
     | '__root__'
     | '/_private'
     | '/_public'
+    | '/_private/admin'
     | '/_private/calendar'
+    | '/_private/profile'
     | '/_private/settings'
     | '/_private/stats'
     | '/_public/login'
     | '/_public/reset-password'
     | '/api/files'
+    | '/api/stats'
     | '/_private/'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
@@ -141,6 +177,7 @@ export interface RootRouteChildren {
   PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
   ApiFilesRoute: typeof ApiFilesRoute
+  ApiStatsRoute: typeof ApiStatsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -166,6 +203,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof PrivateIndexRouteImport
       parentRoute: typeof PrivateRouteRoute
+    }
+    '/api/stats': {
+      id: '/api/stats'
+      path: '/api/stats'
+      fullPath: '/api/stats'
+      preLoaderRoute: typeof ApiStatsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/files': {
       id: '/api/files'
@@ -202,11 +246,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateSettingsRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
+    '/_private/profile': {
+      id: '/_private/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof PrivateProfileRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
     '/_private/calendar': {
       id: '/_private/calendar'
       path: '/calendar'
       fullPath: '/calendar'
       preLoaderRoute: typeof PrivateCalendarRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    '/_private/admin': {
+      id: '/_private/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof PrivateAdminRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
     '/api/auth/$': {
@@ -220,14 +278,18 @@ declare module '@tanstack/react-router' {
 }
 
 interface PrivateRouteRouteChildren {
+  PrivateAdminRoute: typeof PrivateAdminRoute
   PrivateCalendarRoute: typeof PrivateCalendarRoute
+  PrivateProfileRoute: typeof PrivateProfileRoute
   PrivateSettingsRoute: typeof PrivateSettingsRoute
   PrivateStatsRoute: typeof PrivateStatsRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
+  PrivateAdminRoute: PrivateAdminRoute,
   PrivateCalendarRoute: PrivateCalendarRoute,
+  PrivateProfileRoute: PrivateProfileRoute,
   PrivateSettingsRoute: PrivateSettingsRoute,
   PrivateStatsRoute: PrivateStatsRoute,
   PrivateIndexRoute: PrivateIndexRoute,
@@ -255,6 +317,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
   PublicRouteRoute: PublicRouteRouteWithChildren,
   ApiFilesRoute: ApiFilesRoute,
+  ApiStatsRoute: ApiStatsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
