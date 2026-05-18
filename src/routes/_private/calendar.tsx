@@ -86,7 +86,7 @@ function CalendarPage() {
 											{dueSubscriptions.map((subscription) => (
 												<div
 													key={subscription.id}
-													className="not-first:mt-2 flex items-center not-first:border-t not-first:pt-2"
+													className="not-first:mt-2 flex items-center not-first:border-t not-first:pt-2 gap-2"
 												>
 													{subscription.image && (
 														<img
