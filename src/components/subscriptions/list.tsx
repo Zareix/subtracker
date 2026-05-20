@@ -1,4 +1,4 @@
-import { compareAsc, endOfToday, isBefore, isThisMonth } from "date-fns";
+import { compareAsc, isBefore, isThisMonth, startOfToday } from "date-fns";
 import {
 	Calendar1Icon,
 	CopyPlusIcon,
@@ -76,7 +76,7 @@ export const SubscriptionList = ({ subscriptions }: Props) => {
 		);
 	}
 
-	const now = endOfToday();
+	const now = startOfToday();
 	const previousSubOfThisMonth = subs
 		.filter(
 			(s) =>

@@ -143,7 +143,9 @@ export const rounded = (val: number, precision = 2) => {
 	return Math.round(val * 10 ** precision) / 10 ** precision;
 };
 
-export const currencyToSymbol = (currency: string) => {
+export const currencyToSymbol = (
+	currency: string,
+): (typeof CURRENCY_SYMBOLS)[keyof typeof CURRENCY_SYMBOLS] | "¤" => {
 	// @ts-expect-error
 	return CURRENCY_SYMBOLS[currency] ?? "¤";
 };

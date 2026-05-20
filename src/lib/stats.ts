@@ -14,6 +14,8 @@ export type BreakdownItem = {
 	image: string | null;
 	name: string;
 	retainPrice: number;
+	originalPrice: number;
+	currency: string;
 };
 
 const getRetainPrice = (
@@ -58,6 +60,8 @@ export const getStats = (
 			image: sub.image,
 			name: sub.name,
 			retainPrice: getRetainPrice(sub, multiplier(sub), filters),
+			originalPrice: sub.originalPrice,
+			currency: sub.currency,
 		}));
 
 	const sumBreakdown = (items: BreakdownItem[]) =>

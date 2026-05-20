@@ -215,6 +215,12 @@ const StatsCard = ({
 												/>
 											)}
 											<span className="grow text-sm">{item.name}</span>
+											{item.currency !== userBaseCurrency && (
+												<span className="text-muted-foreground text-sm tabular-nums">
+													({item.originalPrice.toLocaleString()}
+													{currencyToSymbol(item.currency)})
+												</span>
+											)}
 											<span className="font-medium text-sm tabular-nums">
 												{item.retainPrice.toLocaleString()}
 												{currencySymbol}

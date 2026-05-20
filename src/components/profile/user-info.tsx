@@ -73,10 +73,11 @@ export const UserInfoForm = ({ user }: Props) => {
 			email: user.email,
 			image: user.image ?? (undefined as string | null | undefined),
 		},
+		validators: {
+			onSubmit: schema,
+		},
 		onSubmit: async ({ value }) => {
-			const parsed = schema.safeParse(value);
-			if (!parsed.success) return;
-			editMutation.mutate(parsed.data);
+			editMutation.mutate(value);
 		},
 	});
 
@@ -101,55 +102,54 @@ export const UserInfoForm = ({ user }: Props) => {
 							)}
 						</form.Field>
 						<form.Field name="name">
-							{(field) => (
-								<Field
-									data-invalid={field.state.meta.errors.length > 0}
-									className="col-span-10"
-								>
-									<FieldLabel htmlFor="profile-name">
-										{m.settings_form_name()}
-									</FieldLabel>
-									<Input
-										id="profile-name"
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={(e) => field.handleChange(e.target.value)}
-										placeholder="Your name"
-									/>
-									{field.state.meta.errors.length > 0 && (
-										<FieldError
-											errors={field.state.meta.errors.map((e) => ({
-												message: String(e),
-											}))}
+							{(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid;
+								return (
+									<Field data-invalid={isInvalid} className="col-span-10">
+										<FieldLabel htmlFor="profile-name">
+											{m.settings_form_name()}
+										</FieldLabel>
+										<Input
+											id="profile-name"
+											name={field.name}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onChange={(e) => field.handleChange(e.target.value)}
+											aria-invalid={isInvalid}
+											placeholder="Your name"
 										/>
-									)}
-								</Field>
-							)}
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								);
+							}}
 						</form.Field>
 					</div>
 					<form.Field name="email">
-						{(field) => (
-							<Field data-invalid={field.state.meta.errors.length > 0}>
-								<FieldLabel htmlFor="profile-email">
-									{m.admin_form_email()}
-								</FieldLabel>
-								<Input
-									id="profile-email"
-									type="email"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder="your.email@example.com"
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid}>
+									<FieldLabel htmlFor="profile-email">
+										{m.admin_form_email()}
+									</FieldLabel>
+									<Input
+										id="profile-email"
+										name={field.name}
+										type="email"
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder="your.email@example.com"
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 					<Field>
 						<FieldLabel htmlFor="profile-role">

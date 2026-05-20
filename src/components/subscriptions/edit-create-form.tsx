@@ -39,7 +39,7 @@ import {
 } from "~/functions/subscriptions.functions";
 import { getUsers } from "~/functions/users.functions";
 import { authClient } from "~/lib/auth-client";
-import { Currencies, SCHEDULES } from "~/lib/constant";
+import { CURRENCY_SYMBOLS, Currencies, SCHEDULES } from "~/lib/constant";
 import { cn } from "~/lib/utils";
 import { m } from "~/paraglide/messages";
 
@@ -56,14 +56,14 @@ const schema = z.object({
 	name: z.string().min(1),
 	description: z.string(),
 	category: z.number().positive(),
-	image: z.string().optional(),
+	image: z.string().nullish(),
 	price: z.number().positive(),
 	currency: z.enum(Currencies),
 	paymentMethod: z.number().positive(),
 	firstPaymentDate: z.date(),
 	schedule: z.enum(SCHEDULES),
 	payedBy: z.array(z.string()).min(1),
-	url: z.url().optional().or(z.literal("")),
+	url: z.url().nullish(),
 });
 
 export const EditCreateForm = ({
@@ -122,22 +122,26 @@ export const EditCreateForm = ({
 		onError: (err) => toast.error(err.message),
 	});
 
+	const defaultValues: z.input<typeof schema> = {
+		name: subscription?.name ?? "",
+		description: subscription?.description ?? "",
+		category: subscription?.category.id ?? 1,
+		image: subscription?.image,
+		price: subscription?.originalPrice ?? 0,
+		currency:
+			subscription?.currency ?? session.data?.user.baseCurrency ?? "EUR",
+		paymentMethod: subscription?.paymentMethod.id ?? 1,
+		firstPaymentDate: subscription?.firstPaymentDate ?? new Date(),
+		schedule: subscription?.schedule ?? ("Monthly" as const),
+		payedBy:
+			subscription?.users.map((u) => u.id) ??
+			(session.data?.user.id ? [session.data.user.id] : []),
+		url: subscription?.url,
+	};
 	const form = useForm({
-		defaultValues: {
-			name: subscription?.name ?? "",
-			description: subscription?.description ?? "",
-			category: subscription?.category.id ?? 1,
-			image: subscription?.image ?? (undefined as string | undefined),
-			price: subscription?.originalPrice ?? 0,
-			currency:
-				subscription?.currency ?? session.data?.user.baseCurrency ?? "EUR",
-			paymentMethod: subscription?.paymentMethod.id ?? 1,
-			firstPaymentDate: subscription?.firstPaymentDate ?? new Date(),
-			schedule: subscription?.schedule ?? ("Monthly" as const),
-			payedBy:
-				subscription?.users.map((u) => u.id) ??
-				(session.data?.user.id ? [session.data.user.id] : []),
-			url: subscription?.url ?? "",
+		defaultValues,
+		validators: {
+			onSubmit: schema,
 		},
 		onSubmit: async ({ value }) => {
 			if (subscription?.id) {
@@ -149,14 +153,6 @@ export const EditCreateForm = ({
 	});
 
 	const isPending = createMutation.isPending || editMutation.isPending;
-
-	if (
-		usersQuery.isLoading ||
-		paymentMethodsQuery.isLoading ||
-		categoriesQuery.isLoading
-	) {
-		return <div>{m.subscription_form_loading()}</div>;
-	}
 
 	if (
 		usersQuery.isError ||
@@ -218,6 +214,11 @@ export const EditCreateForm = ({
 		value: s,
 		label: SCHEDULE_LABELS[s](),
 	}));
+	const currencies = Currencies.map((currency) => ({
+		value: currency,
+		labelComplete: `${CURRENCY_SYMBOLS[currency]} ${m[`currency_${currency}`]()}`,
+		label: CURRENCY_SYMBOLS[currency],
+	}));
 
 	return (
 		<form
@@ -231,30 +232,27 @@ export const EditCreateForm = ({
 				{/* Name + image upload + image search */}
 				<div className="grid grid-cols-12 items-center gap-2">
 					<form.Field name="name">
-						{(field) => (
-							<Field
-								data-invalid={field.state.meta.errors.length > 0}
-								className="col-span-8"
-							>
-								<FieldLabel htmlFor="sub-name">
-									{m.subscription_form_name()}
-								</FieldLabel>
-								<Input
-									id="sub-name"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder={m.subscription_form_name_placeholder()}
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid} className="col-span-8">
+									<FieldLabel htmlFor="sub-name">
+										{m.subscription_form_name()}
+									</FieldLabel>
+									<Input
+										id="sub-name"
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder={m.subscription_form_name_placeholder()}
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 					<form.Field name="image">
 						{(field) => (
@@ -281,65 +279,68 @@ export const EditCreateForm = ({
 				{/* Category + URL */}
 				<div className="flex">
 					<form.Field name="category">
-						{(field) => (
-							<Field data-invalid={field.state.meta.errors.length > 0}>
-								<FieldLabel htmlFor="sub-category">
-									{m.subscription_form_category()}
-								</FieldLabel>
-								<Select
-									value={field.state.value}
-									onValueChange={(v) => field.handleChange(v ?? 1)}
-									items={categories}
-								>
-									<SelectTrigger id="sub-category" className="min-w-42">
-										<SelectValue
-											placeholder={m.subscription_form_category_placeholder()}
-										/>
-									</SelectTrigger>
-									<SelectContent>
-										{categories.map((p) => (
-											<SelectItem value={p.value} key={p.value}>
-												{p.label}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
-									/>
-								)}
-							</Field>
-						)}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid}>
+									<FieldLabel htmlFor="sub-category">
+										{m.subscription_form_category()}
+									</FieldLabel>
+									<Select
+										name={field.name}
+										value={field.state.value}
+										onValueChange={(v) => field.handleChange(v ?? 1)}
+										items={categories}
+									>
+										<SelectTrigger
+											id="sub-category"
+											aria-invalid={isInvalid}
+											className="min-w-42"
+										>
+											<SelectValue
+												placeholder={m.subscription_form_category_placeholder()}
+											/>
+										</SelectTrigger>
+										<SelectContent>
+											{categories.map((p) => (
+												<SelectItem value={p.value} key={p.value}>
+													{p.label}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 					<Separator
 						orientation="vertical"
 						className="mx-2 my-auto flex h-12"
 					/>
 					<form.Field name="url">
-						{(field) => (
-							<Field data-invalid={field.state.meta.errors.length > 0}>
-								<FieldLabel htmlFor="sub-url">
-									{m.subscription_form_url()}
-								</FieldLabel>
-								<Input
-									id="sub-url"
-									value={field.state.value ?? ""}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder={m.subscription_form_url_placeholder()}
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid}>
+									<FieldLabel htmlFor="sub-url">
+										{m.subscription_form_url()}
+									</FieldLabel>
+									<Input
+										id="sub-url"
+										name={field.name}
+										value={field.state.value ?? ""}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder={m.subscription_form_url_placeholder()}
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 				</div>
 
@@ -352,6 +353,7 @@ export const EditCreateForm = ({
 							</FieldLabel>
 							<Input
 								id="sub-description"
+								name={field.name}
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
@@ -365,31 +367,32 @@ export const EditCreateForm = ({
 				<div className="grid grid-cols-2 gap-3">
 					<div className="flex">
 						<form.Field name="price">
-							{(field) => (
-								<Field
-									data-invalid={field.state.meta.errors.length > 0}
-									className="grow"
-								>
-									<FieldLabel htmlFor="sub-price">
-										{m.subscription_form_price()}
-									</FieldLabel>
-									<Input
-										id="sub-price"
-										type="number"
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={(e) => field.handleChange(Number(e.target.value))}
-										className="rounded-r-none"
-									/>
-									{field.state.meta.errors.length > 0 && (
-										<FieldError
-											errors={field.state.meta.errors.map((e) => ({
-												message: String(e),
-											}))}
+							{(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid;
+								return (
+									<Field data-invalid={isInvalid} className="grow">
+										<FieldLabel htmlFor="sub-price">
+											{m.subscription_form_price()}
+										</FieldLabel>
+										<Input
+											id="sub-price"
+											name={field.name}
+											type="number"
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onChange={(e) =>
+												field.handleChange(Number(e.target.value))
+											}
+											aria-invalid={isInvalid}
+											className="rounded-r-none"
 										/>
-									)}
-								</Field>
-							)}
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								);
+							}}
 						</form.Field>
 						<form.Field name="currency">
 							{(field) => (
@@ -398,9 +401,10 @@ export const EditCreateForm = ({
 										{m.subscription_form_currency()}
 									</FieldLabel>
 									<Select
+										name={field.name}
 										value={field.state.value}
 										onValueChange={(v) => field.handleChange(v ?? "EUR")}
-										items={Currencies.map((c) => ({ value: c, label: c }))}
+										items={currencies}
 									>
 										<SelectTrigger
 											id="sub-currency"
@@ -409,9 +413,9 @@ export const EditCreateForm = ({
 											<SelectValue />
 										</SelectTrigger>
 										<SelectContent>
-											{Currencies.map((c) => (
-												<SelectItem value={c} key={c}>
-													{c}
+											{currencies.map((c) => (
+												<SelectItem value={c.value} key={c.value}>
+													{c.labelComplete}
 												</SelectItem>
 											))}
 										</SelectContent>
@@ -421,79 +425,82 @@ export const EditCreateForm = ({
 						</form.Field>
 					</div>
 					<form.Field name="paymentMethod">
-						{(field) => (
-							<Field data-invalid={field.state.meta.errors.length > 0}>
-								<FieldLabel htmlFor="sub-pm">
-									{m.subscription_form_payment_method()}
-								</FieldLabel>
-								<Select
-									value={field.state.value}
-									onValueChange={(v) => field.handleChange(v ?? 1)}
-									items={paymentMethods}
-								>
-									<SelectTrigger id="sub-pm" className="w-full">
-										<SelectValue
-											placeholder={m.subscription_form_payment_method_placeholder()}
-										/>
-									</SelectTrigger>
-									<SelectContent>
-										{paymentMethods.map((p) => (
-											<SelectItem value={p.value} key={p.value}>
-												{p.label}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
-									/>
-								)}
-							</Field>
-						)}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid}>
+									<FieldLabel htmlFor="sub-pm">
+										{m.subscription_form_payment_method()}
+									</FieldLabel>
+									<Select
+										name={field.name}
+										value={field.state.value}
+										onValueChange={(v) => field.handleChange(v ?? 1)}
+										items={paymentMethods}
+									>
+										<SelectTrigger
+											id="sub-pm"
+											aria-invalid={isInvalid}
+											className="w-full"
+										>
+											<SelectValue
+												placeholder={m.subscription_form_payment_method_placeholder()}
+											/>
+										</SelectTrigger>
+										<SelectContent>
+											{paymentMethods.map((p) => (
+												<SelectItem value={p.value} key={p.value}>
+													{p.label}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 				</div>
 
 				{/* Payed by */}
 				<form.Field name="payedBy">
-					{(field) => (
-						<Field
-							data-invalid={field.state.meta.errors.length > 0}
-							className="grow"
-						>
-							<FieldLabel htmlFor="sub-payed-by">
-								{m.subscription_form_payed_by()}
-							</FieldLabel>
-							<Select
-								value={field.state.value}
-								onValueChange={(v) => field.handleChange(v ?? [])}
-								multiple
-								items={users}
-							>
-								<SelectTrigger id="sub-payed-by" className="w-full">
-									<SelectValue
-										placeholder={m.subscription_form_payed_by_placeholder()}
-									/>
-								</SelectTrigger>
-								<SelectContent>
-									{users.map((u) => (
-										<SelectItem value={u.value} key={u.value}>
-											{u.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-							{field.state.meta.errors.length > 0 && (
-								<FieldError
-									errors={field.state.meta.errors.map((e) => ({
-										message: String(e),
-									}))}
-								/>
-							)}
-						</Field>
-					)}
+					{(field) => {
+						const isInvalid =
+							field.state.meta.isTouched && !field.state.meta.isValid;
+						return (
+							<Field data-invalid={isInvalid} className="grow">
+								<FieldLabel htmlFor="sub-payed-by">
+									{m.subscription_form_payed_by()}
+								</FieldLabel>
+								<Select
+									name={field.name}
+									value={field.state.value}
+									onValueChange={(v) => field.handleChange(v ?? [])}
+									multiple
+									items={users}
+								>
+									<SelectTrigger
+										id="sub-payed-by"
+										aria-invalid={isInvalid}
+										className="w-full"
+									>
+										<SelectValue
+											placeholder={m.subscription_form_payed_by_placeholder()}
+										/>
+									</SelectTrigger>
+									<SelectContent>
+										{users.map((u) => (
+											<SelectItem value={u.value} key={u.value}>
+												{u.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								{isInvalid && <FieldError errors={field.state.meta.errors} />}
+							</Field>
+						);
+					}}
 				</form.Field>
 
 				{/* Schedule + First payment date */}
@@ -505,6 +512,7 @@ export const EditCreateForm = ({
 									{m.subscription_form_schedule()}
 								</FieldLabel>
 								<Select
+									name={field.name}
 									value={field.state.value}
 									onValueChange={(v) => field.handleChange(v ?? "Monthly")}
 									items={schedules}
@@ -524,55 +532,51 @@ export const EditCreateForm = ({
 						)}
 					</form.Field>
 					<form.Field name="firstPaymentDate">
-						{(field) => (
-							<Field
-								data-invalid={field.state.meta.errors.length > 0}
-								className="grow"
-							>
-								<FieldLabel htmlFor="sub-date">
-									{m.subscription_form_first_payment_date()}
-								</FieldLabel>
-								<Popover modal>
-									<PopoverTrigger
-										render={
-											<Button
-												id="sub-date"
-												variant="outline"
-												className={cn(
-													"h-9 w-full justify-start text-left font-normal",
-													!field.state.value && "text-muted-foreground",
-												)}
-											>
-												<CalendarIcon className="mr-2 size-4" />
-												{field.state.value ? (
-													format(field.state.value, "dd/MM/yyyy")
-												) : (
-													<span>{m.subscription_form_pick_date()}</span>
-												)}
-											</Button>
-										}
-									/>
-									<PopoverContent className="pointer-events-auto w-auto p-0">
-										<Calendar
-											mode="single"
-											selected={field.state.value}
-											onSelect={(date) => date && field.handleChange(date)}
-											autoFocus
-											captionLayout="dropdown"
-											startMonth={subYears(new Date(), 10)}
-											endMonth={addYears(new Date(), 10)}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid} className="grow">
+									<FieldLabel htmlFor="sub-date">
+										{m.subscription_form_first_payment_date()}
+									</FieldLabel>
+									<Popover modal>
+										<PopoverTrigger
+											render={
+												<Button
+													id="sub-date"
+													variant="outline"
+													aria-invalid={isInvalid}
+													className={cn(
+														"h-9 w-full justify-start text-left font-normal",
+														!field.state.value && "text-muted-foreground",
+													)}
+												>
+													<CalendarIcon className="mr-2 size-4" />
+													{field.state.value ? (
+														format(field.state.value, "dd/MM/yyyy")
+													) : (
+														<span>{m.subscription_form_pick_date()}</span>
+													)}
+												</Button>
+											}
 										/>
-									</PopoverContent>
-								</Popover>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
-									/>
-								)}
-							</Field>
-						)}
+										<PopoverContent className="pointer-events-auto w-auto p-0">
+											<Calendar
+												mode="single"
+												selected={field.state.value}
+												onSelect={(date) => date && field.handleChange(date)}
+												autoFocus
+												captionLayout="dropdown"
+												startMonth={subYears(new Date(), 10)}
+												endMonth={addYears(new Date(), 10)}
+											/>
+										</PopoverContent>
+									</Popover>
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 				</div>
 

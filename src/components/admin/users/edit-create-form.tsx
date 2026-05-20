@@ -111,13 +111,14 @@ export const EditCreateForm = ({
 			password: "",
 			role: (user?.role ?? "user") as UserRole,
 		},
+		validators: {
+			onSubmit: schema,
+		},
 		onSubmit: async ({ value }) => {
-			const parsed = schema.safeParse(value);
-			if (!parsed.success) return;
 			if (user) {
-				editMutation.mutate({ ...parsed.data, id: user.id });
+				editMutation.mutate({ ...value, id: user.id });
 			} else {
-				createMutation.mutate(parsed.data);
+				createMutation.mutate(value);
 			}
 		},
 	});
@@ -144,102 +145,114 @@ export const EditCreateForm = ({
 						)}
 					</form.Field>
 					<form.Field name="name">
-						{(field) => (
-							<Field
-								data-invalid={field.state.meta.errors.length > 0}
-								className="col-span-10"
-							>
-								<FieldLabel htmlFor="user-name">
-									{m.settings_form_name()}
-								</FieldLabel>
-								<Input
-									id="user-name"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder="Raphael"
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid} className="col-span-10">
+									<FieldLabel htmlFor="user-name">
+										{m.settings_form_name()}
+									</FieldLabel>
+									<Input
+										id="user-name"
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder="Raphael"
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 				</div>
 				<form.Field name="email">
-					{(field) => (
-						<Field data-invalid={field.state.meta.errors.length > 0}>
-							<FieldLabel htmlFor="user-email">
-								{m.admin_form_email()}
-							</FieldLabel>
-							<Input
-								id="user-email"
-								value={field.state.value}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-								placeholder="raphael@example.com"
-							/>
-							{field.state.meta.errors.length > 0 && (
-								<FieldError
-									errors={field.state.meta.errors.map((e) => ({
-										message: String(e),
-									}))}
+					{(field) => {
+						const isInvalid =
+							field.state.meta.isTouched && !field.state.meta.isValid;
+						return (
+							<Field data-invalid={isInvalid}>
+								<FieldLabel htmlFor="user-email">
+									{m.admin_form_email()}
+								</FieldLabel>
+								<Input
+									id="user-email"
+									name={field.name}
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+									aria-invalid={isInvalid}
+									placeholder="raphael@example.com"
 								/>
-							)}
-						</Field>
-					)}
+								{isInvalid && <FieldError errors={field.state.meta.errors} />}
+							</Field>
+						);
+					}}
 				</form.Field>
 				<form.Field name="password">
-					{(field) => (
-						<Field data-invalid={field.state.meta.errors.length > 0}>
-							<FieldLabel htmlFor="user-password">
-								{m.admin_form_password()}
-							</FieldLabel>
-							<Input
-								id="user-password"
-								type="password"
-								value={field.state.value}
-								onBlur={field.handleBlur}
-								onChange={(e) => field.handleChange(e.target.value)}
-								placeholder="***"
-							/>
-							{field.state.meta.errors.length > 0 && (
-								<FieldError
-									errors={field.state.meta.errors.map((e) => ({
-										message: String(e),
-									}))}
+					{(field) => {
+						const isInvalid =
+							field.state.meta.isTouched && !field.state.meta.isValid;
+						return (
+							<Field data-invalid={isInvalid}>
+								<FieldLabel htmlFor="user-password">
+									{m.admin_form_password()}
+								</FieldLabel>
+								<Input
+									id="user-password"
+									name={field.name}
+									type="password"
+									value={field.state.value}
+									onBlur={field.handleBlur}
+									onChange={(e) => field.handleChange(e.target.value)}
+									aria-invalid={isInvalid}
+									placeholder="***"
 								/>
-							)}
-						</Field>
-					)}
+								{isInvalid && <FieldError errors={field.state.meta.errors} />}
+							</Field>
+						);
+					}}
 				</form.Field>
 				<form.Field name="role">
-					{(field) => (
-						<Field data-invalid={field.state.meta.errors.length > 0}>
-							<FieldLabel htmlFor="user-role">{m.admin_form_role()}</FieldLabel>
-							<Select
-								name={field.name}
-								value={field.state.value}
-								onValueChange={(v) => field.handleChange(v as UserRole)}
-								disabled={isCurrentUser}
-							>
-								<SelectTrigger id="user-role" className="min-w-42.5 capitalize">
-									<SelectValue placeholder={m.admin_form_select_role()} />
-								</SelectTrigger>
-								<SelectContent>
-									{UserRoles.map((role) => (
-										<SelectItem value={role} key={role} className="capitalize">
-											{role}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</Field>
-					)}
+					{(field) => {
+						const isInvalid =
+							field.state.meta.isTouched && !field.state.meta.isValid;
+						return (
+							<Field data-invalid={isInvalid}>
+								<FieldLabel htmlFor="user-role">
+									{m.admin_form_role()}
+								</FieldLabel>
+								<Select
+									name={field.name}
+									value={field.state.value}
+									onValueChange={(v) => field.handleChange(v as UserRole)}
+									disabled={isCurrentUser}
+								>
+									<SelectTrigger
+										id="user-role"
+										aria-invalid={isInvalid}
+										className="min-w-42.5 capitalize"
+									>
+										<SelectValue placeholder={m.admin_form_select_role()} />
+									</SelectTrigger>
+									<SelectContent>
+										{UserRoles.map((role) => (
+											<SelectItem
+												value={role}
+												key={role}
+												className="capitalize"
+											>
+												{role}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								{isInvalid && <FieldError errors={field.state.meta.errors} />}
+							</Field>
+						);
+					}}
 				</form.Field>
 				<DialogFooter>
 					<Button type="submit" disabled={isPending}>

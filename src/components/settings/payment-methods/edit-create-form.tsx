@@ -21,7 +21,7 @@ import { m } from "~/paraglide/messages";
 
 const schema = z.object({
 	name: z.string().min(1),
-	image: z.string().optional(),
+	image: z.string().nullish(),
 });
 
 type PaymentMethodItem = { id: number; name: string; image: string | null };
@@ -56,18 +56,20 @@ export const EditCreateForm = ({
 		onError: (err) => toast.error(err.message),
 	});
 
+	const defaultValues: z.infer<typeof schema> = {
+		name: paymentMethod?.name ?? "",
+		image: paymentMethod?.image,
+	};
 	const form = useForm({
-		defaultValues: {
-			name: paymentMethod?.name ?? "",
-			image: paymentMethod?.image ?? (undefined as string | undefined),
+		defaultValues,
+		validators: {
+			onSubmit: schema,
 		},
 		onSubmit: async ({ value }) => {
-			const parsed = schema.safeParse(value);
-			if (!parsed.success) return;
 			if (paymentMethod) {
-				editMutation.mutate({ ...parsed.data, id: paymentMethod.id });
+				editMutation.mutate({ ...value, id: paymentMethod.id });
 			} else {
-				createMutation.mutate(parsed.data);
+				createMutation.mutate(value);
 			}
 		},
 	});
@@ -85,30 +87,27 @@ export const EditCreateForm = ({
 			<FieldGroup>
 				<div className="grid grid-cols-12 items-center gap-2">
 					<form.Field name="name">
-						{(field) => (
-							<Field
-								data-invalid={field.state.meta.errors.length > 0}
-								className="col-span-8"
-							>
-								<FieldLabel htmlFor="pm-name">
-									{m.settings_form_name()}
-								</FieldLabel>
-								<Input
-									id="pm-name"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder="PayPal"
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid} className="col-span-8">
+									<FieldLabel htmlFor="pm-name">
+										{m.settings_form_name()}
+									</FieldLabel>
+									<Input
+										id="pm-name"
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder="PayPal"
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 					<form.Field name="image">
 						{(field) => (

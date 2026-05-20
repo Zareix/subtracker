@@ -9,6 +9,7 @@ import {
 	PopoverTrigger,
 } from "~/components/ui/popover";
 import { getSubscriptions } from "~/functions/subscriptions.functions";
+import { authClient } from "~/lib/auth-client";
 import { cn, currencyToSymbol } from "~/lib/utils";
 import { m } from "~/paraglide/messages";
 
@@ -17,10 +18,13 @@ export const Route = createFileRoute("/_private/calendar")({
 });
 
 function CalendarPage() {
+	const session = authClient.useSession();
 	const subscriptionsQuery = useQuery({
 		queryKey: ["subscriptions"],
 		queryFn: () => getSubscriptions(),
 	});
+
+	const userCurrency = session.data?.user.baseCurrency ?? "EUR";
 
 	return (
 		<div>
@@ -100,9 +104,15 @@ function CalendarPage() {
 													<h4 className="grow font-semibold">
 														{subscription.name}
 													</h4>
+													{subscription.currency !== userCurrency && (
+														<span className="text-muted-foreground">
+															({subscription.originalPrice}
+															{currencyToSymbol(subscription.currency)})
+														</span>
+													)}
 													<span>
 														{subscription.price}
-														{currencyToSymbol(subscription.currency)}
+														{currencyToSymbol(userCurrency)}
 													</span>
 												</div>
 											))}

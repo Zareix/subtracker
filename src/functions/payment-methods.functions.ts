@@ -23,7 +23,7 @@ export const createPaymentMethod = createServerFn({ method: "POST" })
 	.inputValidator(
 		z.object({
 			name: z.string().min(1, "Name cannot be empty"),
-			image: z.string().optional(),
+			image: z.string().nullish(),
 		}),
 	)
 	.handler(async ({ data }) => {

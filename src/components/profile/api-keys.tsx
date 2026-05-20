@@ -64,10 +64,11 @@ export const ApiKeys = ({ userId }: Props) => {
 
 	const form = useForm({
 		defaultValues: { name: "" },
+		validators: {
+			onSubmit: schema,
+		},
 		onSubmit: async ({ value }) => {
-			const parsed = schema.safeParse(value);
-			if (!parsed.success) return;
-			createMutation.mutate(parsed.data);
+			createMutation.mutate(value);
 		},
 	});
 
@@ -180,27 +181,27 @@ export const ApiKeys = ({ userId }: Props) => {
 			>
 				<FieldGroup>
 					<form.Field name="name">
-						{(field) => (
-							<Field data-invalid={field.state.meta.errors.length > 0}>
-								<FieldLabel htmlFor="api-key-name">
-									{m.profile_api_keys_name()}
-								</FieldLabel>
-								<Input
-									id="api-key-name"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder={m.profile_api_keys_placeholder()}
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid}>
+									<FieldLabel htmlFor="api-key-name">
+										{m.profile_api_keys_name()}
+									</FieldLabel>
+									<Input
+										id="api-key-name"
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder={m.profile_api_keys_placeholder()}
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</form.Field>
 					<div className="flex justify-end">
 						<Button

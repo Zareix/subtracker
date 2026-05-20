@@ -79,25 +79,21 @@ export const CredentialsForm = ({ userId }: Props) => {
 			newPassword: "",
 			confirmPassword: "",
 		},
+		validators: {
+			onSubmit: passwordSchema,
+		},
 		onSubmit: async ({ value }) => {
-			const parsed = passwordSchema.safeParse(value);
-			if (!parsed.success) {
-				const confirmErr = parsed.error.flatten().fieldErrors.confirmPassword;
-				if (confirmErr?.includes("no_match")) {
-					toast.error(m.profile_password_no_match());
-				}
-				return;
-			}
-			changePasswordMutation.mutate(parsed.data);
+			changePasswordMutation.mutate(value);
 		},
 	});
 
 	const passkeyForm = useForm({
 		defaultValues: { name: "" },
+		validators: {
+			onSubmit: passkeySchema,
+		},
 		onSubmit: async ({ value }) => {
-			const parsed = passkeySchema.safeParse(value);
-			if (!parsed.success) return;
-			registerPasskeyMutation.mutate(parsed.data);
+			registerPasskeyMutation.mutate(value);
 		},
 	});
 
@@ -156,27 +152,29 @@ export const CredentialsForm = ({ userId }: Props) => {
 				>
 					<FieldGroup>
 						<passkeyForm.Field name="name">
-							{(field) => (
-								<Field data-invalid={field.state.meta.errors.length > 0}>
-									<FieldLabel htmlFor="passkey-name">
-										{m.profile_passkey_name()}
-									</FieldLabel>
-									<Input
-										id="passkey-name"
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={(e) => field.handleChange(e.target.value)}
-										placeholder={m.profile_passkey_placeholder()}
-									/>
-									{field.state.meta.errors.length > 0 && (
-										<FieldError
-											errors={field.state.meta.errors.map((e) => ({
-												message: String(e),
-											}))}
+							{(field) => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid;
+								return (
+									<Field data-invalid={isInvalid}>
+										<FieldLabel htmlFor="passkey-name">
+											{m.profile_passkey_name()}
+										</FieldLabel>
+										<Input
+											id="passkey-name"
+											name={field.name}
+											value={field.state.value}
+											onBlur={field.handleBlur}
+											onChange={(e) => field.handleChange(e.target.value)}
+											aria-invalid={isInvalid}
+											placeholder={m.profile_passkey_placeholder()}
 										/>
-									)}
-								</Field>
-							)}
+										{isInvalid && (
+											<FieldError errors={field.state.meta.errors} />
+										)}
+									</Field>
+								);
+							}}
 						</passkeyForm.Field>
 						<div className="flex justify-end">
 							<Button
@@ -204,79 +202,79 @@ export const CredentialsForm = ({ userId }: Props) => {
 			>
 				<FieldGroup>
 					<passwordForm.Field name="currentPassword">
-						{(field) => (
-							<Field data-invalid={field.state.meta.errors.length > 0}>
-								<FieldLabel htmlFor="password-current">
-									{m.profile_password_current()}
-								</FieldLabel>
-								<Input
-									id="password-current"
-									type="password"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder={m.profile_password_current_placeholder()}
-									autoComplete="current-password"
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid}>
+									<FieldLabel htmlFor="password-current">
+										{m.profile_password_current()}
+									</FieldLabel>
+									<Input
+										id="password-current"
+										name={field.name}
+										type="password"
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder={m.profile_password_current_placeholder()}
+										autoComplete="current-password"
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</passwordForm.Field>
 					<passwordForm.Field name="newPassword">
-						{(field) => (
-							<Field data-invalid={field.state.meta.errors.length > 0}>
-								<FieldLabel htmlFor="password-new">
-									{m.profile_password_new()}
-								</FieldLabel>
-								<Input
-									id="password-new"
-									type="password"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder={m.profile_password_new_placeholder()}
-									autoComplete="new-password"
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid}>
+									<FieldLabel htmlFor="password-new">
+										{m.profile_password_new()}
+									</FieldLabel>
+									<Input
+										id="password-new"
+										name={field.name}
+										type="password"
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder={m.profile_password_new_placeholder()}
+										autoComplete="new-password"
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</passwordForm.Field>
 					<passwordForm.Field name="confirmPassword">
-						{(field) => (
-							<Field data-invalid={field.state.meta.errors.length > 0}>
-								<FieldLabel htmlFor="password-confirm">
-									{m.profile_password_confirm()}
-								</FieldLabel>
-								<Input
-									id="password-confirm"
-									type="password"
-									value={field.state.value}
-									onBlur={field.handleBlur}
-									onChange={(e) => field.handleChange(e.target.value)}
-									placeholder={m.profile_password_confirm_placeholder()}
-									autoComplete="new-password"
-								/>
-								{field.state.meta.errors.length > 0 && (
-									<FieldError
-										errors={field.state.meta.errors.map((e) => ({
-											message: String(e),
-										}))}
+						{(field) => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid;
+							return (
+								<Field data-invalid={isInvalid}>
+									<FieldLabel htmlFor="password-confirm">
+										{m.profile_password_confirm()}
+									</FieldLabel>
+									<Input
+										id="password-confirm"
+										name={field.name}
+										type="password"
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={(e) => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder={m.profile_password_confirm_placeholder()}
+										autoComplete="new-password"
 									/>
-								)}
-							</Field>
-						)}
+									{isInvalid && <FieldError errors={field.state.meta.errors} />}
+								</Field>
+							);
+						}}
 					</passwordForm.Field>
 					<div className="flex justify-end">
 						<Button

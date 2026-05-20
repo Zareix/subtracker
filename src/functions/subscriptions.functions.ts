@@ -254,14 +254,14 @@ const subscriptionInputSchema = z.object({
 	name: z.string(),
 	description: z.string(),
 	category: z.number(),
-	image: z.string().optional(),
-	price: z.number(),
+	image: z.string().nullish(),
+	price: z.number().positive(),
 	currency: z.enum(Currencies),
 	paymentMethod: z.number(),
 	firstPaymentDate: z.string().transform((s) => new Date(s)),
 	schedule: z.enum(SCHEDULES),
 	payedBy: z.array(z.string()),
-	url: z.url().optional(),
+	url: z.url().nullish(),
 });
 
 export const getSubscriptions = createServerFn({ method: "GET" }).handler(
