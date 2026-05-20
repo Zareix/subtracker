@@ -140,13 +140,10 @@ export const EditCreateForm = ({
 			url: subscription?.url ?? "",
 		},
 		onSubmit: async ({ value }) => {
-			const parsed = schema.safeParse(value);
-			if (!parsed.success) return;
-			const data = parsed.data;
 			if (subscription?.id) {
-				editMutation.mutate({ ...data, id: subscription.id });
+				editMutation.mutate({ ...value, id: subscription.id });
 			} else {
-				createMutation.mutate(data);
+				createMutation.mutate(value);
 			}
 		},
 	});
@@ -168,6 +165,59 @@ export const EditCreateForm = ({
 	) {
 		return <div>{m.subscription_form_error()}</div>;
 	}
+
+	const paymentMethods = (paymentMethodsQuery.data ?? []).map((p) => ({
+		value: p.id,
+		label: (
+			<div className="flex items-center gap-1">
+				{p.image && (
+					<img
+						src={p.image}
+						alt={p.name}
+						width={20}
+						height={20}
+						className="max-h-5 max-w-5 object-contain"
+					/>
+				)}
+				{p.name}
+			</div>
+		),
+	}));
+	const users = (usersQuery.data ?? []).map((u) => ({
+		value: u.id,
+		label: (
+			<div className="flex items-center gap-1">
+				{u.image && (
+					<img
+						src={u.image}
+						alt={u.name}
+						width={20}
+						height={20}
+						className="max-h-5 max-w-5 object-contain"
+					/>
+				)}
+				{u.name}
+			</div>
+		),
+	}));
+	const categories = (categoriesQuery.data ?? []).map((c) => ({
+		value: c.id,
+		label: (
+			<div className="flex items-center gap-1">
+				{c.icon && (
+					<CategoryIcon
+						icon={c.icon}
+						className="max-h-5 max-w-5 object-contain"
+					/>
+				)}
+				{c.name}
+			</div>
+		),
+	}));
+	const schedules = SCHEDULES.map((s) => ({
+		value: s,
+		label: SCHEDULE_LABELS[s](),
+	}));
 
 	return (
 		<form
@@ -214,14 +264,18 @@ export const EditCreateForm = ({
 							/>
 						)}
 					</form.Field>
-					<form.Field name="image">
-						{(field) => (
-							<ImageSearch
-								query={form.state.values.name}
-								setFileUrl={(url) => field.handleChange(url)}
-							/>
+					<form.Subscribe selector={(state) => state.values.name}>
+						{(name) => (
+							<form.Field name="image">
+								{(field) => (
+									<ImageSearch
+										query={name}
+										setFileUrl={(url) => field.handleChange(url)}
+									/>
+								)}
+							</form.Field>
 						)}
-					</form.Field>
+					</form.Subscribe>
 				</div>
 
 				{/* Category + URL */}
@@ -233,24 +287,9 @@ export const EditCreateForm = ({
 									{m.subscription_form_category()}
 								</FieldLabel>
 								<Select
-									value={field.state.value?.toString()}
-									onValueChange={(v) => field.handleChange(Number(v))}
-									items={
-										categoriesQuery.data?.map((p) => ({
-											value: p.id.toString(),
-											label: (
-												<div className="flex items-center gap-1">
-													{p.icon && (
-														<CategoryIcon
-															icon={p.icon}
-															className="max-h-5 max-w-5 object-contain"
-														/>
-													)}
-													{p.name}
-												</div>
-											),
-										})) ?? []
-									}
+									value={field.state.value}
+									onValueChange={(v) => field.handleChange(v ?? 1)}
+									items={categories}
 								>
 									<SelectTrigger id="sub-category" className="min-w-42">
 										<SelectValue
@@ -258,17 +297,9 @@ export const EditCreateForm = ({
 										/>
 									</SelectTrigger>
 									<SelectContent>
-										{categoriesQuery.data?.map((p) => (
-											<SelectItem value={p.id.toString()} key={p.id}>
-												<div className="flex items-center gap-1">
-													{p.icon && (
-														<CategoryIcon
-															icon={p.icon}
-															className="max-h-5 max-w-5 object-contain"
-														/>
-													)}
-													{p.name}
-												</div>
+										{categories.map((p) => (
+											<SelectItem value={p.value} key={p.value}>
+												{p.label}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -368,9 +399,7 @@ export const EditCreateForm = ({
 									</FieldLabel>
 									<Select
 										value={field.state.value}
-										onValueChange={(v) =>
-											field.handleChange(v as typeof field.state.value)
-										}
+										onValueChange={(v) => field.handleChange(v ?? "EUR")}
 										items={Currencies.map((c) => ({ value: c, label: c }))}
 									>
 										<SelectTrigger
@@ -398,27 +427,9 @@ export const EditCreateForm = ({
 									{m.subscription_form_payment_method()}
 								</FieldLabel>
 								<Select
-									value={field.state.value?.toString()}
-									onValueChange={(v) => field.handleChange(Number(v))}
-									items={
-										paymentMethodsQuery.data?.map((p) => ({
-											value: p.id.toString(),
-											label: (
-												<div className="flex items-center gap-1">
-													{p.image && (
-														<img
-															src={p.image}
-															alt={p.name}
-															width={20}
-															height={20}
-															className="max-h-5 max-w-5 object-contain"
-														/>
-													)}
-													{p.name}
-												</div>
-											),
-										})) ?? []
-									}
+									value={field.state.value}
+									onValueChange={(v) => field.handleChange(v ?? 1)}
+									items={paymentMethods}
 								>
 									<SelectTrigger id="sub-pm" className="w-full">
 										<SelectValue
@@ -426,20 +437,9 @@ export const EditCreateForm = ({
 										/>
 									</SelectTrigger>
 									<SelectContent>
-										{paymentMethodsQuery.data?.map((p) => (
-											<SelectItem value={p.id.toString()} key={p.id}>
-												<div className="flex items-center gap-1">
-													{p.image && (
-														<img
-															src={p.image}
-															alt={p.name}
-															width={20}
-															height={20}
-															className="max-h-5 max-w-5 object-contain"
-														/>
-													)}
-													{p.name}
-												</div>
+										{paymentMethods.map((p) => (
+											<SelectItem value={p.value} key={p.value}>
+												{p.label}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -468,14 +468,9 @@ export const EditCreateForm = ({
 							</FieldLabel>
 							<Select
 								value={field.state.value}
-								onValueChange={(v) => field.handleChange(v as string[])}
+								onValueChange={(v) => field.handleChange(v ?? [])}
 								multiple
-								items={
-									usersQuery.data?.map((u) => ({
-										value: u.id,
-										label: u.name,
-									})) ?? []
-								}
+								items={users}
 							>
 								<SelectTrigger id="sub-payed-by" className="w-full">
 									<SelectValue
@@ -483,9 +478,9 @@ export const EditCreateForm = ({
 									/>
 								</SelectTrigger>
 								<SelectContent>
-									{usersQuery.data?.map((u) => (
-										<SelectItem value={u.id} key={u.id}>
-											{u.name}
+									{users.map((u) => (
+										<SelectItem value={u.value} key={u.value}>
+											{u.label}
 										</SelectItem>
 									))}
 								</SelectContent>
@@ -511,21 +506,16 @@ export const EditCreateForm = ({
 								</FieldLabel>
 								<Select
 									value={field.state.value}
-									onValueChange={(v) =>
-										field.handleChange(v as typeof field.state.value)
-									}
-									items={SCHEDULES.map((s) => ({
-										value: s,
-										label: SCHEDULE_LABELS[s](),
-									}))}
+									onValueChange={(v) => field.handleChange(v ?? "Monthly")}
+									items={schedules}
 								>
 									<SelectTrigger id="sub-schedule" className="w-full">
 										<SelectValue />
 									</SelectTrigger>
 									<SelectContent>
-										{SCHEDULES.map((s) => (
-											<SelectItem value={s} key={s}>
-												{SCHEDULE_LABELS[s]()}
+										{schedules.map((s) => (
+											<SelectItem value={s.value} key={s.value}>
+												{s.label}
 											</SelectItem>
 										))}
 									</SelectContent>

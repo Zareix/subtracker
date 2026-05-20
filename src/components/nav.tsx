@@ -48,7 +48,7 @@ import {
 	SidebarTrigger,
 	useSidebar,
 } from "~/components/ui/sidebar";
-import { ThemeIcon } from "~/components/ui/theme-provider";
+import { THEMES, ThemeIcon } from "~/components/ui/theme-provider";
 import { authClient } from "~/lib/auth-client";
 import { Currencies, type Currency } from "~/lib/constant";
 import { useIsMobile } from "~/lib/hooks/use-mobile";
@@ -279,27 +279,16 @@ export function AppSidebar() {
 														value={theme}
 														onValueChange={(value) => setTheme(value)}
 													>
-														<DropdownMenuRadioItem
-															value="light"
-															className="flex items-center gap-2"
-														>
-															<ThemeIcon theme="light" />
-															{m.nav_theme_light()}
-														</DropdownMenuRadioItem>
-														<DropdownMenuRadioItem
-															value="dark"
-															className="flex items-center gap-2"
-														>
-															<ThemeIcon theme="dark" />
-															{m.nav_theme_dark()}
-														</DropdownMenuRadioItem>
-														<DropdownMenuRadioItem
-															value="system"
-															className="flex items-center gap-2"
-														>
-															<ThemeIcon theme="system" />
-															{m.nav_theme_system()}
-														</DropdownMenuRadioItem>
+														{THEMES.map((t) => (
+															<DropdownMenuRadioItem
+																key={t}
+																value={t}
+																className="flex items-center gap-2"
+															>
+																<ThemeIcon theme={t} />
+																{m[`nav_theme_${t}`]()}
+															</DropdownMenuRadioItem>
+														))}
 													</DropdownMenuRadioGroup>
 												</DropdownMenuSubContent>
 											</DropdownMenuPortal>
@@ -330,7 +319,8 @@ export function AppSidebar() {
 																value={currency}
 																className="flex items-center gap-2 capitalize"
 															>
-																{currencyToSymbol(currency)} {currency}
+																{currencyToSymbol(currency)}{" "}
+																{m[`currency_${currency}`]()}
 															</DropdownMenuRadioItem>
 														))}
 													</DropdownMenuRadioGroup>

@@ -299,11 +299,10 @@ const SubscriptionListItem = ({
 							href={subscription.url}
 							target="_blank"
 							rel="noopener noreferrer"
+							className="flex items-center gap-1"
 						>
-							<div className="flex items-center gap-1">
-								<ExternalLinkIcon size={16} className="text-primary" />
-								{new URL(subscription.url).hostname}
-							</div>
+							<ExternalLinkIcon size={16} className="text-primary" />
+							{new URL(subscription.url).hostname}
 						</a>
 					)}
 					{subscription.description.length > 0 && (

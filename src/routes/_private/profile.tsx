@@ -3,7 +3,6 @@ import { AppearanceSettings } from "~/components/profile/appearance";
 import { CredentialsForm } from "~/components/profile/credentials";
 import { CurrencySettings } from "~/components/profile/currency-settings";
 import { UserInfoForm } from "~/components/profile/user-info";
-import { Separator } from "~/components/ui/separator";
 import { authClient } from "~/lib/auth-client";
 import { m } from "~/paraglide/messages";
 
@@ -18,16 +17,17 @@ function ProfilePage() {
 	if (!user) return null;
 
 	return (
-		<div className="grid w-full max-w-lg items-start gap-6">
+		<div className="grid w-full max-w-lg items-start gap-8">
 			<header className="flex flex-wrap items-center justify-between">
 				<h1 className="font-bold text-3xl">
 					{m.profile_welcome({ name: user.name })}
 				</h1>
 			</header>
 			<UserInfoForm user={user} />
-			<CurrencySettings />
-			<AppearanceSettings />
-			<Separator className="my-4 lg:hidden" />
+			<div className="grid grid-cols-2">
+				<CurrencySettings />
+				<AppearanceSettings />
+			</div>
 			<CredentialsForm userId={user.id} />
 		</div>
 	);

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { FilterIcon } from "lucide-react";
+import { CategoryIcon } from "~/components/subscriptions/categories/icon";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import {
@@ -60,9 +61,58 @@ export const FiltersButton = ({
 		return null;
 	}
 
-	const paymentMethods = paymentMethodsQuery.data ?? [];
-	const users = usersQuery.data ?? [];
-	const categories = categoriesQuery.data ?? [];
+	const paymentMethods = (paymentMethodsQuery.data ?? []).map((p) => ({
+		value: p.id,
+		label: (
+			<div className="flex items-center gap-1">
+				{p.image && (
+					<img
+						src={p.image}
+						alt={p.name}
+						width={20}
+						height={20}
+						className="max-h-5 max-w-5 object-contain"
+					/>
+				)}
+				{p.name}
+			</div>
+		),
+	}));
+	const users = (usersQuery.data ?? []).map((u) => ({
+		value: u.id,
+		label: (
+			<div className="flex items-center gap-1">
+				{u.image && (
+					<img
+						src={u.image}
+						alt={u.name}
+						width={20}
+						height={20}
+						className="max-h-5 max-w-5 object-contain"
+					/>
+				)}
+				{u.name}
+			</div>
+		),
+	}));
+	const categories = (categoriesQuery.data ?? []).map((c) => ({
+		value: c.id,
+		label: (
+			<div className="flex items-center gap-1">
+				{c.icon && (
+					<CategoryIcon
+						icon={c.icon}
+						className="max-h-5 max-w-5 object-contain"
+					/>
+				)}
+				{c.name}
+			</div>
+		),
+	}));
+	const schedules = SCHEDULES.map((s) => ({
+		value: s,
+		label: SCHEDULE_LABELS[s](),
+	}));
 
 	const hasActiveFilters =
 		!!filters.schedule ||
@@ -114,15 +164,15 @@ export const FiltersButton = ({
 										})
 									}
 									value={filters.users ?? ""}
-									items={users.map((u) => ({ value: u.id, label: u.name }))}
+									items={users}
 								>
 									<SelectTrigger className="w-full capitalize">
 										<SelectValue placeholder={m.filters_select()} />
 									</SelectTrigger>
 									<SelectContent>
 										{users.map((user) => (
-											<SelectItem value={user.id} key={user.id}>
-												{user.name}
+											<SelectItem value={user.value} key={user.value}>
+												{user.label}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -143,18 +193,15 @@ export const FiltersButton = ({
 										})
 									}
 									value={filters.schedule ?? ""}
-									items={SCHEDULES.map((s) => ({
-										value: s,
-										label: SCHEDULE_LABELS[s](),
-									}))}
+									items={schedules}
 								>
 									<SelectTrigger className="w-full capitalize">
 										<SelectValue placeholder={m.filters_select()} />
 									</SelectTrigger>
 									<SelectContent>
-										{SCHEDULES.map((schedule) => (
-											<SelectItem value={schedule} key={schedule}>
-												{SCHEDULE_LABELS[schedule]()}
+										{schedules.map((schedule) => (
+											<SelectItem value={schedule.value} key={schedule.value}>
+												{schedule.label}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -170,26 +217,20 @@ export const FiltersButton = ({
 									id="filters-paymentMethods"
 									onValueChange={(value) =>
 										setFilters({
-											paymentMethods:
-												value.length === 0
-													? undefined
-													: value.map((v) => Number.parseInt(v, 10)),
+											paymentMethods: value.length === 0 ? undefined : value,
 										})
 									}
-									value={filters.paymentMethods.map((pm) => pm.toString())}
+									value={filters.paymentMethods}
 									multiple
-									items={paymentMethods.map((pm) => ({
-										value: pm.id.toString(),
-										label: pm.name,
-									}))}
+									items={paymentMethods}
 								>
 									<SelectTrigger className="w-full capitalize">
 										<SelectValue placeholder={m.filters_select()} />
 									</SelectTrigger>
 									<SelectContent>
 										{paymentMethods.map((pm) => (
-											<SelectItem value={pm.id.toString()} key={pm.id}>
-												{pm.name}
+											<SelectItem value={pm.value} key={pm.value}>
+												{pm.label}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -205,26 +246,20 @@ export const FiltersButton = ({
 									id="filters-categories"
 									onValueChange={(value) =>
 										setFilters({
-											categories:
-												value.length === 0
-													? undefined
-													: value.map((v) => Number.parseInt(v, 10)),
+											categories: value.length === 0 ? undefined : value,
 										})
 									}
-									value={filters.categories.map((c) => c.toString())}
+									value={filters.categories}
 									multiple
-									items={categories.map((cat) => ({
-										value: cat.id.toString(),
-										label: cat.name,
-									}))}
+									items={categories}
 								>
 									<SelectTrigger className="w-full capitalize">
 										<SelectValue placeholder={m.filters_select()} />
 									</SelectTrigger>
 									<SelectContent>
 										{categories.map((cat) => (
-											<SelectItem value={cat.id.toString()} key={cat.id}>
-												{cat.name}
+											<SelectItem value={cat.value} key={cat.value}>
+												{cat.label}
 											</SelectItem>
 										))}
 									</SelectContent>

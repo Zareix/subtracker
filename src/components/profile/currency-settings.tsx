@@ -44,6 +44,11 @@ export const CurrencySettings = () => {
 		);
 	}
 
+	const currencies = Currencies.map((currency) => ({
+		value: currency,
+		label: `${CURRENCY_SYMBOLS[currency]} ${m[`currency_${currency}`]()}`,
+	}));
+
 	return (
 		<section>
 			<h2 className="mb-4 font-bold text-2xl">{m.profile_currency_title()}</h2>
@@ -52,14 +57,15 @@ export const CurrencySettings = () => {
 				onValueChange={(value) =>
 					updateCurrencyMutation.mutate(value as Currency)
 				}
+				items={currencies}
 			>
 				<SelectTrigger className="min-w-42.5 capitalize">
 					<SelectValue placeholder={m.profile_currency_select()} />
 				</SelectTrigger>
 				<SelectContent>
-					{Currencies.map((currency) => (
-						<SelectItem key={currency} value={currency}>
-							{CURRENCY_SYMBOLS[currency]} {currency}
+					{currencies.map((currency) => (
+						<SelectItem key={currency.value} value={currency.value}>
+							{currency.label}
 						</SelectItem>
 					))}
 				</SelectContent>

@@ -12,7 +12,6 @@ import {
 	FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Separator } from "~/components/ui/separator";
 import { authClient } from "~/lib/auth-client";
 import { m } from "~/paraglide/messages";
 
@@ -191,11 +190,11 @@ export const CredentialsForm = ({ userId }: Props) => {
 				</form>
 			</div>
 
-			<Separator className="my-8" />
 			<ApiKeys userId={userId} />
-			<Separator className="my-8" />
 
-			<h3 className="font-semibold text-lg">{m.profile_password_change()}</h3>
+			<h3 className="font-semibold text-lg mb-2">
+				{m.profile_password_change()}
+			</h3>
 			<form
 				onSubmit={(e) => {
 					e.preventDefault();

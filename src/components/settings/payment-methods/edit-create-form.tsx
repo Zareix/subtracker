@@ -118,14 +118,18 @@ export const EditCreateForm = ({
 							/>
 						)}
 					</form.Field>
-					<form.Field name="image">
-						{(field) => (
-							<ImageSearch
-								query={form.getFieldValue("name")}
-								setFileUrl={(url) => field.handleChange(url)}
-							/>
+					<form.Subscribe selector={(state) => state.values.name}>
+						{(name) => (
+							<form.Field name="image">
+								{(field) => (
+									<ImageSearch
+										query={name}
+										setFileUrl={(url) => field.handleChange(url)}
+									/>
+								)}
+							</form.Field>
 						)}
-					</form.Field>
+					</form.Subscribe>
 				</div>
 				<DialogFooter>
 					<Button type="submit" disabled={isPending}>
