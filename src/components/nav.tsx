@@ -1,40 +1,19 @@
 "use client";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import {
 	Calendar1Icon,
 	CalendarSyncIcon,
 	ChartColumnIcon,
-	ChevronsUpDownIcon,
+	CreditCardIcon,
 	HomeIcon,
-	LanguagesIcon,
-	LogOutIcon,
 	PlusIcon,
 	ShieldIcon,
+	TagIcon,
 	UserCircle2Icon,
-	WrenchIcon,
 } from "lucide-react";
-import { useTheme } from "next-themes";
-import { toast } from "sonner";
+import { UserButton } from "~/components/auth/user/user-button";
 import { CreateSubscriptionDialog } from "~/components/subscriptions/create";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuPortal,
-	DropdownMenuRadioGroup,
-	DropdownMenuRadioItem,
-	DropdownMenuSeparator,
-	DropdownMenuSub,
-	DropdownMenuSubContent,
-	DropdownMenuSubTrigger,
-	DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 import {
 	Sidebar,
 	SidebarContent,
@@ -46,15 +25,10 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 	SidebarTrigger,
-	useSidebar,
 } from "~/components/ui/sidebar";
-import { THEMES, ThemeIcon } from "~/components/ui/theme-provider";
 import { authClient } from "~/lib/auth-client";
-import { Currencies, type Currency } from "~/lib/constant";
-import { useIsMobile } from "~/lib/hooks/use-mobile";
-import { cn, currencyToSymbol } from "~/lib/utils";
+import { cn } from "~/lib/utils";
 import { m } from "~/paraglide/messages";
-import { getLocale, setLocale } from "~/paraglide/runtime";
 
 export const NAV_ITEMS = [
 	{
@@ -76,9 +50,15 @@ export const NAV_ITEMS = [
 		keepParams: true,
 	},
 	{
-		title: m.nav_settings,
-		url: "/settings",
-		icon: WrenchIcon,
+		title: m.nav_categories,
+		url: "/categories",
+		icon: TagIcon,
+		keepParams: false,
+	},
+	{
+		title: m.nav_payment_methods,
+		url: "/payment-methods",
+		icon: CreditCardIcon,
 		keepParams: false,
 	},
 	{
@@ -98,49 +78,9 @@ export const NAV_ITEMS = [
 ] as const;
 
 export function AppSidebar() {
-	const locale = getLocale();
-	const navigate = useNavigate();
 	const pathname = useRouterState({ select: (s) => s.location.pathname });
 	const search = useRouterState({ select: (s) => s.location.search });
 	const session = authClient.useSession();
-	const { setTheme, theme } = useTheme();
-	const queryClient = useQueryClient();
-	const isMobile = useIsMobile();
-	const { toggleSidebar } = useSidebar();
-
-	const updateBaseCurrencyMutation = useMutation({
-		mutationFn: (newCurrency: string) =>
-			authClient.updateUser({ baseCurrency: newCurrency as Currency }),
-		onSuccess: (res) => {
-			if (res.error) {
-				toast.error(res.error.message);
-				return;
-			}
-			queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
-		},
-		onError: (error) => {
-			toast.error(
-				error instanceof Error ? error.message : "Failed to update currency",
-			);
-		},
-	});
-
-	const handleLocaleChange = (newLocale: "fr" | "en") => {
-		setLocale(newLocale);
-	};
-
-	const signOut = () => {
-		authClient
-			.signOut()
-			.then(() => {
-				navigate({ to: "/login" });
-			})
-			.catch((error) => {
-				toast.error(
-					error instanceof Error ? error.message : "Failed to sign out",
-				);
-			});
-	};
 
 	const query = search;
 
@@ -205,162 +145,7 @@ export function AppSidebar() {
 							/>
 						</SidebarMenuItem>
 						<SidebarMenuItem>
-							<DropdownMenu>
-								<DropdownMenuTrigger
-									render={
-										<SidebarMenuButton
-											size="lg"
-											className="border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-										>
-											<Avatar className="size-8 rounded-lg">
-												<AvatarImage
-													src={session.data.user.image ?? undefined}
-													alt={session.data.user.name ?? ""}
-												/>
-												<AvatarFallback className="rounded-lg">
-													{session.data.user.name.charAt(0).toUpperCase()}
-												</AvatarFallback>
-											</Avatar>
-											<div className="grid flex-1 text-left text-sm leading-tight">
-												<span className="truncate font-semibold">
-													{session.data.user.name}
-												</span>
-												<span className="truncate text-xs">
-													{session.data.user.email}
-												</span>
-											</div>
-											<ChevronsUpDownIcon className="ml-auto size-4" />
-										</SidebarMenuButton>
-									}
-								/>
-								<DropdownMenuContent
-									className="min-w-56 rounded-lg"
-									side={isMobile ? "top" : "right"}
-									align="end"
-									sideOffset={4}
-								>
-									<DropdownMenuGroup>
-										<DropdownMenuLabel className="p-0 font-normal">
-											<Link
-												to="/profile"
-												className="flex items-center gap-2 rounded-md px-1 py-1.5 text-left text-sm hover:bg-muted"
-												onClick={() => {
-													if (isMobile) toggleSidebar();
-												}}
-											>
-												<Avatar className="size-8 rounded-lg">
-													<AvatarImage
-														src={session.data.user.image ?? undefined}
-														alt={session.data.user.name}
-													/>
-													<AvatarFallback className="rounded-lg">
-														{session.data.user.name.charAt(0).toUpperCase()}
-													</AvatarFallback>
-												</Avatar>
-												<div className="grid flex-1 text-left text-sidebar-accent-foreground text-sm leading-tight">
-													<span className="truncate font-semibold">
-														{session.data.user.name}
-													</span>
-													<span className="truncate text-xs">
-														{session.data.user.email}
-													</span>
-												</div>
-											</Link>
-										</DropdownMenuLabel>
-										<DropdownMenuSeparator />
-										<DropdownMenuSub>
-											<DropdownMenuSubTrigger>
-												<ThemeIcon theme={theme} />
-												{m.nav_theme()}
-											</DropdownMenuSubTrigger>
-											<DropdownMenuPortal>
-												<DropdownMenuSubContent>
-													<DropdownMenuRadioGroup
-														value={theme}
-														onValueChange={(value) => setTheme(value)}
-													>
-														{THEMES.map((t) => (
-															<DropdownMenuRadioItem
-																key={t}
-																value={t}
-																className="flex items-center gap-2"
-															>
-																<ThemeIcon theme={t} />
-																{m[`nav_theme_${t}`]()}
-															</DropdownMenuRadioItem>
-														))}
-													</DropdownMenuRadioGroup>
-												</DropdownMenuSubContent>
-											</DropdownMenuPortal>
-										</DropdownMenuSub>
-										<DropdownMenuSub>
-											<DropdownMenuSubTrigger>
-												<span className="mr-2">
-													{currencyToSymbol(session.data.user.baseCurrency)}
-												</span>
-												{m.nav_currency()}
-											</DropdownMenuSubTrigger>
-											<DropdownMenuPortal>
-												<DropdownMenuSubContent className="max-h-64 overflow-auto">
-													<DropdownMenuRadioGroup
-														value={
-															(session.data.user.baseCurrency as string) ??
-															"USD"
-														}
-														onValueChange={(value) =>
-															updateBaseCurrencyMutation.mutate(
-																value as Currency,
-															)
-														}
-													>
-														{Currencies.map((currency) => (
-															<DropdownMenuRadioItem
-																key={currency}
-																value={currency}
-																className="flex items-center gap-2 capitalize"
-															>
-																{currencyToSymbol(currency)}{" "}
-																{m[`currency_${currency}`]()}
-															</DropdownMenuRadioItem>
-														))}
-													</DropdownMenuRadioGroup>
-												</DropdownMenuSubContent>
-											</DropdownMenuPortal>
-										</DropdownMenuSub>
-										<DropdownMenuSub>
-											<DropdownMenuSubTrigger>
-												<LanguagesIcon className="size-4" />
-												{m.nav_language()}
-											</DropdownMenuSubTrigger>
-											<DropdownMenuPortal>
-												<DropdownMenuSubContent>
-													<DropdownMenuRadioGroup
-														value={locale}
-														onValueChange={handleLocaleChange}
-													>
-														<DropdownMenuRadioItem
-															value="en"
-															className="flex items-center gap-2"
-														>
-															{m.nav_language_en()}
-														</DropdownMenuRadioItem>
-														<DropdownMenuRadioItem
-															value="fr"
-															className="flex items-center gap-2"
-														>
-															{m.nav_language_fr()}
-														</DropdownMenuRadioItem>
-													</DropdownMenuRadioGroup>
-												</DropdownMenuSubContent>
-											</DropdownMenuPortal>
-										</DropdownMenuSub>
-										<DropdownMenuItem onClick={signOut}>
-											<LogOutIcon />
-											{m.nav_log_out()}
-										</DropdownMenuItem>
-									</DropdownMenuGroup>
-								</DropdownMenuContent>
-							</DropdownMenu>
+							<UserButton />
 						</SidebarMenuItem>
 					</SidebarMenu>
 				)}

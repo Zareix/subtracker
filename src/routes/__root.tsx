@@ -1,5 +1,6 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools/production";
 import {
 	createRootRouteWithContext,
 	HeadContent,
@@ -9,11 +10,9 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { DateLocaleHandler } from "~/components/date-locale";
+import { Providers } from "~/components/providers";
 import { Toaster } from "~/components/ui/sonner";
-import { ThemeProvider } from "~/components/ui/theme-provider";
-import { TooltipProvider } from "~/components/ui/tooltip";
 import { getLocale } from "~/paraglide/runtime";
-import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
 interface MyRouterContext {
@@ -82,9 +81,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-					<TooltipProvider>{children}</TooltipProvider>
-				</ThemeProvider>
+				<Providers>{children}</Providers>
 				<Toaster
 					richColors
 					toastOptions={{
@@ -94,13 +91,18 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				/>
 				<DateLocaleHandler />
 				<TanStackDevtools
-					config={{ position: "bottom-right" }}
+					config={{
+						position: "bottom-right",
+					}}
 					plugins={[
 						{
 							name: "Tanstack Router",
 							render: <TanStackRouterDevtoolsPanel />,
 						},
-						TanStackQueryDevtools,
+						{
+							name: "Tanstack Query",
+							render: <ReactQueryDevtoolsPanel />,
+						},
 					]}
 				/>
 				<Scripts />

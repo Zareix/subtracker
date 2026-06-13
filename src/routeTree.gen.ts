@@ -14,14 +14,15 @@ import { Route as PrivateRouteRouteImport } from './routes/_private/route'
 import { Route as PrivateIndexRouteImport } from './routes/_private/index'
 import { Route as ApiStatsRouteImport } from './routes/api/stats'
 import { Route as ApiFilesRouteImport } from './routes/api/files'
-import { Route as PublicResetPasswordRouteImport } from './routes/_public/reset-password'
-import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PrivateStatsRouteImport } from './routes/_private/stats'
-import { Route as PrivateSettingsRouteImport } from './routes/_private/settings'
 import { Route as PrivateProfileRouteImport } from './routes/_private/profile'
+import { Route as PrivatePaymentMethodsRouteImport } from './routes/_private/payment-methods'
+import { Route as PrivateCategoriesRouteImport } from './routes/_private/categories'
 import { Route as PrivateCalendarRouteImport } from './routes/_private/calendar'
 import { Route as PrivateAdminRouteImport } from './routes/_private/admin'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as PublicAuthPathRouteImport } from './routes/_public/auth/$path'
+import { Route as PrivateSettingsPathRouteImport } from './routes/_private/settings/$path'
 
 const PublicRouteRoute = PublicRouteRouteImport.update({
   id: '/_public',
@@ -46,29 +47,24 @@ const ApiFilesRoute = ApiFilesRouteImport.update({
   path: '/api/files',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PublicResetPasswordRoute = PublicResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
-const PublicLoginRoute = PublicLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => PublicRouteRoute,
-} as any)
 const PrivateStatsRoute = PrivateStatsRouteImport.update({
   id: '/stats',
   path: '/stats',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
-const PrivateSettingsRoute = PrivateSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => PrivateRouteRoute,
-} as any)
 const PrivateProfileRoute = PrivateProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivatePaymentMethodsRoute = PrivatePaymentMethodsRouteImport.update({
+  id: '/payment-methods',
+  path: '/payment-methods',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateCategoriesRoute = PrivateCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
 const PrivateCalendarRoute = PrivateCalendarRouteImport.update({
@@ -86,31 +82,43 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicAuthPathRoute = PublicAuthPathRouteImport.update({
+  id: '/auth/$path',
+  path: '/auth/$path',
+  getParentRoute: () => PublicRouteRoute,
+} as any)
+const PrivateSettingsPathRoute = PrivateSettingsPathRouteImport.update({
+  id: '/settings/$path',
+  path: '/settings/$path',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PrivateIndexRoute
   '/admin': typeof PrivateAdminRoute
   '/calendar': typeof PrivateCalendarRoute
+  '/categories': typeof PrivateCategoriesRoute
+  '/payment-methods': typeof PrivatePaymentMethodsRoute
   '/profile': typeof PrivateProfileRoute
-  '/settings': typeof PrivateSettingsRoute
   '/stats': typeof PrivateStatsRoute
-  '/login': typeof PublicLoginRoute
-  '/reset-password': typeof PublicResetPasswordRoute
   '/api/files': typeof ApiFilesRoute
   '/api/stats': typeof ApiStatsRoute
+  '/settings/$path': typeof PrivateSettingsPathRoute
+  '/auth/$path': typeof PublicAuthPathRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PrivateIndexRoute
   '/admin': typeof PrivateAdminRoute
   '/calendar': typeof PrivateCalendarRoute
+  '/categories': typeof PrivateCategoriesRoute
+  '/payment-methods': typeof PrivatePaymentMethodsRoute
   '/profile': typeof PrivateProfileRoute
-  '/settings': typeof PrivateSettingsRoute
   '/stats': typeof PrivateStatsRoute
-  '/login': typeof PublicLoginRoute
-  '/reset-password': typeof PublicResetPasswordRoute
   '/api/files': typeof ApiFilesRoute
   '/api/stats': typeof ApiStatsRoute
+  '/settings/$path': typeof PrivateSettingsPathRoute
+  '/auth/$path': typeof PublicAuthPathRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -119,14 +127,15 @@ export interface FileRoutesById {
   '/_public': typeof PublicRouteRouteWithChildren
   '/_private/admin': typeof PrivateAdminRoute
   '/_private/calendar': typeof PrivateCalendarRoute
+  '/_private/categories': typeof PrivateCategoriesRoute
+  '/_private/payment-methods': typeof PrivatePaymentMethodsRoute
   '/_private/profile': typeof PrivateProfileRoute
-  '/_private/settings': typeof PrivateSettingsRoute
   '/_private/stats': typeof PrivateStatsRoute
-  '/_public/login': typeof PublicLoginRoute
-  '/_public/reset-password': typeof PublicResetPasswordRoute
   '/api/files': typeof ApiFilesRoute
   '/api/stats': typeof ApiStatsRoute
   '/_private/': typeof PrivateIndexRoute
+  '/_private/settings/$path': typeof PrivateSettingsPathRoute
+  '/_public/auth/$path': typeof PublicAuthPathRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
@@ -135,26 +144,28 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/calendar'
+    | '/categories'
+    | '/payment-methods'
     | '/profile'
-    | '/settings'
     | '/stats'
-    | '/login'
-    | '/reset-password'
     | '/api/files'
     | '/api/stats'
+    | '/settings/$path'
+    | '/auth/$path'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin'
     | '/calendar'
+    | '/categories'
+    | '/payment-methods'
     | '/profile'
-    | '/settings'
     | '/stats'
-    | '/login'
-    | '/reset-password'
     | '/api/files'
     | '/api/stats'
+    | '/settings/$path'
+    | '/auth/$path'
     | '/api/auth/$'
   id:
     | '__root__'
@@ -162,14 +173,15 @@ export interface FileRouteTypes {
     | '/_public'
     | '/_private/admin'
     | '/_private/calendar'
+    | '/_private/categories'
+    | '/_private/payment-methods'
     | '/_private/profile'
-    | '/_private/settings'
     | '/_private/stats'
-    | '/_public/login'
-    | '/_public/reset-password'
     | '/api/files'
     | '/api/stats'
     | '/_private/'
+    | '/_private/settings/$path'
+    | '/_public/auth/$path'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -218,20 +230,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiFilesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_public/reset-password': {
-      id: '/_public/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof PublicResetPasswordRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
-    '/_public/login': {
-      id: '/_public/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof PublicLoginRouteImport
-      parentRoute: typeof PublicRouteRoute
-    }
     '/_private/stats': {
       id: '/_private/stats'
       path: '/stats'
@@ -239,18 +237,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateStatsRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
-    '/_private/settings': {
-      id: '/_private/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof PrivateSettingsRouteImport
-      parentRoute: typeof PrivateRouteRoute
-    }
     '/_private/profile': {
       id: '/_private/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof PrivateProfileRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    '/_private/payment-methods': {
+      id: '/_private/payment-methods'
+      path: '/payment-methods'
+      fullPath: '/payment-methods'
+      preLoaderRoute: typeof PrivatePaymentMethodsRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    '/_private/categories': {
+      id: '/_private/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof PrivateCategoriesRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
     '/_private/calendar': {
@@ -274,25 +279,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_public/auth/$path': {
+      id: '/_public/auth/$path'
+      path: '/auth/$path'
+      fullPath: '/auth/$path'
+      preLoaderRoute: typeof PublicAuthPathRouteImport
+      parentRoute: typeof PublicRouteRoute
+    }
+    '/_private/settings/$path': {
+      id: '/_private/settings/$path'
+      path: '/settings/$path'
+      fullPath: '/settings/$path'
+      preLoaderRoute: typeof PrivateSettingsPathRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
   }
 }
 
 interface PrivateRouteRouteChildren {
   PrivateAdminRoute: typeof PrivateAdminRoute
   PrivateCalendarRoute: typeof PrivateCalendarRoute
+  PrivateCategoriesRoute: typeof PrivateCategoriesRoute
+  PrivatePaymentMethodsRoute: typeof PrivatePaymentMethodsRoute
   PrivateProfileRoute: typeof PrivateProfileRoute
-  PrivateSettingsRoute: typeof PrivateSettingsRoute
   PrivateStatsRoute: typeof PrivateStatsRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
+  PrivateSettingsPathRoute: typeof PrivateSettingsPathRoute
 }
 
 const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateAdminRoute: PrivateAdminRoute,
   PrivateCalendarRoute: PrivateCalendarRoute,
+  PrivateCategoriesRoute: PrivateCategoriesRoute,
+  PrivatePaymentMethodsRoute: PrivatePaymentMethodsRoute,
   PrivateProfileRoute: PrivateProfileRoute,
-  PrivateSettingsRoute: PrivateSettingsRoute,
   PrivateStatsRoute: PrivateStatsRoute,
   PrivateIndexRoute: PrivateIndexRoute,
+  PrivateSettingsPathRoute: PrivateSettingsPathRoute,
 }
 
 const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
@@ -300,13 +323,11 @@ const PrivateRouteRouteWithChildren = PrivateRouteRoute._addFileChildren(
 )
 
 interface PublicRouteRouteChildren {
-  PublicLoginRoute: typeof PublicLoginRoute
-  PublicResetPasswordRoute: typeof PublicResetPasswordRoute
+  PublicAuthPathRoute: typeof PublicAuthPathRoute
 }
 
 const PublicRouteRouteChildren: PublicRouteRouteChildren = {
-  PublicLoginRoute: PublicLoginRoute,
-  PublicResetPasswordRoute: PublicResetPasswordRoute,
+  PublicAuthPathRoute: PublicAuthPathRoute,
 }
 
 const PublicRouteRouteWithChildren = PublicRouteRoute._addFileChildren(

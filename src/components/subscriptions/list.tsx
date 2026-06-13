@@ -153,7 +153,7 @@ const SubscriptionListItem = ({
 				isPrevious && "opacity-50",
 			)}
 		>
-			<CardContent className="py-4">
+			<CardContent>
 				<div className="flex items-center gap-2">
 					{subscription.image && (
 						<img
