@@ -132,7 +132,7 @@ export function SignIn({
 		emailAndPassword?.enabled && socialProviders && socialProviders.length > 0;
 
 	return (
-		<Card className={cn("w-full max-w-sm p-4 gap-3 flex flex-col", className)}>
+		<Card className={cn("w-full max-w-sm gap-3 flex flex-col", className)}>
 			<CardHeader>
 				<CardTitle>
 					<div className="flex items-center gap-2 self-center py-4 font-medium text-xl">

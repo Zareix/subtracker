@@ -1,4 +1,3 @@
-import React, { type HtmlHTMLAttributes } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -17,87 +16,34 @@ import {
 } from "~/components/ui/drawer";
 import { useIsMobile } from "~/lib/hooks/use-mobile";
 
-export const createWrapper = <
-	T extends React.ElementType,
-	U extends React.ElementType,
->() => {
-	return ({
-		children,
-		...props
-	}: React.ComponentProps<T> &
-		React.ComponentProps<U> &
-		HtmlHTMLAttributes<HTMLDivElement>) => {
-		if (React.isValidElement(children)) {
-			return React.cloneElement(children as React.ReactElement, { ...props });
-		}
-		return <>{children}</>;
-	};
+type Props = {
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+	children?: React.ReactNode;
+	trigger?: React.ReactElement;
+	title?: React.ReactNode;
+	description?: React.ReactNode;
+	footer?: React.ReactNode;
 };
 
-export const WrapperDialogVaulTitle = createWrapper<
-	typeof DialogTitle,
-	typeof DrawerTitle
->();
-
-export const WrapperDialogVaulTrigger = createWrapper<
-	typeof DialogTrigger,
-	typeof DrawerTrigger
->();
-
-export const WrapperDialogVaulDescription = createWrapper<
-	typeof DialogDescription,
-	typeof DrawerDescription
->();
-
-export const WrapperDialogVaulFooter = createWrapper<
-	typeof DialogFooter,
-	typeof DrawerFooter
->();
-
-export const WrapperDialogVaul = ({
+export const VaulDialog = ({
+	open,
+	onOpenChange,
 	children,
-	isOpen,
-	setIsOpen,
-}: {
-	children: React.ReactNode;
-	isOpen: boolean;
-	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+	trigger,
+	title,
+	description,
+	footer,
+}: Props) => {
 	const isMobile = useIsMobile();
-
-	const content = React.Children.toArray(children).filter(
-		(child) =>
-			React.isValidElement(child) &&
-			child.type !== WrapperDialogVaulTitle &&
-			child.type !== WrapperDialogVaulTrigger &&
-			child.type !== WrapperDialogVaulDescription &&
-			child.type !== WrapperDialogVaulFooter,
-	)[0];
-	const title = React.Children.toArray(children).find(
-		(child) =>
-			React.isValidElement(child) && child.type === WrapperDialogVaulTitle,
-	) as React.ReactElement | undefined;
-	const trigger = React.Children.toArray(children).find(
-		(child) =>
-			React.isValidElement(child) && child.type === WrapperDialogVaulTrigger,
-	) as React.ReactElement | undefined;
-	const description = React.Children.toArray(children).find(
-		(child) =>
-			React.isValidElement(child) &&
-			child.type === WrapperDialogVaulDescription,
-	) as React.ReactElement | undefined;
-	const footer = React.Children.toArray(children).find(
-		(child) =>
-			React.isValidElement(child) && child.type === WrapperDialogVaulFooter,
-	) as React.ReactElement | undefined;
 
 	if (isMobile) {
 		return (
-			<Drawer open={isOpen} onOpenChange={setIsOpen} repositionInputs={false}>
+			<Drawer open={open} onOpenChange={onOpenChange} repositionInputs={false}>
 				{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
 				<DrawerContent aria-describedby={undefined}>
 					{title && <DrawerTitle>{title}</DrawerTitle>}
-					{content}
+					{children}
 					{description && <DrawerDescription>{description}</DrawerDescription>}
 					{footer && <DrawerFooter>{footer}</DrawerFooter>}
 				</DrawerContent>
@@ -106,19 +52,17 @@ export const WrapperDialogVaul = ({
 	}
 
 	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
+		<Dialog open={open} onOpenChange={onOpenChange}>
 			{trigger && <DialogTrigger render={trigger} />}
-			<DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto" aria-describedby={undefined}>
+			<DialogContent
+				className="max-h-[90vh] max-w-xl overflow-y-auto"
+				aria-describedby={undefined}
+			>
 				{title && <DialogTitle>{title}</DialogTitle>}
-				{content}
+				{children}
 				{description && <DialogDescription>{description}</DialogDescription>}
 				{footer && <DialogFooter>{footer}</DialogFooter>}
 			</DialogContent>
 		</Dialog>
 	);
 };
-
-WrapperDialogVaul.Title = WrapperDialogVaulTitle;
-WrapperDialogVaul.Trigger = WrapperDialogVaulTrigger;
-WrapperDialogVaul.Description = WrapperDialogVaulDescription;
-WrapperDialogVaul.Footer = WrapperDialogVaulFooter;

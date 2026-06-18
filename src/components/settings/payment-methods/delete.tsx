@@ -3,7 +3,7 @@ import { TrashIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
-import { WrapperDialogVaul } from "~/components/ui/vaul-dialog";
+import { VaulDialog } from "~/components/ui/vaul-dialog";
 import { deletePaymentMethod } from "~/functions/payment-methods.functions";
 import { m } from "~/paraglide/messages";
 
@@ -26,8 +26,10 @@ export const DeletePaymentMethodDialog = ({
 	});
 
 	return (
-		<WrapperDialogVaul isOpen={isOpen} setIsOpen={setIsOpen}>
-			<WrapperDialogVaul.Trigger>
+		<VaulDialog
+			open={isOpen}
+			onOpenChange={setIsOpen}
+			trigger={
 				<Button
 					variant="ghost"
 					className="w-8 text-destructive"
@@ -36,30 +38,32 @@ export const DeletePaymentMethodDialog = ({
 				>
 					<TrashIcon size={20} />
 				</Button>
-			</WrapperDialogVaul.Trigger>
-			<WrapperDialogVaul.Title>
-				{m.settings_payment_methods_delete()}:{" "}
-				<span className="font-medium italic">{paymentMethod.name}</span>
-			</WrapperDialogVaul.Title>
-			<WrapperDialogVaul.Description>
-				{m.settings_payment_methods_delete_confirm()}
-			</WrapperDialogVaul.Description>
-			<WrapperDialogVaul.Footer>
-				<Button
-					variant="destructive"
-					onClick={() => deleteMutation.mutate()}
-					disabled={deleteMutation.isPending}
-				>
-					{m.settings_actions_delete()}
-				</Button>
-				<Button
-					variant="outline"
-					onClick={() => setIsOpen(false)}
-					disabled={deleteMutation.isPending}
-				>
-					{m.subscription_form_cancel()}
-				</Button>
-			</WrapperDialogVaul.Footer>
-		</WrapperDialogVaul>
+			}
+			title={
+				<>
+					{m.settings_payment_methods_delete()}:{" "}
+					<span className="font-medium italic">{paymentMethod.name}</span>
+				</>
+			}
+			description={m.settings_payment_methods_delete_confirm()}
+			footer={
+				<>
+					<Button
+						variant="destructive"
+						onClick={() => deleteMutation.mutate()}
+						disabled={deleteMutation.isPending}
+					>
+						{m.settings_actions_delete()}
+					</Button>
+					<Button
+						variant="outline"
+						onClick={() => setIsOpen(false)}
+						disabled={deleteMutation.isPending}
+					>
+						{m.subscription_form_cancel()}
+					</Button>
+				</>
+			}
+		/>
 	);
 };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { EditCreateForm } from "~/components/subscriptions/edit-create-form";
-import { WrapperDialogVaul } from "~/components/ui/vaul-dialog";
+import { VaulDialog } from "~/components/ui/vaul-dialog";
 import { m } from "~/paraglide/messages";
 
 export const CreateSubscriptionDialog = ({
@@ -11,12 +11,13 @@ export const CreateSubscriptionDialog = ({
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<WrapperDialogVaul isOpen={isOpen} setIsOpen={setIsOpen}>
-			<WrapperDialogVaul.Trigger>{trigger}</WrapperDialogVaul.Trigger>
-			<WrapperDialogVaul.Title>
-				{m.subscription_form_create_title()}
-			</WrapperDialogVaul.Title>
+		<VaulDialog
+			open={isOpen}
+			onOpenChange={setIsOpen}
+			trigger={trigger}
+			title={m.subscription_form_create_title()}
+		>
 			<EditCreateForm onFinished={() => setIsOpen(false)} />
-		</WrapperDialogVaul>
+		</VaulDialog>
 	);
 };

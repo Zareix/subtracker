@@ -2,7 +2,7 @@ import { EditIcon } from "lucide-react";
 import { useState } from "react";
 import { EditCreateForm } from "~/components/settings/payment-methods/edit-create-form";
 import { Button } from "~/components/ui/button";
-import { WrapperDialogVaul } from "~/components/ui/vaul-dialog";
+import { VaulDialog } from "~/components/ui/vaul-dialog";
 import { m } from "~/paraglide/messages";
 
 type Props = {
@@ -12,19 +12,20 @@ type Props = {
 export const EditPaymentMethodDialog = ({ paymentMethod }: Props) => {
 	const [isOpen, setIsOpen] = useState(false);
 	return (
-		<WrapperDialogVaul isOpen={isOpen} setIsOpen={setIsOpen}>
-			<WrapperDialogVaul.Trigger>
+		<VaulDialog
+			open={isOpen}
+			onOpenChange={setIsOpen}
+			trigger={
 				<Button variant="ghost" className="w-8" size="icon">
 					<EditIcon size={20} />
 				</Button>
-			</WrapperDialogVaul.Trigger>
-			<WrapperDialogVaul.Title>
-				{m.settings_payment_methods_edit()}
-			</WrapperDialogVaul.Title>
+			}
+			title={m.settings_payment_methods_edit()}
+		>
 			<EditCreateForm
 				onFinished={() => setIsOpen(false)}
 				paymentMethod={paymentMethod}
 			/>
-		</WrapperDialogVaul>
+		</VaulDialog>
 	);
 };

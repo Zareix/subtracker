@@ -29,7 +29,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "~/components/ui/select";
-import { Separator } from "~/components/ui/separator";
 import { getCategories } from "~/functions/categories.functions";
 import { getPaymentMethods } from "~/functions/payment-methods.functions";
 import type { SubscriptionItem } from "~/functions/subscriptions.functions";
@@ -277,7 +276,7 @@ export const EditCreateForm = ({
 				</div>
 
 				{/* Category + URL */}
-				<div className="flex">
+				<div className="flex gap-2">
 					<form.Field name="category">
 						{(field) => {
 							const isInvalid =
@@ -315,10 +314,6 @@ export const EditCreateForm = ({
 							);
 						}}
 					</form.Field>
-					<Separator
-						orientation="vertical"
-						className="mx-2 my-auto flex h-12"
-					/>
 					<form.Field name="url">
 						{(field) => {
 							const isInvalid =
@@ -364,7 +359,7 @@ export const EditCreateForm = ({
 				</form.Field>
 
 				{/* Price + Currency | Payment Method */}
-				<div className="grid grid-cols-2 gap-3">
+				<div className="grid grid-cols-2 gap-2">
 					<div className="flex">
 						<form.Field name="price">
 							{(field) => {
@@ -387,9 +382,6 @@ export const EditCreateForm = ({
 											aria-invalid={isInvalid}
 											className="rounded-r-none"
 										/>
-										{isInvalid && (
-											<FieldError errors={field.state.meta.errors} />
-										)}
 									</Field>
 								);
 							}}
@@ -568,6 +560,7 @@ export const EditCreateForm = ({
 												onSelect={(date) => date && field.handleChange(date)}
 												autoFocus
 												captionLayout="dropdown"
+												className="[--cell-size:--spacing(8)]"
 												startMonth={subYears(new Date(), 10)}
 												endMonth={addYears(new Date(), 10)}
 											/>

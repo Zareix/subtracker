@@ -47,7 +47,7 @@ function PrivateLayout() {
 		<SidebarProvider>
 			<AppSidebar />
 			<main
-				className="container relative mx-auto min-h-screen bg-background px-4 pt-8 pb-20 xl:max-w-5xl"
+				className="container relative mx-auto min-h-svh bg-background px-4 pt-8 pb-20 xl:max-w-5xl"
 				data-vaul-drawer-wrapper
 			>
 				<Outlet />

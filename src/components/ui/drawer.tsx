@@ -59,7 +59,7 @@ function DrawerContent({
 				{...props}
 			>
 				<div className="mx-auto mt-4 hidden h-1.5 w-25 shrink-0 rounded-full bg-muted group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
-				<div className="grid gap-4 overflow-y-auto p-4">{children}</div>
+				<div className="grid gap-4 overflow-y-auto px-4 pb-3">{children}</div>
 			</DrawerPrimitive.Content>
 		</DrawerPortal>
 	);

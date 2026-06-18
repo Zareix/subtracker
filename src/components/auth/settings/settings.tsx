@@ -72,7 +72,8 @@ export function Settings({ className, view, path, hideNav }: SettingsProps) {
 			<div className={cn(hideNav && "hidden")}>
 				<TabsList aria-label={localization.settings.settings}>
 					<TabsTrigger
-						value="account"
+            value="account"
+            nativeButton={false}
 						render={
 							<Link
 								href={`${basePaths.settings}/${viewPaths.settings.account}`}
@@ -86,6 +87,7 @@ export function Settings({ className, view, path, hideNav }: SettingsProps) {
 
 					<TabsTrigger
 						value="security"
+						nativeButton={false}
 						render={
 							<Link
 								href={`${basePaths.settings}/${viewPaths.settings.security}`}
