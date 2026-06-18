@@ -1,4 +1,5 @@
 import { apiKeyClient } from "@better-auth/api-key/client";
+import { passkeyClient } from "@better-auth/passkey/client";
 import {
 	adminClient,
 	genericOAuthClient,
@@ -11,9 +12,9 @@ import type { auth } from "~/lib/auth";
 export const authClient = createAuthClient({
 	plugins: [
 		inferAdditionalFields<typeof auth>(),
-		// passkeyClient(),
-		adminClient(),
+		passkeyClient(),
 		apiKeyClient(),
+		adminClient(),
 		genericOAuthClient(),
 		lastLoginMethodClient(),
 	],
