@@ -2,7 +2,7 @@ import { EditIcon } from "lucide-react";
 import { useState } from "react";
 import { EditCreateForm } from "~/components/admin/users/edit-create-form";
 import { Button } from "~/components/ui/button";
-import { WrapperDialogVaul } from "~/components/ui/vaul-dialog";
+import { VaulDialog } from "~/components/ui/vaul-dialog";
 import { authClient } from "~/lib/auth-client";
 import type { UserRole } from "~/lib/constant";
 import { m } from "~/paraglide/messages";
@@ -22,8 +22,10 @@ export const EditUserDialog = ({ user }: Props) => {
 	const session = authClient.useSession();
 
 	return (
-		<WrapperDialogVaul isOpen={isOpen} setIsOpen={setIsOpen}>
-			<WrapperDialogVaul.Trigger>
+		<VaulDialog
+			open={isOpen}
+			onOpenChange={setIsOpen}
+			trigger={
 				<Button
 					variant="ghost"
 					className="w-8"
@@ -32,9 +34,10 @@ export const EditUserDialog = ({ user }: Props) => {
 				>
 					<EditIcon size={20} />
 				</Button>
-			</WrapperDialogVaul.Trigger>
-			<WrapperDialogVaul.Title>{m.admin_users_edit()}</WrapperDialogVaul.Title>
+			}
+			title={m.admin_users_edit()}
+		>
 			<EditCreateForm onFinished={() => setIsOpen(false)} user={user} />
-		</WrapperDialogVaul>
+		</VaulDialog>
 	);
 };

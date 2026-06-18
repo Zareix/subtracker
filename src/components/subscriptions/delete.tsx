@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
-import { WrapperDialogVaul } from "~/components/ui/vaul-dialog";
+import { VaulDialog } from "~/components/ui/vaul-dialog";
 import { deleteSubscription } from "~/functions/subscriptions.functions";
 import { m } from "~/paraglide/messages";
 
@@ -27,30 +27,34 @@ export const DeleteDialog = ({
 	});
 
 	return (
-		<WrapperDialogVaul isOpen={isOpen} setIsOpen={setIsOpen}>
-			<WrapperDialogVaul.Title>
-				{m.subscription_form_delete_title()}{" "}
-				<span className="font-medium italic">{subscription.name}</span>
-			</WrapperDialogVaul.Title>
-			<WrapperDialogVaul.Description>
-				{m.subscription_form_delete_confirm()}
-			</WrapperDialogVaul.Description>
-			<WrapperDialogVaul.Footer>
-				<Button
-					variant="destructive"
-					onClick={() => deleteMutation.mutate()}
-					disabled={deleteMutation.isPending}
-				>
-					{m.subscription_form_delete_action()}
-				</Button>
-				<Button
-					variant="outline"
-					onClick={() => setIsOpen(false)}
-					disabled={deleteMutation.isPending}
-				>
-					{m.subscription_form_cancel()}
-				</Button>
-			</WrapperDialogVaul.Footer>
-		</WrapperDialogVaul>
+		<VaulDialog
+			open={isOpen}
+			onOpenChange={setIsOpen}
+			title={
+				<>
+					{m.subscription_form_delete_title()}{" "}
+					<span className="font-medium italic">{subscription.name}</span>
+				</>
+			}
+			description={m.subscription_form_delete_confirm()}
+			footer={
+				<>
+					<Button
+						variant="destructive"
+						onClick={() => deleteMutation.mutate()}
+						disabled={deleteMutation.isPending}
+					>
+						{m.subscription_form_delete_action()}
+					</Button>
+					<Button
+						variant="outline"
+						onClick={() => setIsOpen(false)}
+						disabled={deleteMutation.isPending}
+					>
+						{m.subscription_form_cancel()}
+					</Button>
+				</>
+			}
+		/>
 	);
 };

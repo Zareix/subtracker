@@ -1,8 +1,13 @@
+import { ensureSession as ensureSessionClient } from "@better-auth-ui/react";
+import { ensureSession as ensureSessionServer } from "@better-auth-ui/react/server";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createIsomorphicFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { AppSidebar, Navbar } from "~/components/nav";
 import { SidebarProvider } from "~/components/ui/sidebar";
-import { getSession } from "~/functions/session.functions";
+import { auth } from "~/lib/auth";
+import { authClient } from "~/lib/auth-client";
 import { SCHEDULES, SORTS } from "~/lib/constant";
 
 const searchSchema = z.object({
@@ -16,10 +21,21 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/_private")({
 	validateSearch: searchSchema,
-	beforeLoad: async () => {
-		const session = await getSession();
+	async beforeLoad({ context: { queryClient }, location }) {
+		const ensureSession = createIsomorphicFn()
+			.server(() =>
+				ensureSessionServer(queryClient, auth, {
+					headers: getRequestHeaders(),
+				}),
+			)
+			.client(() => ensureSessionClient(queryClient, authClient));
+		const session = await ensureSession();
 		if (!session) {
-			throw redirect({ to: "/login" });
+			throw redirect({
+				to: "/auth/$path",
+				params: { path: "sign-in" },
+				search: { redirectTo: location.href },
+			});
 		}
 		return { session };
 	},
@@ -31,7 +47,7 @@ function PrivateLayout() {
 		<SidebarProvider>
 			<AppSidebar />
 			<main
-				className="container relative mx-auto min-h-screen bg-background px-4 pt-8 pb-20 xl:max-w-5xl"
+				className="container relative mx-auto min-h-svh bg-background px-4 pt-8 pb-20 xl:max-w-5xl"
 				data-vaul-drawer-wrapper
 			>
 				<Outlet />

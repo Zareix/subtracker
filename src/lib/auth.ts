@@ -1,4 +1,3 @@
-import { apiKey } from "@better-auth/api-key";
 import { passkey } from "@better-auth/passkey";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { betterAuth } from "better-auth";
@@ -98,14 +97,14 @@ export const auth = betterAuth({
 			rpName: "Subtracker",
 			origin: env.BETTER_AUTH_URL,
 		}),
-		apiKey({
-			references: "user",
-			rateLimit: {
-				enabled: env.NODE_ENV === "production",
-				maxRequests: 100,
-				timeWindow: 1000,
-			},
-		}),
+		// apiKey({
+		// 	references: "user",
+		// 	rateLimit: {
+		// 		enabled: env.NODE_ENV === "production",
+		// 		maxRequests: 100,
+		// 		timeWindow: 1000,
+		// 	},
+		// }),
 		lastLoginMethod(),
 		admin(),
 		tanstackStartCookies(),

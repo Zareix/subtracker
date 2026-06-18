@@ -1,5 +1,5 @@
 import { EditCreateForm } from "~/components/subscriptions/edit-create-form";
-import { WrapperDialogVaul } from "~/components/ui/vaul-dialog";
+import { VaulDialog } from "~/components/ui/vaul-dialog";
 import type { SubscriptionItem } from "~/functions/subscriptions.functions";
 import { m } from "~/paraglide/messages";
 
@@ -14,13 +14,14 @@ export const DuplicateSubscriptionDialog = ({
 	isOpen,
 	setIsOpen,
 }: Props) => (
-	<WrapperDialogVaul isOpen={isOpen} setIsOpen={setIsOpen}>
-		<WrapperDialogVaul.Title>
-			{m.subscription_form_duplicate_title({ name: subscription.name })}
-		</WrapperDialogVaul.Title>
+	<VaulDialog
+		open={isOpen}
+		onOpenChange={setIsOpen}
+		title={m.subscription_form_duplicate_title({ name: subscription.name })}
+	>
 		<EditCreateForm
 			subscription={{ ...subscription, id: undefined }}
 			onFinished={() => setIsOpen(false)}
 		/>
-	</WrapperDialogVaul>
+	</VaulDialog>
 );

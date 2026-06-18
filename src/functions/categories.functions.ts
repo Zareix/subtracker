@@ -18,7 +18,7 @@ export const getCategories = createServerFn({ method: "GET" }).handler(
 );
 
 export const createCategory = createServerFn({ method: "POST" })
-	.inputValidator(
+	.validator(
 		z.object({
 			name: z.string().min(1, "Name cannot be empty"),
 			icon: z.enum(Object.keys(dynamicIconImports) as [string, ...string[]]),
@@ -41,9 +41,7 @@ export const createCategory = createServerFn({ method: "POST" })
 	});
 
 export const editCategory = createServerFn({ method: "POST" })
-	.inputValidator(
-		z.object({ id: z.number(), name: z.string(), icon: z.string() }),
-	)
+	.validator(z.object({ id: z.number(), name: z.string(), icon: z.string() }))
 	.handler(async ({ data }) => {
 		await requireSession();
 		const category = takeFirstOrThrow(
@@ -62,7 +60,7 @@ export const editCategory = createServerFn({ method: "POST" })
 	});
 
 export const deleteCategory = createServerFn({ method: "POST" })
-	.inputValidator(z.object({ id: z.number() }))
+	.validator(z.object({ id: z.number() }))
 	.handler(async ({ data }) => {
 		await requireSession();
 		if (data.id === 1) {

@@ -7,7 +7,7 @@ export function Card({
 	return (
 		<div
 			className={cn(
-				"rounded-xl border border-border bg-card text-card-foreground shadow",
+				"rounded-xl border border-border bg-card text-card-foreground shadow py-4",
 				className,
 			)}
 			{...props}
@@ -41,4 +41,20 @@ export function CardContent({
 	...props
 }: React.HTMLAttributes<HTMLDivElement>) {
 	return <div className={cn("px-6 pt-0", className)} {...props} />;
+}
+
+export function CardFooter({
+	className,
+	...props
+}: React.ComponentProps<"div">) {
+	return (
+		<div
+			data-slot="card-footer"
+			className={cn(
+				"flex items-center rounded-b-xl px-6 mt-4 group-data-[size=sm]/card:px-4 [.border-t]:pt-6 group-data-[size=sm]/card:[.border-t]:pt-4",
+				className,
+			)}
+			{...props}
+		/>
+	);
 }

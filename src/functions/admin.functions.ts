@@ -122,7 +122,7 @@ export const adminExportData = createServerFn({ method: "POST" }).handler(
 );
 
 export const adminImportData = createServerFn({ method: "POST" })
-	.inputValidator(
+	.validator(
 		z.object({
 			subscriptions: z.array(
 				z.object({

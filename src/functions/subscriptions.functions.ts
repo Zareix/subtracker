@@ -160,7 +160,7 @@ const calculatePreviousPaymentDate = (
 export const getAllSubscriptionsOfUser = createServerFn({
 	method: "GET",
 })
-	.inputValidator(
+	.validator(
 		z.object({
 			userId: z.string(),
 			baseCurrency: z.enum(Currencies).optional(),
@@ -277,7 +277,7 @@ export const getSubscriptions = createServerFn({ method: "GET" }).handler(
 );
 
 export const createSubscription = createServerFn({ method: "POST" })
-	.inputValidator(subscriptionInputSchema)
+	.validator(subscriptionInputSchema)
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		if (!data.payedBy.includes(session.user.id)) {
@@ -316,7 +316,7 @@ export const createSubscription = createServerFn({ method: "POST" })
 	});
 
 export const editSubscription = createServerFn({ method: "POST" })
-	.inputValidator(subscriptionInputSchema.extend({ id: z.number() }))
+	.validator(subscriptionInputSchema.extend({ id: z.number() }))
 	.handler(async ({ data }) => {
 		const session = await requireSession();
 		if (!data.payedBy.includes(session.user.id)) {
@@ -359,7 +359,7 @@ export const editSubscription = createServerFn({ method: "POST" })
 	});
 
 export const deleteSubscription = createServerFn({ method: "POST" })
-	.inputValidator(z.object({ id: z.number() }))
+	.validator(z.object({ id: z.number() }))
 	.handler(async ({ data }) => {
 		await requireSession();
 		await runTransaction(db, async (tx) => {
@@ -371,7 +371,7 @@ export const deleteSubscription = createServerFn({ method: "POST" })
 	});
 
 export const searchSubscriptionImages = createServerFn({ method: "GET" })
-	.inputValidator(z.object({ query: z.string() }))
+	.validator(z.object({ query: z.string() }))
 	.handler(async ({ data }) => {
 		await requireSession();
 		return searchImages(data.query);
