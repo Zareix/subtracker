@@ -95,7 +95,7 @@ export const WrapperDialogVaul = ({
 		return (
 			<Drawer open={isOpen} onOpenChange={setIsOpen} repositionInputs={false}>
 				{trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
-				<DrawerContent>
+				<DrawerContent aria-describedby={undefined}>
 					{title && <DrawerTitle>{title}</DrawerTitle>}
 					{content}
 					{description && <DrawerDescription>{description}</DrawerDescription>}
@@ -108,7 +108,7 @@ export const WrapperDialogVaul = ({
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			{trigger && <DialogTrigger render={trigger} />}
-			<DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto">
+			<DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto" aria-describedby={undefined}>
 				{title && <DialogTitle>{title}</DialogTitle>}
 				{content}
 				{description && <DialogDescription>{description}</DialogDescription>}

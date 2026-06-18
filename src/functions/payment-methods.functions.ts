@@ -20,7 +20,7 @@ export const getPaymentMethods = createServerFn({ method: "GET" }).handler(
 );
 
 export const createPaymentMethod = createServerFn({ method: "POST" })
-	.inputValidator(
+	.validator(
 		z.object({
 			name: z.string().min(1, "Name cannot be empty"),
 			image: z.string().nullish(),
@@ -39,7 +39,7 @@ export const createPaymentMethod = createServerFn({ method: "POST" })
 	});
 
 export const editPaymentMethod = createServerFn({ method: "POST" })
-	.inputValidator(
+	.validator(
 		z.object({
 			id: z.number(),
 			name: z.string(),
@@ -60,7 +60,7 @@ export const editPaymentMethod = createServerFn({ method: "POST" })
 	});
 
 export const deletePaymentMethod = createServerFn({ method: "POST" })
-	.inputValidator(z.object({ id: z.number() }))
+	.validator(z.object({ id: z.number() }))
 	.handler(async ({ data }) => {
 		await requireSession();
 		await runTransaction(db, async (tx) => {

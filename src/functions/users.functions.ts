@@ -26,7 +26,7 @@ export const getUsers = createServerFn({ method: "GET" }).handler(async () => {
 });
 
 export const editUser = createServerFn({ method: "POST" })
-	.inputValidator(
+	.validator(
 		z.object({
 			id: z.string(),
 			name: z.string(),
@@ -53,7 +53,7 @@ export const editUser = createServerFn({ method: "POST" })
 	});
 
 export const deleteUser = createServerFn({ method: "POST" })
-	.inputValidator(z.object({ id: z.string() }))
+	.validator(z.object({ id: z.string() }))
 	.handler(async ({ data }) => {
 		await requireAdmin();
 		const user = await db.query.users.findFirst({

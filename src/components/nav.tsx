@@ -25,6 +25,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 	SidebarTrigger,
+	useSidebar,
 } from "~/components/ui/sidebar";
 import { authClient } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
@@ -81,6 +82,7 @@ export function AppSidebar() {
 	const pathname = useRouterState({ select: (s) => s.location.pathname });
 	const search = useRouterState({ select: (s) => s.location.search });
 	const session = authClient.useSession();
+	const { isMobile, toggleSidebar } = useSidebar();
 
 	const query = search;
 
@@ -92,7 +94,11 @@ export function AppSidebar() {
 						<SidebarMenuButton
 							size="lg"
 							render={
-								<Link to="/" search={query}>
+								<Link
+									to="/"
+									search={query}
+									onClick={() => isMobile && toggleSidebar()}
+								>
 									<div className="flex aspect-square size-8 items-center justify-center rounded-xs bg-primary text-sidebar-primary-foreground">
 										<CalendarSyncIcon className="size-4" />
 									</div>
@@ -119,6 +125,7 @@ export function AppSidebar() {
 											<Link
 												to={item.url}
 												search={item.keepParams ? query : undefined}
+												onClick={() => isMobile && toggleSidebar()}
 											>
 												<item.icon />
 												<span>{item.title()}</span>
@@ -174,7 +181,7 @@ const NavbarItem = ({
 				search={item.keepParams ? search : undefined}
 				className="flex h-full items-center justify-center gap-2 font-bold text-xl"
 			>
-				<item.icon size={26} />
+				<item.icon className="size-6.5" />
 			</Link>
 		}
 	/>
@@ -187,12 +194,11 @@ export const Navbar = () => {
 	const navBarItems = NAV_ITEMS.filter((item) =>
 		"role" in item ? item.role === "user" : true,
 	);
-	const middleIndex = Math.floor(navBarItems.length / 2);
 	return (
 		<nav className="fixed right-0 bottom-0 left-0 z-10 flex h-14 items-center justify-between border-border border-t bg-background/80 px-4 backdrop-blur md:hidden md:px-8">
 			<div className="grid h-full w-full grid-cols-5 content-center items-center justify-around gap-2">
 				{navBarItems
-					.filter((_, i) => i < middleIndex)
+					.filter((_, i) => i < 2)
 					.map((item) => (
 						<NavbarItem
 							key={item.title()}
@@ -207,12 +213,12 @@ export const Navbar = () => {
 							variant="link"
 							className="flex h-full items-center gap-2 text-foreground"
 						>
-							<PlusIcon />
+							<PlusIcon className="size-6.5" />
 						</Button>
 					}
 				/>
 				{navBarItems
-					.filter((_, i) => i >= middleIndex && i < 3)
+					.filter((_, i) => i >= 2 && i < 3)
 					.map((item) => (
 						<NavbarItem
 							key={item.title()}
@@ -221,7 +227,7 @@ export const Navbar = () => {
 							search={search}
 						/>
 					))}
-				<SidebarTrigger className="h-full w-full px-3 py-1.5 [&_svg]:size-6.5" />
+				<SidebarTrigger className="h-full w-full px-3 py-1.5 [&_svg]:size-6.5!" />
 			</div>
 		</nav>
 	);
