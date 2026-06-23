@@ -7,7 +7,11 @@ import { paraglideMiddleware } from "./paraglide/server.js";
 await migrateDB();
 await seed();
 
-await updateExchangeRates();
+try {
+	await updateExchangeRates();
+} catch (e) {
+	console.error("Failed to update exchange rates", e);
+}
 
 export default createServerEntry({
 	fetch(req) {

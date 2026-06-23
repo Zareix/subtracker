@@ -13,6 +13,7 @@ import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as PrivateRouteRouteImport } from './routes/_private/route'
 import { Route as PrivateIndexRouteImport } from './routes/_private/index'
 import { Route as ApiStatsRouteImport } from './routes/api/stats'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiFilesRouteImport } from './routes/api/files'
 import { Route as PrivateStatsRouteImport } from './routes/_private/stats'
 import { Route as PrivateProfileRouteImport } from './routes/_private/profile'
@@ -40,6 +41,11 @@ const PrivateIndexRoute = PrivateIndexRouteImport.update({
 const ApiStatsRoute = ApiStatsRouteImport.update({
   id: '/api/stats',
   path: '/api/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiFilesRoute = ApiFilesRouteImport.update({
@@ -102,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof PrivateProfileRoute
   '/stats': typeof PrivateStatsRoute
   '/api/files': typeof ApiFilesRoute
+  '/api/health': typeof ApiHealthRoute
   '/api/stats': typeof ApiStatsRoute
   '/settings/$path': typeof PrivateSettingsPathRoute
   '/auth/$path': typeof PublicAuthPathRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/profile': typeof PrivateProfileRoute
   '/stats': typeof PrivateStatsRoute
   '/api/files': typeof ApiFilesRoute
+  '/api/health': typeof ApiHealthRoute
   '/api/stats': typeof ApiStatsRoute
   '/settings/$path': typeof PrivateSettingsPathRoute
   '/auth/$path': typeof PublicAuthPathRoute
@@ -132,6 +140,7 @@ export interface FileRoutesById {
   '/_private/profile': typeof PrivateProfileRoute
   '/_private/stats': typeof PrivateStatsRoute
   '/api/files': typeof ApiFilesRoute
+  '/api/health': typeof ApiHealthRoute
   '/api/stats': typeof ApiStatsRoute
   '/_private/': typeof PrivateIndexRoute
   '/_private/settings/$path': typeof PrivateSettingsPathRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/stats'
     | '/api/files'
+    | '/api/health'
     | '/api/stats'
     | '/settings/$path'
     | '/auth/$path'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/stats'
     | '/api/files'
+    | '/api/health'
     | '/api/stats'
     | '/settings/$path'
     | '/auth/$path'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/_private/profile'
     | '/_private/stats'
     | '/api/files'
+    | '/api/health'
     | '/api/stats'
     | '/_private/'
     | '/_private/settings/$path'
@@ -189,6 +201,7 @@ export interface RootRouteChildren {
   PrivateRouteRoute: typeof PrivateRouteRouteWithChildren
   PublicRouteRoute: typeof PublicRouteRouteWithChildren
   ApiFilesRoute: typeof ApiFilesRoute
+  ApiHealthRoute: typeof ApiHealthRoute
   ApiStatsRoute: typeof ApiStatsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       path: '/api/stats'
       fullPath: '/api/stats'
       preLoaderRoute: typeof ApiStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/files': {
@@ -338,6 +358,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivateRouteRoute: PrivateRouteRouteWithChildren,
   PublicRouteRoute: PublicRouteRouteWithChildren,
   ApiFilesRoute: ApiFilesRoute,
+  ApiHealthRoute: ApiHealthRoute,
   ApiStatsRoute: ApiStatsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

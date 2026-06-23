@@ -11,8 +11,6 @@ services:
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET} # generate with `openssl rand -hex 32`
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - BETTER_AUTH_URL=https://subtracker.example.com
-      - DATABASE_PATH=/data/db.sqlite
-      - UPLOADS_FOLDER=/data/uploads
       - S3_BUCKET=${S3_BUCKET} # optional
       - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID} # optional
       - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY} # optional
@@ -36,8 +34,8 @@ services:
 | BETTER_AUTH_SECRET   | Secret key for [better-auth](https://github.com/better-auth/better-auth)   | -                           |
 | ADMIN_EMAIL          | Admin email for default admin user                                         | -                           |
 | BETTER_AUTH_URL      | Your app URL for [better-auth](https://github.com/better-auth/better-auth) | -                           |
-| DATABASE_PATH        | Path to the database file                                                  | /app/db/db.sqlite           |
-| UPLOADS_FOLDER       | Path to the uploads folder                                                 | /app/uploads                |
+| DATABASE_PATH        | Path to the database file                                                  | /app/data/db.sqlite         |
+| UPLOADS_FOLDER       | Path to the uploads folder                                                 | /app/data/uploads/          |
 | FRANKFURTER_API_URL  | API Url for [Frankfurter](https://frankfurter.dev/)                        | https://api.frankfurter.dev |
 | S3_BUCKET            | S3 bucket name                                                             | -                           |
 | S3_ACCESS_KEY_ID     | S3 access key ID                                                           | -                           |

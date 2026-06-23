@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      BETTER_AUTH_SECRET: xxx
+      ADMIN_EMAIL: admin@gmail.com
+      BETTER_AUTH_URL: http://localhost:3000
+    volumes:
+      - data:/app/data
+
+volumes:
+  data:
