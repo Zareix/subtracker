@@ -9,12 +9,8 @@ RUN bun install --frozen-lockfile
 COPY . .
 
 ENV NODE_ENV=production
-ENV DATABASE_PATH=/app/data/db.sqlite
-ENV UPLOADS_FOLDER=/app/data/uploads
-
 RUN bun run build
-RUN mkdir -p ${DATABASE_PATH}
-RUN mkdir -p ${UPLOADS_FOLDER}
+RUN mkdir -p /app/data/
 
 
 FROM oven/bun:1.3.14-distroless AS runner
