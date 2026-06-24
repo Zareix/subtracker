@@ -194,7 +194,7 @@ const StatsCard = ({
 				{description && (
 					<Popover>
 						<PopoverTrigger>
-							<InfoIcon size={20} className="text-muted-foreground" />
+							<InfoIcon className="size-5 text-muted-foreground" />
 						</PopoverTrigger>
 						<PopoverContent
 							className="w-max max-w-80 gap-0 px-3 py-3"

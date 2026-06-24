@@ -36,7 +36,7 @@ export const DeletePaymentMethodDialog = ({
 					size="icon"
 					disabled={paymentMethod.id === 1}
 				>
-					<TrashIcon size={20} />
+					<TrashIcon className="size-5" />
 				</Button>
 			}
 			title={

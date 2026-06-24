@@ -37,6 +37,7 @@
   "filters_payment_methods": "Payment methods",
   "filters_schedule": "Schedule",
   "filters_select": "Select...",
+  "filters_selected": "{count} selected",
   "filters_users": "Users",
   "home_add_subscription": "Add subscription",
   "home_page": "Home page",

@@ -31,7 +31,7 @@ const LoadingSkeleton = () => (
 					<div className="flex grow flex-col gap-1">
 						<Skeleton className="h-6 w-20 md:w-28" />
 						<div className="flex items-center gap-1 text-muted-foreground text-sm">
-							<Calendar1Icon size={16} />
+							<Calendar1Icon className="size-4" />
 							<Skeleton className="h-4 w-16" />
 						</div>
 					</div>

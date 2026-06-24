@@ -133,9 +133,9 @@ export const CredentialsForm = ({ userId }: Props) => {
 									disabled={removePasskeyMutation.isPending}
 								>
 									{removePasskeyMutation.isPending ? (
-										<LoaderCircleIcon className="animate-spin" size={20} />
+										<LoaderCircleIcon className="animate-spinsize-5" />
 									) : (
-										<TrashIcon size={20} className="text-destructive" />
+										<TrashIcon className="size-5 text-destructive" />
 									)}
 								</Button>
 							</li>

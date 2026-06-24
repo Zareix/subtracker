@@ -167,7 +167,7 @@ const SubscriptionListItem = ({
 					<div className="flex grow flex-col gap-1">
 						<h2 className="font-semibold text-xl">{subscription.name}</h2>
 						<div className="flex items-center gap-1 text-muted-foreground text-sm">
-							<Calendar1Icon size={16} />
+							<Calendar1Icon className="size-4" />
 							{formatNextPaymentDate(
 								isPrevious
 									? subscription.previousPaymentDate
@@ -182,12 +182,8 @@ const SubscriptionListItem = ({
 					<DropdownMenu>
 						<DropdownMenuTrigger
 							render={
-								<Button
-									size="icon"
-									variant="ghost"
-									className="w-5 text-muted-foreground md:w-10"
-								>
-									<InfoIcon size={20} />
+								<Button size="icon" variant="ghost">
+									<InfoIcon className="size-5" />
 								</Button>
 							}
 						/>
@@ -219,7 +215,7 @@ const SubscriptionListItem = ({
 				</div>
 				<div className="flex flex-wrap gap-x-4 gap-y-2 pt-1 text-base text-foreground/80 md:gap-x-6">
 					<div className="flex items-center gap-1">
-						<UserIcon size={18} className="text-primary" />
+						<UserIcon className="size-4.5 text-primary" />
 						<span>{subscription.users.map((u) => u.name).join(", ")}</span>
 					</div>
 					<button
@@ -246,7 +242,7 @@ const SubscriptionListItem = ({
 								className="max-h-5 max-w-5 object-contain"
 							/>
 						) : (
-							<WalletCardsIcon size={18} className="text-primary" />
+							<WalletCardsIcon className="size-4.5 text-primary" />
 						)}
 						<span>{subscription.paymentMethod.name}</span>
 					</button>
@@ -266,8 +262,7 @@ const SubscriptionListItem = ({
 					>
 						<CategoryIcon
 							icon={subscription.category.icon}
-							size={16}
-							className="text-primary"
+							className="size-4 text-primary"
 						/>
 						{subscription.category.name}
 					</button>
@@ -283,7 +278,7 @@ const SubscriptionListItem = ({
 							})
 						}
 					>
-						<RefreshCcwIcon size={16} className="text-primary" />
+						<RefreshCcwIcon className="size-4 text-primary" />
 						{SCHEDULE_LABELS[subscription.schedule]()}
 					</button>
 					{subscription.currency !== userBaseCurrency && (
@@ -301,13 +296,13 @@ const SubscriptionListItem = ({
 							rel="noopener noreferrer"
 							className="flex items-center gap-1"
 						>
-							<ExternalLinkIcon size={16} className="text-primary" />
+							<ExternalLinkIcon className="size-4 text-primary" />
 							{new URL(subscription.url).hostname}
 						</a>
 					)}
 					{subscription.description.length > 0 && (
 						<div className="flex items-center gap-1">
-							<TextIcon size={20} className="text-primary" />
+							<TextIcon className="size-5 text-primary" />
 							<span className="max-w-[80vw] overflow-x-clip text-ellipsis whitespace-nowrap md:whitespace-pre-wrap">
 								{subscription.description}
 							</span>

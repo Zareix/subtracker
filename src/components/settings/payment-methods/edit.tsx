@@ -17,7 +17,7 @@ export const EditPaymentMethodDialog = ({ paymentMethod }: Props) => {
 			onOpenChange={setIsOpen}
 			trigger={
 				<Button variant="ghost" className="w-8" size="icon">
-					<EditIcon size={20} />
+					<EditIcon className="size-5" />
 				</Button>
 			}
 			title={m.settings_payment_methods_edit()}

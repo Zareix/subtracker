@@ -37,6 +37,14 @@
   "filters_payment_methods": "Moyens de paiement",
   "filters_schedule": "Fréquence",
   "filters_select": "Sélectionner...",
+  "filters_selected": [{
+      "declarations": ["input count", "local countPlural = count: plural"],
+      "selectors": ["countPlural"],
+      "match": {
+        "countPlural=one": "{count} sélectionné",
+        "countPlural=other": "{count} sélectionnés"
+      }
+    }],
   "filters_users": "Utilisateurs",
   "home_add_subscription": "Ajouter un abonnement",
   "home_page": "Page d'accueil",

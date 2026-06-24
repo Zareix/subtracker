@@ -17,6 +17,7 @@ import {
 	FieldLabel,
 } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
+import { NumberField } from "~/components/ui/number-field";
 import {
 	Popover,
 	PopoverContent,
@@ -370,15 +371,14 @@ export const EditCreateForm = ({
 										<FieldLabel htmlFor="sub-price">
 											{m.subscription_form_price()}
 										</FieldLabel>
-										<Input
+										<NumberField
 											id="sub-price"
 											name={field.name}
-											type="number"
 											value={field.state.value}
 											onBlur={field.handleBlur}
-											onChange={(e) =>
-												field.handleChange(Number(e.target.value))
-											}
+											inputMode="decimal"
+											step={0.01}
+											onValueChange={(v) => field.handleChange(v ?? 0)}
 											aria-invalid={isInvalid}
 											className="rounded-r-none"
 										/>

@@ -13,7 +13,7 @@ export const CreatePaymentMethodDialog = () => {
 			onOpenChange={setIsOpen}
 			trigger={
 				<Button>
-					<PlusIcon size={20} />
+					<PlusIcon className="size-5" />
 					<span>{m.settings_actions_add_new()}</span>
 				</Button>
 			}

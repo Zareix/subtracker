@@ -91,7 +91,7 @@ export const ApiKeys = ({ userId }: Props) => {
 								onClick={() => setLastCreatedKey(null)}
 								className="h-6 w-6 p-0 text-green-600 hover:text-green-800 dark:text-green-400"
 							>
-								<XIcon size={16} />
+								<XIcon className="size-4" />
 							</Button>
 						</div>
 					</CardHeader>
@@ -117,7 +117,7 @@ export const ApiKeys = ({ userId }: Props) => {
 								}}
 								className="h-8 w-8 p-0 text-green-600 hover:text-green-800 dark:text-green-400"
 							>
-								<CopyIcon size={16} />
+								<CopyIcon className="size-4" />
 							</Button>
 						</div>
 					</CardContent>
@@ -126,7 +126,7 @@ export const ApiKeys = ({ userId }: Props) => {
 
 			{apiKeysQuery.isLoading ? (
 				<div className="flex items-center gap-2">
-					<LoaderCircleIcon className="animate-spin" size={16} />
+					<LoaderCircleIcon className="animate-spin size-4" />
 					<p>{m.profile_api_keys_loading()}</p>
 				</div>
 			) : !apiKeysQuery.data?.apiKeys ||
@@ -160,9 +160,9 @@ export const ApiKeys = ({ userId }: Props) => {
 									className="ml-auto text-destructive hover:text-destructive"
 								>
 									{deleteMutation.isPending ? (
-										<LoaderCircleIcon className="animate-spin" size={20} />
+										<LoaderCircleIcon className="animate-spin size-5" />
 									) : (
-										<TrashIcon size={20} />
+										<TrashIcon className="size-5" />
 									)}
 								</Button>
 							</div>
@@ -211,7 +211,7 @@ export const ApiKeys = ({ userId }: Props) => {
 						>
 							{createMutation.isPending ? (
 								<>
-									<LoaderCircleIcon className="mr-2 animate-spin" size={16} />
+									<LoaderCircleIcon className="mr-2 animate-spin size-4" />
 									{m.profile_api_keys_creating()}
 								</>
 							) : (

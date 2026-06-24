@@ -36,7 +36,7 @@ export const DeleteCategoryDialog = ({
 					size="icon"
 					disabled={category.id === 1}
 				>
-					<TrashIcon size={20} />
+					<TrashIcon className="size-5" />
 				</Button>
 			}
 			title={

@@ -32,7 +32,7 @@ export const EditUserDialog = ({ user }: Props) => {
 					size="icon"
 					disabled={session.data?.user.id === user.id}
 				>
-					<EditIcon size={20} />
+					<EditIcon className="size-5" />
 				</Button>
 			}
 			title={m.admin_users_edit()}

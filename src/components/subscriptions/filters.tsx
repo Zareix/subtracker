@@ -120,6 +120,16 @@ export const FiltersButton = ({
 		filters.paymentMethods.length > 0 ||
 		filters.categories.length > 0;
 
+	const renderMultiselectValue = (
+		items: typeof paymentMethods,
+		selectedItems: (typeof filters)["paymentMethods"],
+	) => {
+		if (selectedItems?.length === 0) return m.filters_select();
+		if (selectedItems?.length === 1)
+			return items.find((i) => i.value === selectedItems[0])?.label;
+		return m.filters_selected({ count: selectedItems?.length });
+	};
+
 	return (
 		<div className="flex items-center gap-4">
 			<Popover>
@@ -224,8 +234,13 @@ export const FiltersButton = ({
 									multiple
 									items={paymentMethods}
 								>
-									<SelectTrigger className="w-full capitalize">
-										<SelectValue placeholder={m.filters_select()} />
+									<SelectTrigger className="w-full">
+										<SelectValue>
+											{renderMultiselectValue(
+												paymentMethods,
+												filters.paymentMethods,
+											)}
+										</SelectValue>
 									</SelectTrigger>
 									<SelectContent>
 										{paymentMethods.map((pm) => (
@@ -253,8 +268,10 @@ export const FiltersButton = ({
 									multiple
 									items={categories}
 								>
-									<SelectTrigger className="w-full capitalize">
-										<SelectValue placeholder={m.filters_select()} />
+									<SelectTrigger className="w-full">
+										<SelectValue>
+											{renderMultiselectValue(categories, filters.categories)}
+										</SelectValue>
 									</SelectTrigger>
 									<SelectContent>
 										{categories.map((cat) => (

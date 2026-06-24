@@ -38,7 +38,7 @@ export const DeleteUserDialog = ({
 					size="icon"
 					disabled={session.data?.user.id === user.id}
 				>
-					<TrashIcon size={20} />
+					<TrashIcon className="size-5" />
 				</Button>
 			}
 			title={

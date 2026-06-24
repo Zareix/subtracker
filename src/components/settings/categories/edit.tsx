@@ -17,7 +17,7 @@ export const EditCategoryDialog = ({ category }: Props) => {
 			onOpenChange={setIsOpen}
 			trigger={
 				<Button variant="ghost" className="w-8" size="icon">
-					<EditIcon size={20} />
+					<EditIcon className="size-5" />
 				</Button>
 			}
 			title={m.settings_categories_edit()}
