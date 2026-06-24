@@ -1,112 +1,112 @@
-import { TanStackDevtools } from "@tanstack/react-devtools";
-import type { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools/production";
+import { TanStackDevtools } from "@tanstack/react-devtools"
+import type { QueryClient } from "@tanstack/react-query"
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools/production"
 import {
-	createRootRouteWithContext,
-	HeadContent,
-	Link,
-	Scripts,
-	useRouter,
-} from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { DateLocaleHandler } from "~/components/date-locale";
-import { Providers } from "~/components/providers";
-import { Toaster } from "~/components/ui/sonner";
-import { getLocale } from "~/paraglide/runtime";
-import appCss from "../styles.css?url";
+  createRootRouteWithContext,
+  HeadContent,
+  Link,
+  Scripts,
+  useRouter,
+} from "@tanstack/react-router"
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
+
+import { DateLocaleHandler } from "~/components/date-locale"
+import { Providers } from "~/components/providers"
+import { Toaster } from "~/components/ui/sonner"
+import { getLocale } from "~/paraglide/runtime"
+
+import appCss from "../styles.css?url"
 
 interface MyRouterContext {
-	queryClient: QueryClient;
+  queryClient: QueryClient
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-	beforeLoad: async () => {
-		if (typeof document !== "undefined") {
-			document.documentElement.setAttribute("lang", getLocale());
-		}
-	},
+  beforeLoad: async () => {
+    if (typeof document !== "undefined") {
+      document.documentElement.setAttribute("lang", getLocale())
+    }
+  },
 
-	head: () => ({
-		meta: [
-			{ charSet: "utf-8" },
-			{ name: "viewport", content: "width=device-width, initial-scale=1" },
-			{ title: "Subtracker" },
-			{ name: "description", content: "Track your subscriptions" },
-			{ name: "robots", content: "noindex, nofollow" },
-		],
-		links: [{ rel: "stylesheet", href: appCss }],
-	}),
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Subtracker" },
+      { name: "description", content: "Track your subscriptions" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+    links: [{ rel: "stylesheet", href: appCss }],
+  }),
 
-	shellComponent: RootDocument,
-	notFoundComponent: NotFound,
-	errorComponent: RootError,
-});
+  shellComponent: RootDocument,
+  notFoundComponent: NotFound,
+  errorComponent: RootError,
+})
 
 function NotFound() {
-	return (
-		<div className="flex min-h-svh flex-col items-center justify-center gap-4">
-			<h1 className="font-bold text-4xl">404</h1>
-			<p className="text-muted-foreground">Page not found</p>
-			<Link to="/" className="text-primary underline underline-offset-4">
-				Go home
-			</Link>
-		</div>
-	);
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center gap-4">
+      <h1 className="text-4xl font-bold">404</h1>
+      <p className="text-muted-foreground">Page not found</p>
+      <Link to="/" className="text-primary underline underline-offset-4">
+        Go home
+      </Link>
+    </div>
+  )
 }
 
 function RootError({ error }: { error: unknown }) {
-	const router = useRouter();
-	const message =
-		error instanceof Error ? error.message : "An unexpected error occurred";
+  const router = useRouter()
+  const message = error instanceof Error ? error.message : "An unexpected error occurred"
 
-	return (
-		<div className="flex min-h-svh flex-col items-center justify-center gap-4">
-			<h1 className="font-bold text-4xl">Something went wrong</h1>
-			<p className="max-w-md text-center text-muted-foreground">{message}</p>
-			<button
-				type="button"
-				onClick={() => router.invalidate()}
-				className="text-primary underline underline-offset-4"
-			>
-				Try again
-			</button>
-		</div>
-	);
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center gap-4">
+      <h1 className="text-4xl font-bold">Something went wrong</h1>
+      <p className="max-w-md text-center text-muted-foreground">{message}</p>
+      <button
+        type="button"
+        onClick={() => router.invalidate()}
+        className="text-primary underline underline-offset-4"
+      >
+        Try again
+      </button>
+    </div>
+  )
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-	return (
-		<html lang={getLocale()} suppressHydrationWarning>
-			<head>
-				<HeadContent />
-			</head>
-			<body>
-				<Providers>{children}</Providers>
-				<Toaster
-					richColors
-					toastOptions={{
-						className:
-							"bg-background/80 backdrop-blur-sm border-border text-foreground",
-					}}
-				/>
-				<DateLocaleHandler />
-				<TanStackDevtools
-					config={{
-						position: "bottom-right",
-					}}
-					plugins={[
-						{
-							name: "Tanstack Router",
-							render: <TanStackRouterDevtoolsPanel />,
-						},
-						{
-							name: "Tanstack Query",
-							render: <ReactQueryDevtoolsPanel />,
-						},
-					]}
-				/>
-				<Scripts />
-			</body>
-		</html>
-	);
+  return (
+    <html lang={getLocale()} suppressHydrationWarning>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        <Providers>{children}</Providers>
+        <Toaster
+          richColors
+          toastOptions={{
+            className: "bg-background/80 backdrop-blur-sm border-border text-foreground",
+          }}
+        />
+        <DateLocaleHandler />
+        <TanStackDevtools
+          config={{
+            position: "bottom-right",
+          }}
+          plugins={[
+            {
+              name: "Tanstack Router",
+              render: <TanStackRouterDevtoolsPanel />,
+            },
+            {
+              name: "Tanstack Query",
+              render: <ReactQueryDevtoolsPanel />,
+            },
+          ]}
+        />
+        <Scripts />
+      </body>
+    </html>
+  )
 }

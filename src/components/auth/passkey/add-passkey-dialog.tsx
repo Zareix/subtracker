@@ -4,7 +4,7 @@ import {
   type PasskeyAuthClient,
   useAddPasskey,
   useAuth,
-  useAuthPlugin
+  useAuthPlugin,
 } from "@better-auth-ui/react"
 import { Fingerprint } from "lucide-react"
 import type { SyntheticEvent } from "react"
@@ -17,7 +17,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogMedia,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "~/components/ui/alert-dialog"
 import { Button } from "~/components/ui/button"
 import { Field, FieldError } from "~/components/ui/field"
@@ -31,16 +31,11 @@ export type AddPasskeyDialogProps = {
   onOpenChange: (open: boolean) => void
 }
 
-export function AddPasskeyDialog({
-  open,
-  onOpenChange
-}: AddPasskeyDialogProps) {
+export function AddPasskeyDialog({ open, onOpenChange }: AddPasskeyDialogProps) {
   const { authClient, localization } = useAuth()
   const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin)
 
-  const { mutate: addPasskey, isPending: isAdding } = useAddPasskey(
-    authClient as PasskeyAuthClient
-  )
+  const { mutate: addPasskey, isPending: isAdding } = useAddPasskey(authClient as PasskeyAuthClient)
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -49,7 +44,7 @@ export function AddPasskeyDialog({
     const name = (formData.get("name") as string)?.trim()
 
     addPasskey(name ? { name } : undefined, {
-      onSuccess: () => onOpenChange(false)
+      onSuccess: () => onOpenChange(false),
     })
   }
 
@@ -62,9 +57,7 @@ export function AddPasskeyDialog({
               <Fingerprint />
             </AlertDialogMedia>
 
-            <AlertDialogTitle>
-              {passkeyLocalization.addPasskey}
-            </AlertDialogTitle>
+            <AlertDialogTitle>{passkeyLocalization.addPasskey}</AlertDialogTitle>
 
             <AlertDialogDescription>
               {passkeyLocalization.passkeysDescription}

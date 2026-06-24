@@ -31,7 +31,7 @@ export function ChangeEmail({ className }: ChangeEmailProps) {
   const { data: session } = useSession(authClient)
 
   const { mutate: changeEmail, isPending } = useChangeEmail(authClient, {
-    onSuccess: () => toast.success(localization.settings.changeEmailSuccess)
+    onSuccess: () => toast.success(localization.settings.changeEmailSuccess),
   })
 
   const [fieldErrors, setFieldErrors] = useState<{
@@ -44,15 +44,13 @@ export function ChangeEmail({ className }: ChangeEmailProps) {
     const formData = new FormData(e.currentTarget)
     changeEmail({
       newEmail: formData.get("email") as string,
-      callbackURL: `${baseURL}/${viewPaths.settings.account}`
+      callbackURL: `${baseURL}/${viewPaths.settings.account}`,
     })
   }
 
   return (
     <div>
-      <h2 className="text-sm font-semibold mb-3">
-        {localization.settings.changeEmail}
-      </h2>
+      <h2 className="mb-3 text-sm font-semibold">{localization.settings.changeEmail}</h2>
 
       <form onSubmit={handleSubmit}>
         <Card className={cn(className)}>
@@ -74,14 +72,14 @@ export function ChangeEmail({ className }: ChangeEmailProps) {
                   onChange={() => {
                     setFieldErrors((prev) => ({
                       ...prev,
-                      email: undefined
+                      email: undefined,
                     }))
                   }}
                   onInvalid={(e) => {
                     e.preventDefault()
                     setFieldErrors((prev) => ({
                       ...prev,
-                      email: (e.target as HTMLInputElement).validationMessage
+                      email: (e.target as HTMLInputElement).validationMessage,
                     }))
                   }}
                   aria-invalid={!!fieldErrors.email}

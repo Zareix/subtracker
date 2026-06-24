@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  type UsernameAuthClient,
-  useAuth,
-  useSession
-} from "@better-auth-ui/react"
+import { type UsernameAuthClient, useAuth, useSession } from "@better-auth-ui/react"
 import type { User } from "better-auth"
 import { User2 } from "lucide-react"
 import type { ReactNode } from "react"
@@ -32,16 +28,11 @@ export type UserAvatarProps = {
  * @param fallback - Node to render inside the avatar fallback area before initials or the default icon
  * @returns The avatar element to render (JSX)
  */
-export function UserAvatar({
-  className,
-  user,
-  isPending,
-  fallback
-}: UserAvatarProps) {
+export function UserAvatar({ className, user, isPending, fallback }: UserAvatarProps) {
   const { authClient } = useAuth()
   const { data: session, isPending: sessionPending } = useSession(
     authClient as UsernameAuthClient,
-    { enabled: !user && !isPending }
+    { enabled: !user && !isPending },
   )
 
   if ((isPending || sessionPending) && !user) {
@@ -50,28 +41,15 @@ export function UserAvatar({
 
   const resolvedUser = user ?? session?.user
 
-  const initials = (
-    resolvedUser?.username ||
-    resolvedUser?.name ||
-    resolvedUser?.email
-  )
+  const initials = (resolvedUser?.username || resolvedUser?.name || resolvedUser?.email)
     ?.slice(0, 2)
     .toUpperCase()
 
   return (
-    <Avatar
-      className={cn(
-        "size-8 bg-muted text-foreground text-sm rounded-full",
-        className
-      )}
-    >
+    <Avatar className={cn("size-8 rounded-full bg-muted text-sm text-foreground", className)}>
       <AvatarImage
         src={resolvedUser?.image ?? undefined}
-        alt={
-          resolvedUser?.displayUsername ||
-          resolvedUser?.name ||
-          resolvedUser?.email
-        }
+        alt={resolvedUser?.displayUsername || resolvedUser?.name || resolvedUser?.email}
       />
 
       <AvatarFallback

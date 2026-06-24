@@ -4,7 +4,7 @@ import {
   type PasskeyAuthClient,
   useAuth,
   useAuthPlugin,
-  useListPasskeys
+  useListPasskeys,
 } from "@better-auth-ui/react"
 import { useState } from "react"
 
@@ -27,18 +27,14 @@ export function Passkeys({ className }: PasskeysProps) {
   const { authClient } = useAuth()
   const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin)
 
-  const { data: passkeys, isPending } = useListPasskeys(
-    authClient as PasskeyAuthClient
-  )
+  const { data: passkeys, isPending } = useListPasskeys(authClient as PasskeyAuthClient)
 
   const [addOpen, setAddOpen] = useState(false)
 
   return (
     <div className={cn("flex flex-col gap-3", className)}>
       <div className="flex items-end justify-between gap-3">
-        <h2 className="truncate text-sm font-semibold">
-          {passkeyLocalization.passkeys}
-        </h2>
+        <h2 className="truncate text-sm font-semibold">{passkeyLocalization.passkeys}</h2>
 
         <Button
           className="shrink-0"

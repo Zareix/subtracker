@@ -2,6 +2,7 @@
 
 import { useAuth, useSignOut } from "@better-auth-ui/react"
 import { useEffect, useRef } from "react"
+
 import { Spinner } from "~/components/ui/spinner"
 import { cn } from "~/lib/utils"
 
@@ -22,14 +23,14 @@ export function SignOut({ className }: SignOutProps) {
     onError: () => {
       navigate({
         to: `${basePaths.auth}/${viewPaths.auth.signIn}`,
-        replace: true
+        replace: true,
       })
     },
     onSuccess: () =>
       navigate({
         to: `${basePaths.auth}/${viewPaths.auth.signIn}`,
-        replace: true
-      })
+        replace: true,
+      }),
   })
 
   const hasSignedOut = useRef(false)

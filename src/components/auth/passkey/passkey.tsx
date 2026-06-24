@@ -8,10 +8,7 @@ import { Button } from "~/components/ui/button"
 import { Card, CardContent } from "~/components/ui/card"
 import { passkeyPlugin } from "~/lib/auth/passkey-plugin"
 
-import {
-  DeletePasskeyDialog,
-  type ListedPasskey
-} from "./delete-passkey-dialog"
+import { DeletePasskeyDialog, type ListedPasskey } from "./delete-passkey-dialog"
 
 export type PasskeyProps = {
   passkey: ListedPasskey
@@ -32,14 +29,12 @@ export function Passkey({ passkey }: PasskeyProps) {
         </div>
 
         <div className="flex min-w-0 flex-col">
-          <span className="truncate text-sm font-medium leading-tight">
-            {passkeyName}
-          </span>
+          <span className="truncate text-sm leading-tight font-medium">{passkeyName}</span>
 
-          <span className="text-muted-foreground text-xs">
+          <span className="text-xs text-muted-foreground">
             {new Date(passkey.createdAt).toLocaleString(undefined, {
               dateStyle: "medium",
-              timeStyle: "short"
+              timeStyle: "short",
             })}
           </span>
         </div>
@@ -49,21 +44,14 @@ export function Passkey({ passkey }: PasskeyProps) {
           variant="outline"
           size="sm"
           onClick={() => setDeleteOpen(true)}
-          aria-label={passkeyLocalization.deletePasskey.replace(
-            "{{name}}",
-            passkeyName
-          )}
+          aria-label={passkeyLocalization.deletePasskey.replace("{{name}}", passkeyName)}
         >
           <X />
 
           {localization.settings.delete}
         </Button>
 
-        <DeletePasskeyDialog
-          open={deleteOpen}
-          onOpenChange={setDeleteOpen}
-          passkey={passkey}
-        />
+        <DeletePasskeyDialog open={deleteOpen} onOpenChange={setDeleteOpen} passkey={passkey} />
       </CardContent>
     </Card>
   )

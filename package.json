@@ -1,8 +1,8 @@
 {
   "name": "subtracker",
+  "version": "2.3.1",
   "private": true,
   "type": "module",
-  "version": "2.3.1",
   "imports": {
     "~/*": "./src/*"
   },
@@ -10,9 +10,10 @@
     "dev": "bun run --bun vite dev --port 3000",
     "build": "bun run --bun vite build",
     "preview": "bun run --bun vite preview",
-    "format": "biome format",
-    "lint": "biome lint",
-    "check": "biome check --write .",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "format": "oxfmt",
+    "check": "bun run format && bun run lint:fix",
     "db:generate": "bunx drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -80,6 +81,9 @@
     "@vitejs/plugin-react": "^6.0.2",
     "dotenv": "^17.4.2",
     "jsdom": "^29.1.1",
+    "oxfmt": "^0.55.0",
+    "oxlint": "^1.70.0",
+    "oxlint-tsgolint": "^0.23.0",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "vite": "^8.0.16"

@@ -30,16 +30,15 @@ export function ProviderButton({
 
   const callbackURL = `${baseURL}${redirectTo}`
 
-  const { mutate: signInSocial, isPending: signInSocialPending } =
-    useSignInSocial(authClient)
+  const { mutate: signInSocial, isPending: signInSocialPending } = useSignInSocial(authClient)
 
   const ProviderIcon = providerIcons[provider]
 
   const signInMutating = useIsMutating({
-    mutationKey: authMutationKeys.signIn.all
+    mutationKey: authMutationKeys.signIn.all,
   })
   const signUpMutating = useIsMutating({
-    mutationKey: authMutationKeys.signUp.all
+    mutationKey: authMutationKeys.signUp.all,
   })
   const isPending = signInMutating + signUpMutating > 0
 
@@ -52,17 +51,10 @@ export function ProviderButton({
       {...props}
       aria-label={getProviderName(provider)}
     >
-      {signInSocialPending ? (
-        <Spinner />
-      ) : ProviderIcon ? (
-        <ProviderIcon />
-      ) : null}
+      {signInSocialPending ? <Spinner /> : ProviderIcon ? <ProviderIcon /> : null}
 
       {display === "full"
-        ? localization.auth.continueWith.replace(
-            "{{provider}}",
-            getProviderName(provider)
-          )
+        ? localization.auth.continueWith.replace("{{provider}}", getProviderName(provider))
         : display === "name"
           ? getProviderName(provider)
           : null}

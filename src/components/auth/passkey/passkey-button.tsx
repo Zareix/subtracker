@@ -5,7 +5,7 @@ import {
   type PasskeyAuthClient,
   useAuth,
   useAuthPlugin,
-  useSignInPasskey
+  useSignInPasskey,
 } from "@better-auth-ui/react"
 import { useIsMutating } from "@tanstack/react-query"
 import { Fingerprint } from "lucide-react"
@@ -34,15 +34,15 @@ export function PasskeyButton({ view }: PasskeyButtonProps) {
   const { mutate: signInPasskey, isPending: passkeyPending } = useSignInPasskey(
     authClient as PasskeyAuthClient,
     {
-      onSuccess: () => navigate({ to: redirectTo })
-    }
+      onSuccess: () => navigate({ to: redirectTo }),
+    },
   )
 
   const signInMutating = useIsMutating({
-    mutationKey: authMutationKeys.signIn.all
+    mutationKey: authMutationKeys.signIn.all,
   })
   const signUpMutating = useIsMutating({
-    mutationKey: authMutationKeys.signUp.all
+    mutationKey: authMutationKeys.signUp.all,
   })
   const isPending = signInMutating + signUpMutating > 0
 
@@ -58,10 +58,7 @@ export function PasskeyButton({ view }: PasskeyButtonProps) {
       onClick={() => signInPasskey()}
     >
       {passkeyPending ? <Spinner /> : <Fingerprint />}
-      {localization.auth.continueWith.replace(
-        "{{provider}}",
-        passkeyLocalization.passkey
-      )}
+      {localization.auth.continueWith.replace("{{provider}}", passkeyLocalization.passkey)}
     </Button>
   )
 }

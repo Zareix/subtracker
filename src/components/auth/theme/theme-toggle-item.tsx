@@ -23,7 +23,7 @@ export function ThemeToggleItem() {
   // inside, letting the user switch themes with Left/Right arrows.
   const focusActiveTab = () => {
     const activeTab = tabsListRef.current?.querySelector<HTMLElement>(
-      '[role="tab"][data-state="active"]'
+      '[role="tab"][data-state="active"]',
     )
     activeTab?.focus({ preventScroll: true })
   }
@@ -41,13 +41,10 @@ export function ThemeToggleItem() {
     if (!wrapper || !content) return
 
     const items = Array.from(
-      content.querySelectorAll<HTMLElement>(
-        '[role="menuitem"]:not([aria-disabled="true"])'
-      )
+      content.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])'),
     )
     const currentIndex = items.indexOf(wrapper)
-    const nextIndex =
-      event.key === "ArrowDown" ? currentIndex + 1 : currentIndex - 1
+    const nextIndex = event.key === "ArrowDown" ? currentIndex + 1 : currentIndex - 1
     const next = items[nextIndex]
     if (!next) return
 
@@ -56,45 +53,41 @@ export function ThemeToggleItem() {
   }
 
   return (
-    <DropdownMenuItem onSelect={(e) => e.preventDefault()} onFocus={(e) => {
-              // onFocus bubbles in React, so guard against re-entry from focus
-              // events fired by the inner TabsTrigger.
-              if (e.target === e.currentTarget) focusActiveTab()
-            }} render={<div />}><PaletteIcon className="text-muted-foreground" /><span>{localization.theme}</span><Tabs
-                className="ml-auto"
-                value={theme}
-                onValueChange={setTheme}
-                onKeyDown={handleTabsKeyDown}
-              >
-                <TabsList ref={tabsListRef} className="h-6!">
-                  {themes.includes("system") && (
-                    <TabsTrigger
-                      value="system"
-                      className="size-5 p-0"
-                      aria-label={localization.system}
-                    >
-                      <Monitor className="size-3" />
-                    </TabsTrigger>
-                  )}
-                  {themes.includes("light") && (
-                    <TabsTrigger
-                      value="light"
-                      className="size-5 p-0"
-                      aria-label={localization.light}
-                    >
-                      <Sun className="size-3" />
-                    </TabsTrigger>
-                  )}
-                  {themes.includes("dark") && (
-                    <TabsTrigger
-                      value="dark"
-                      className="size-5 p-0"
-                      aria-label={localization.dark}
-                    >
-                      <Moon className="size-3" />
-                    </TabsTrigger>
-                  )}
-                </TabsList>
-              </Tabs></DropdownMenuItem>
+    <DropdownMenuItem
+      onSelect={(e) => e.preventDefault()}
+      onFocus={(e) => {
+        // onFocus bubbles in React, so guard against re-entry from focus
+        // events fired by the inner TabsTrigger.
+        if (e.target === e.currentTarget) focusActiveTab()
+      }}
+      render={<div />}
+    >
+      <PaletteIcon className="text-muted-foreground" />
+      <span>{localization.theme}</span>
+      <Tabs
+        className="ml-auto"
+        value={theme}
+        onValueChange={setTheme}
+        onKeyDown={handleTabsKeyDown}
+      >
+        <TabsList ref={tabsListRef} className="h-6!">
+          {themes.includes("system") && (
+            <TabsTrigger value="system" className="size-5 p-0" aria-label={localization.system}>
+              <Monitor className="size-3" />
+            </TabsTrigger>
+          )}
+          {themes.includes("light") && (
+            <TabsTrigger value="light" className="size-5 p-0" aria-label={localization.light}>
+              <Sun className="size-3" />
+            </TabsTrigger>
+          )}
+          {themes.includes("dark") && (
+            <TabsTrigger value="dark" className="size-5 p-0" aria-label={localization.dark}>
+              <Moon className="size-3" />
+            </TabsTrigger>
+          )}
+        </TabsList>
+      </Tabs>
+    </DropdownMenuItem>
   )
 }

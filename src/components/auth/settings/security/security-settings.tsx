@@ -1,7 +1,9 @@
 "use client"
 
 import { useAuth } from "@better-auth-ui/react"
+
 import { cn } from "~/lib/utils"
+
 import { ActiveSessions } from "./active-sessions"
 import { ChangePassword } from "./change-password"
 import { LinkedAccounts } from "./linked-accounts"
@@ -31,7 +33,7 @@ export function SecuritySettings({ className }: SecuritySettingsProps) {
         (plugin) =>
           plugin.securityCards?.map((Card, index) => (
             <Card key={`${plugin.id}-${index.toString()}`} />
-          )) ?? []
+          )) ?? [],
       )}
     </div>
   )

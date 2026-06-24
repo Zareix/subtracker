@@ -22,13 +22,9 @@ export function PasskeysEmpty({ onAddPress }: PasskeysEmptyProps) {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-1 text-center">
-          <p className="text-sm font-semibold">
-            {passkeyLocalization.noPasskeys}
-          </p>
+          <p className="text-sm font-semibold">{passkeyLocalization.noPasskeys}</p>
 
-          <p className="text-muted-foreground text-xs">
-            {passkeyLocalization.passkeysDescription}
-          </p>
+          <p className="text-xs text-muted-foreground">{passkeyLocalization.passkeysDescription}</p>
         </div>
 
         <Button size="sm" onClick={onAddPress}>

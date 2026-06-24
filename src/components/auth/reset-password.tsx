@@ -7,17 +7,12 @@ import { toast } from "sonner"
 
 import { Button } from "~/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup
-} from "~/components/ui/field"
+import { Field, FieldDescription, FieldError, FieldGroup } from "~/components/ui/field"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
-  InputGroupInput
+  InputGroupInput,
 } from "~/components/ui/input-group"
 import { Label } from "~/components/ui/label"
 import { Spinner } from "~/components/ui/spinner"
@@ -35,26 +30,18 @@ export type ResetPasswordProps = {
  * @returns The password reset form UI ready to be mounted in the app layout.
  */
 export function ResetPassword({ className }: ResetPasswordProps) {
-  const {
-    authClient,
-    basePaths,
-    emailAndPassword,
-    localization,
-    viewPaths,
-    navigate,
-    Link
-  } = useAuth()
+  const { authClient, basePaths, emailAndPassword, localization, viewPaths, navigate, Link } =
+    useAuth()
 
   const { mutate: resetPassword, isPending } = useResetPassword(authClient, {
     onSuccess: () => {
       toast.success(localization.auth.passwordResetSuccess)
       navigate({ to: `${basePaths.auth}/${viewPaths.auth.signIn}` })
-    }
+    },
   })
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false)
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false)
 
   const [fieldErrors, setFieldErrors] = useState<{
     password?: string
@@ -69,12 +56,7 @@ export function ResetPassword({ className }: ResetPasswordProps) {
       toast.error(localization.auth.invalidResetPasswordToken)
       navigate({ to: `${basePaths.auth}/${viewPaths.auth.signIn}` })
     }
-  }, [
-    basePaths.auth,
-    localization.auth.invalidResetPasswordToken,
-    viewPaths.auth.signIn,
-    navigate
-  ])
+  }, [basePaths.auth, localization.auth.invalidResetPasswordToken, viewPaths.auth.signIn, navigate])
 
   function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -103,9 +85,7 @@ export function ResetPassword({ className }: ResetPasswordProps) {
   return (
     <Card className={cn("w-full max-w-sm", className)}>
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">
-          {localization.auth.resetPassword}
-        </CardTitle>
+        <CardTitle className="text-xl font-semibold">{localization.auth.resetPassword}</CardTitle>
       </CardHeader>
 
       <CardContent>
@@ -128,7 +108,7 @@ export function ResetPassword({ className }: ResetPasswordProps) {
                   onChange={() => {
                     setFieldErrors((prev) => ({
                       ...prev,
-                      password: undefined
+                      password: undefined,
                     }))
                   }}
                   onInvalid={(e) => {
@@ -139,18 +119,12 @@ export function ResetPassword({ className }: ResetPasswordProps) {
                     const msg = el.validity.valueMissing
                       ? localization.auth.fieldRequired
                       : el.validity.tooShort
-                        ? localization.auth.tooShort.replace(
-                            "{{min}}",
-                            String(min)
-                          )
-                        : localization.auth.tooLong.replace(
-                            "{{max}}",
-                            String(max)
-                          )
+                        ? localization.auth.tooShort.replace("{{min}}", String(min))
+                        : localization.auth.tooLong.replace("{{max}}", String(max))
 
                     setFieldErrors((prev) => ({
                       ...prev,
-                      password: msg
+                      password: msg,
                     }))
                   }}
                   aria-invalid={!!fieldErrors.password}
@@ -182,9 +156,7 @@ export function ResetPassword({ className }: ResetPasswordProps) {
 
             {emailAndPassword?.confirmPassword && (
               <Field data-invalid={!!fieldErrors.confirmPassword}>
-                <Label htmlFor="confirmPassword">
-                  {localization.auth.confirmPassword}
-                </Label>
+                <Label htmlFor="confirmPassword">{localization.auth.confirmPassword}</Label>
 
                 <InputGroup>
                   <InputGroupInput
@@ -200,7 +172,7 @@ export function ResetPassword({ className }: ResetPasswordProps) {
                     onChange={() => {
                       setFieldErrors((prev) => ({
                         ...prev,
-                        confirmPassword: undefined
+                        confirmPassword: undefined,
                       }))
                     }}
                     onInvalid={(e) => {
@@ -211,18 +183,12 @@ export function ResetPassword({ className }: ResetPasswordProps) {
                       const msg = el.validity.valueMissing
                         ? localization.auth.fieldRequired
                         : el.validity.tooShort
-                          ? localization.auth.tooShort.replace(
-                              "{{min}}",
-                              String(min)
-                            )
-                          : localization.auth.tooLong.replace(
-                              "{{max}}",
-                              String(max)
-                            )
+                          ? localization.auth.tooShort.replace("{{min}}", String(min))
+                          : localization.auth.tooLong.replace("{{max}}", String(max))
 
                       setFieldErrors((prev) => ({
                         ...prev,
-                        confirmPassword: msg
+                        confirmPassword: msg,
                       }))
                     }}
                     aria-invalid={!!fieldErrors.confirmPassword}
@@ -263,7 +229,7 @@ export function ResetPassword({ className }: ResetPasswordProps) {
           </FieldGroup>
         </form>
 
-        <div className="flex flex-col gap-3 items-center w-full mt-4">
+        <div className="mt-4 flex w-full flex-col items-center gap-3">
           <FieldDescription className="text-center">
             {localization.auth.rememberYourPassword}{" "}
             <Link

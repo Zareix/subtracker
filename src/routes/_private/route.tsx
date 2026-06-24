@@ -1,58 +1,59 @@
-import { ensureSession as ensureSessionClient } from "@better-auth-ui/react";
-import { ensureSession as ensureSessionServer } from "@better-auth-ui/react/server";
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { createIsomorphicFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
-import { z } from "zod";
-import { AppSidebar, Navbar } from "~/components/nav";
-import { SidebarProvider } from "~/components/ui/sidebar";
-import { auth } from "~/lib/auth";
-import { authClient } from "~/lib/auth-client";
-import { SCHEDULES, SORTS } from "~/lib/constant";
+import { ensureSession as ensureSessionClient } from "@better-auth-ui/react"
+import { ensureSession as ensureSessionServer } from "@better-auth-ui/react/server"
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
+import { createIsomorphicFn } from "@tanstack/react-start"
+import { getRequestHeaders } from "@tanstack/react-start/server"
+import { z } from "zod"
+
+import { AppSidebar, Navbar } from "~/components/nav"
+import { SidebarProvider } from "~/components/ui/sidebar"
+import { auth } from "~/lib/auth"
+import { authClient } from "~/lib/auth-client"
+import { SCHEDULES, SORTS } from "~/lib/constant"
 
 const searchSchema = z.object({
-	schedule: z.enum(SCHEDULES).optional(),
-	paymentMethods: z.array(z.number()).optional(),
-	users: z.string().optional(),
-	categories: z.array(z.number()).optional(),
-	search: z.string().optional(),
-	sort: z.enum(SORTS.map((s) => s.key) as [string, ...string[]]).optional(),
-});
+  schedule: z.enum(SCHEDULES).optional(),
+  paymentMethods: z.array(z.number()).optional(),
+  users: z.string().optional(),
+  categories: z.array(z.number()).optional(),
+  search: z.string().optional(),
+  sort: z.enum(SORTS.map((s) => s.key) as [string, ...string[]]).optional(),
+})
 
 export const Route = createFileRoute("/_private")({
-	validateSearch: searchSchema,
-	async beforeLoad({ context: { queryClient }, location }) {
-		const ensureSession = createIsomorphicFn()
-			.server(() =>
-				ensureSessionServer(queryClient, auth, {
-					headers: getRequestHeaders(),
-				}),
-			)
-			.client(() => ensureSessionClient(queryClient, authClient));
-		const session = await ensureSession();
-		if (!session) {
-			throw redirect({
-				to: "/auth/$path",
-				params: { path: "sign-in" },
-				search: { redirectTo: location.href },
-			});
-		}
-		return { session };
-	},
-	component: PrivateLayout,
-});
+  validateSearch: searchSchema,
+  async beforeLoad({ context: { queryClient }, location }) {
+    const ensureSession = createIsomorphicFn()
+      .server(() =>
+        ensureSessionServer(queryClient, auth, {
+          headers: getRequestHeaders(),
+        }),
+      )
+      .client(() => ensureSessionClient(queryClient, authClient))
+    const session = await ensureSession()
+    if (!session) {
+      throw redirect({
+        to: "/auth/$path",
+        params: { path: "sign-in" },
+        search: { redirectTo: location.href },
+      })
+    }
+    return { session }
+  },
+  component: PrivateLayout,
+})
 
 function PrivateLayout() {
-	return (
-		<SidebarProvider>
-			<AppSidebar />
-			<main
-				className="container relative mx-auto min-h-svh bg-background px-4 pt-8 pb-20 xl:max-w-5xl"
-				data-vaul-drawer-wrapper
-			>
-				<Outlet />
-			</main>
-			<Navbar />
-		</SidebarProvider>
-	);
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main
+        className="relative container mx-auto min-h-svh bg-background px-4 pt-8 pb-20 xl:max-w-5xl"
+        data-vaul-drawer-wrapper
+      >
+        <Outlet />
+      </main>
+      <Navbar />
+    </SidebarProvider>
+  )
 }

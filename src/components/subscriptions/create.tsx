@@ -1,23 +1,20 @@
-import { useState } from "react";
-import { EditCreateForm } from "~/components/subscriptions/edit-create-form";
-import { VaulDialog } from "~/components/ui/vaul-dialog";
-import { m } from "~/paraglide/messages";
+import { useState } from "react"
 
-export const CreateSubscriptionDialog = ({
-	trigger,
-}: {
-	trigger?: React.ReactNode;
-}) => {
-	const [isOpen, setIsOpen] = useState(false);
+import { EditCreateForm } from "~/components/subscriptions/edit-create-form"
+import { VaulDialog } from "~/components/ui/vaul-dialog"
+import { m } from "~/paraglide/messages"
 
-	return (
-		<VaulDialog
-			open={isOpen}
-			onOpenChange={setIsOpen}
-			trigger={trigger}
-			title={m.subscription_form_create_title()}
-		>
-			<EditCreateForm onFinished={() => setIsOpen(false)} />
-		</VaulDialog>
-	);
-};
+export const CreateSubscriptionDialog = ({ trigger }: { trigger?: React.ReactNode }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <VaulDialog
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      trigger={trigger}
+      title={m.subscription_form_create_title()}
+    >
+      <EditCreateForm onFinished={() => setIsOpen(false)} />
+    </VaulDialog>
+  )
+}

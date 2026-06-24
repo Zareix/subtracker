@@ -13,13 +13,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogMedia,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "~/components/ui/alert-dialog"
-import {
-  InputGroup,
-  InputGroupButton,
-  InputGroupInput
-} from "~/components/ui/input-group"
+import { InputGroup, InputGroupButton, InputGroupInput } from "~/components/ui/input-group"
 import { Label } from "~/components/ui/label"
 import { apiKeyPlugin } from "~/lib/auth/api-key-plugin"
 
@@ -30,12 +26,7 @@ export type NewApiKeyDialogProps = {
   secretKey: string | null
 }
 
-export function NewApiKeyDialog({
-  open,
-  onOpenChange,
-  name,
-  secretKey
-}: NewApiKeyDialogProps) {
+export function NewApiKeyDialog({ open, onOpenChange, name, secretKey }: NewApiKeyDialogProps) {
   const { localization } = useAuth()
   const { localization: apiKeyLocalization } = useAuthPlugin(apiKeyPlugin)
 
@@ -63,15 +54,11 @@ export function NewApiKeyDialog({
 
           <AlertDialogTitle>{apiKeyLocalization.newApiKey}</AlertDialogTitle>
 
-          <AlertDialogDescription>
-            {apiKeyLocalization.newApiKeyWarning}
-          </AlertDialogDescription>
+          <AlertDialogDescription>{apiKeyLocalization.newApiKeyWarning}</AlertDialogDescription>
         </AlertDialogHeader>
 
         <div className="flex flex-col gap-2">
-          <Label htmlFor="new-api-key-secret">
-            {name || apiKeyLocalization.apiKey}
-          </Label>
+          <Label htmlFor="new-api-key-secret">{name || apiKeyLocalization.apiKey}</Label>
 
           <InputGroup>
             <InputGroupInput
@@ -92,9 +79,7 @@ export function NewApiKeyDialog({
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogAction>
-            {apiKeyLocalization.dismissNewKey}
-          </AlertDialogAction>
+          <AlertDialogAction>{apiKeyLocalization.dismissNewKey}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

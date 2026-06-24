@@ -1,9 +1,5 @@
 import { authMutationKeys, authQueryKeys } from "@better-auth-ui/core"
-import {
-  matchMutation,
-  matchQuery,
-  useQueryClient
-} from "@tanstack/react-query"
+import { matchMutation, matchQuery, useQueryClient } from "@tanstack/react-query"
 import type { BetterFetchError } from "better-auth/react"
 import { useEffect } from "react"
 import { toast } from "sonner"
@@ -28,20 +24,8 @@ export function ErrorToaster() {
     const mutationCache = queryClient.getMutationCache()
     const previousMutationOnError = mutationCache.config.onError
 
-    mutationCache.config.onError = (
-      error,
-      variables,
-      onMutateResult,
-      mutation,
-      context
-    ) => {
-      previousMutationOnError?.(
-        error,
-        variables,
-        onMutateResult,
-        mutation,
-        context
-      )
+    mutationCache.config.onError = (error, variables, onMutateResult, mutation, context) => {
+      previousMutationOnError?.(error, variables, onMutateResult, mutation, context)
 
       if (!matchMutation({ mutationKey: authMutationKeys.all }, mutation)) {
         return

@@ -5,7 +5,7 @@ import {
   useActiveOrganization,
   useAuth,
   useListOrganizationMembers,
-  useSession
+  useSession,
 } from "@better-auth-ui/react"
 
 import { ApiKeys } from "./api-keys"
@@ -26,15 +26,14 @@ export function OrganizationApiKeys({ className }: OrganizationApiKeysProps) {
   const { authClient } = useAuth()
   const { data: session } = useSession(authClient)
 
-  const { data: activeOrganization, isPending: activeOrganizationPending } =
-    useActiveOrganization(authClient as OrganizationAuthClient)
-
-  const { data: membersData } = useListOrganizationMembers(
-    authClient as OrganizationAuthClient
+  const { data: activeOrganization, isPending: activeOrganizationPending } = useActiveOrganization(
+    authClient as OrganizationAuthClient,
   )
 
+  const { data: membersData } = useListOrganizationMembers(authClient as OrganizationAuthClient)
+
   const canManageApiKeys = membersData?.members.some(
-    (member) => member.role === "owner" && member.userId === session?.user.id
+    (member) => member.role === "owner" && member.userId === session?.user.id,
   )
 
   if (!canManageApiKeys) {

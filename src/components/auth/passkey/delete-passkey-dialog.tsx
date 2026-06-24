@@ -4,7 +4,7 @@ import {
   type PasskeyAuthClient,
   useAuth,
   useAuthPlugin,
-  useDeletePasskey
+  useDeletePasskey,
 } from "@better-auth-ui/react"
 import { Fingerprint } from "lucide-react"
 
@@ -16,7 +16,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogMedia,
-  AlertDialogTitle
+  AlertDialogTitle,
 } from "~/components/ui/alert-dialog"
 import { Button } from "~/components/ui/button"
 import { Field } from "~/components/ui/field"
@@ -37,11 +37,7 @@ export type DeletePasskeyDialogProps = {
   passkey: ListedPasskey
 }
 
-export function DeletePasskeyDialog({
-  open,
-  onOpenChange,
-  passkey
-}: DeletePasskeyDialogProps) {
+export function DeletePasskeyDialog({ open, onOpenChange, passkey }: DeletePasskeyDialogProps) {
   const { authClient, localization } = useAuth()
   const { localization: passkeyLocalization } = useAuthPlugin(passkeyPlugin)
 
@@ -51,8 +47,8 @@ export function DeletePasskeyDialog({
   const { mutate: deletePasskey, isPending: isDeleting } = useDeletePasskey(
     authClient as PasskeyAuthClient,
     {
-      onSuccess: () => onOpenChange(false)
-    }
+      onSuccess: () => onOpenChange(false),
+    },
   )
 
   return (
@@ -63,9 +59,7 @@ export function DeletePasskeyDialog({
             <Fingerprint />
           </AlertDialogMedia>
 
-          <AlertDialogTitle>
-            {passkeyLocalization.deletePasskeyTitle}
-          </AlertDialogTitle>
+          <AlertDialogTitle>{passkeyLocalization.deletePasskeyTitle}</AlertDialogTitle>
 
           <AlertDialogDescription>
             {passkeyLocalization.deletePasskeyWarning}
@@ -73,9 +67,7 @@ export function DeletePasskeyDialog({
         </AlertDialogHeader>
 
         <Field>
-          <Label htmlFor={previewId}>
-            {passkey.name || passkeyLocalization.passkey}
-          </Label>
+          <Label htmlFor={previewId}>{passkey.name || passkeyLocalization.passkey}</Label>
 
           <Input id={previewId} value={passkeyName} readOnly disabled />
         </Field>

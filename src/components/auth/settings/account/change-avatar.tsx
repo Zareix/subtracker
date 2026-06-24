@@ -5,13 +5,14 @@ import { useAuth, useSession, useUpdateUser } from "@better-auth-ui/react"
 import { Trash2, Upload } from "lucide-react"
 import { type ChangeEvent, useRef, useState } from "react"
 import { toast } from "sonner"
+
 import { UserAvatar } from "~/components/auth/user/user-avatar"
 import { Button } from "~/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu"
 import { Field } from "~/components/ui/field"
 import { Label } from "~/components/ui/label"
@@ -25,8 +26,7 @@ export function ChangeAvatar({ className }: ChangeAvatarProps) {
   const { authClient, localization, avatar } = useAuth()
   const { data: session } = useSession(authClient)
 
-  const { mutate: updateUser, isPending: updatePending } =
-    useUpdateUser(authClient)
+  const { mutate: updateUser, isPending: updatePending } = useUpdateUser(authClient)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isUploading, setIsUploading] = useState(false)
@@ -43,18 +43,15 @@ export function ChangeAvatar({ className }: ChangeAvatarProps) {
     setIsUploading(true)
 
     try {
-      const resized =
-        (await avatar.resize?.(file, avatar.size, avatar.extension)) || file
+      const resized = (await avatar.resize?.(file, avatar.size, avatar.extension)) || file
 
-      const image =
-        (await avatar.upload?.(resized)) || (await fileToBase64(resized))
+      const image = (await avatar.upload?.(resized)) || (await fileToBase64(resized))
 
       updateUser(
         { image },
         {
-          onSuccess: () =>
-            toast.success(localization.settings.avatarChangedSuccess)
-        }
+          onSuccess: () => toast.success(localization.settings.avatarChangedSuccess),
+        },
       )
     } catch (error) {
       if (error instanceof Error) {
@@ -82,8 +79,8 @@ export function ChangeAvatar({ className }: ChangeAvatarProps) {
           }
 
           toast.success(localization.settings.avatarDeletedSuccess)
-        }
-      }
+        },
+      },
     )
   }
 
@@ -103,7 +100,7 @@ export function ChangeAvatar({ className }: ChangeAvatarProps) {
         <Button
           type="button"
           variant="ghost"
-          className="p-0 h-auto w-auto rounded-full"
+          className="h-auto w-auto rounded-full p-0"
           disabled={isPending}
           onClick={() => fileInputRef.current?.click()}
         >
@@ -111,7 +108,12 @@ export function ChangeAvatar({ className }: ChangeAvatarProps) {
         </Button>
 
         <DropdownMenu>
-          <DropdownMenuTrigger render={<Button variant="secondary" size="sm" disabled={!session || isPending} />}>{isPending && <Spinner />}{localization.settings.changeAvatar}</DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={<Button variant="secondary" size="sm" disabled={!session || isPending} />}
+          >
+            {isPending && <Spinner />}
+            {localization.settings.changeAvatar}
+          </DropdownMenuTrigger>
 
           <DropdownMenuContent className="min-w-fit">
             <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
