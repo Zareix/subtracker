@@ -116,9 +116,9 @@ export const FiltersButton = ({
     items: typeof paymentMethods,
     selectedItems: (typeof filters)["paymentMethods"],
   ) => {
-    if (selectedItems?.length === 0) return m.filters_select()
-    if (selectedItems?.length === 1) return items.find((i) => i.value === selectedItems[0])?.label
-    return m.filters_selected({ count: selectedItems?.length })
+    if (selectedItems.length === 0) return m.filters_select()
+    if (selectedItems.length === 1) return items.find((i) => i.value === selectedItems[0])?.label
+    return m.filters_selected({ count: selectedItems.length })
   }
 
   return (

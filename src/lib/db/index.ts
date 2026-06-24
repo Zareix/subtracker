@@ -17,7 +17,7 @@ if (env.NODE_ENV === "test") {
  * update.
  */
 const globalForDb = globalThis as unknown as {
-  client: Database
+  client?: Database
 }
 
 export const client = globalForDb.client ?? new Database(env.DATABASE_PATH)

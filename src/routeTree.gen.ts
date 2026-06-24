@@ -16,7 +16,6 @@ import { Route as ApiStatsRouteImport } from './routes/api/stats'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiFilesRouteImport } from './routes/api/files'
 import { Route as PrivateStatsRouteImport } from './routes/_private/stats'
-import { Route as PrivateProfileRouteImport } from './routes/_private/profile'
 import { Route as PrivatePaymentMethodsRouteImport } from './routes/_private/payment-methods'
 import { Route as PrivateCategoriesRouteImport } from './routes/_private/categories'
 import { Route as PrivateCalendarRouteImport } from './routes/_private/calendar'
@@ -56,11 +55,6 @@ const ApiFilesRoute = ApiFilesRouteImport.update({
 const PrivateStatsRoute = PrivateStatsRouteImport.update({
   id: '/stats',
   path: '/stats',
-  getParentRoute: () => PrivateRouteRoute,
-} as any)
-const PrivateProfileRoute = PrivateProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
 const PrivatePaymentMethodsRoute = PrivatePaymentMethodsRouteImport.update({
@@ -105,7 +99,6 @@ export interface FileRoutesByFullPath {
   '/calendar': typeof PrivateCalendarRoute
   '/categories': typeof PrivateCategoriesRoute
   '/payment-methods': typeof PrivatePaymentMethodsRoute
-  '/profile': typeof PrivateProfileRoute
   '/stats': typeof PrivateStatsRoute
   '/api/files': typeof ApiFilesRoute
   '/api/health': typeof ApiHealthRoute
@@ -120,7 +113,6 @@ export interface FileRoutesByTo {
   '/calendar': typeof PrivateCalendarRoute
   '/categories': typeof PrivateCategoriesRoute
   '/payment-methods': typeof PrivatePaymentMethodsRoute
-  '/profile': typeof PrivateProfileRoute
   '/stats': typeof PrivateStatsRoute
   '/api/files': typeof ApiFilesRoute
   '/api/health': typeof ApiHealthRoute
@@ -137,7 +129,6 @@ export interface FileRoutesById {
   '/_private/calendar': typeof PrivateCalendarRoute
   '/_private/categories': typeof PrivateCategoriesRoute
   '/_private/payment-methods': typeof PrivatePaymentMethodsRoute
-  '/_private/profile': typeof PrivateProfileRoute
   '/_private/stats': typeof PrivateStatsRoute
   '/api/files': typeof ApiFilesRoute
   '/api/health': typeof ApiHealthRoute
@@ -155,7 +146,6 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/categories'
     | '/payment-methods'
-    | '/profile'
     | '/stats'
     | '/api/files'
     | '/api/health'
@@ -170,7 +160,6 @@ export interface FileRouteTypes {
     | '/calendar'
     | '/categories'
     | '/payment-methods'
-    | '/profile'
     | '/stats'
     | '/api/files'
     | '/api/health'
@@ -186,7 +175,6 @@ export interface FileRouteTypes {
     | '/_private/calendar'
     | '/_private/categories'
     | '/_private/payment-methods'
-    | '/_private/profile'
     | '/_private/stats'
     | '/api/files'
     | '/api/health'
@@ -257,13 +245,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateStatsRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
-    '/_private/profile': {
-      id: '/_private/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof PrivateProfileRouteImport
-      parentRoute: typeof PrivateRouteRoute
-    }
     '/_private/payment-methods': {
       id: '/_private/payment-methods'
       path: '/payment-methods'
@@ -321,7 +302,6 @@ interface PrivateRouteRouteChildren {
   PrivateCalendarRoute: typeof PrivateCalendarRoute
   PrivateCategoriesRoute: typeof PrivateCategoriesRoute
   PrivatePaymentMethodsRoute: typeof PrivatePaymentMethodsRoute
-  PrivateProfileRoute: typeof PrivateProfileRoute
   PrivateStatsRoute: typeof PrivateStatsRoute
   PrivateIndexRoute: typeof PrivateIndexRoute
   PrivateSettingsPathRoute: typeof PrivateSettingsPathRoute
@@ -332,7 +312,6 @@ const PrivateRouteRouteChildren: PrivateRouteRouteChildren = {
   PrivateCalendarRoute: PrivateCalendarRoute,
   PrivateCategoriesRoute: PrivateCategoriesRoute,
   PrivatePaymentMethodsRoute: PrivatePaymentMethodsRoute,
-  PrivateProfileRoute: PrivateProfileRoute,
   PrivateStatsRoute: PrivateStatsRoute,
   PrivateIndexRoute: PrivateIndexRoute,
   PrivateSettingsPathRoute: PrivateSettingsPathRoute,

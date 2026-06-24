@@ -29,7 +29,7 @@ function SettingsPage() {
   if (paymentMethodsQuery.isError) {
     return (
       <div>
-        {m.settings_error()}: {paymentMethodsQuery.error?.message}
+        {m.settings_error()}: {paymentMethodsQuery.error.message}
       </div>
     )
   }

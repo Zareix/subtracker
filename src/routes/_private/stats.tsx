@@ -1,3 +1,4 @@
+import NumberFlow from "@number-flow/react"
 import { useQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { InfoIcon } from "lucide-react"
@@ -16,11 +17,12 @@ import { Skeleton } from "~/components/ui/skeleton"
 import type { SubscriptionItem } from "~/functions/subscriptions.functions"
 import { getSubscriptions } from "~/functions/subscriptions.functions"
 import { authClient } from "~/lib/auth-client"
-import { CURRENCY_SYMBOLS, DEFAULT_BASE_CURRENCY } from "~/lib/constant"
+import { CURRENCY_SYMBOLS, DEFAULT_BASE_CURRENCY, type Currency } from "~/lib/constant"
 import { useFilters } from "~/lib/hooks/use-filters"
 import { type BreakdownItem, getStats } from "~/lib/stats"
-import { currencyToSymbol, getFilteredSubscriptions, rounded } from "~/lib/utils"
+import { currencyToSymbol, formatPrice, getFilteredSubscriptions, rounded } from "~/lib/utils"
 import { m } from "~/paraglide/messages"
+import { getLocale } from "~/paraglide/runtime"
 
 export const Route = createFileRoute("/_private/stats")({
   component: StatsPage,
@@ -36,7 +38,7 @@ function StatsPage() {
   })
   const { data: session } = authClient.useSession()
 
-  const userBaseCurrency = session?.user?.baseCurrency ?? DEFAULT_BASE_CURRENCY
+  const userBaseCurrency = session?.user.baseCurrency ?? DEFAULT_BASE_CURRENCY
   const isLoading = subscriptionsQuery.isLoading
 
   const subscriptions = getFilteredSubscriptions(subscriptionsQuery.data ?? [], {
@@ -61,7 +63,7 @@ function StatsPage() {
   if (subscriptionsQuery.isError) {
     return (
       <div>
-        {m.stats_error()}: {subscriptionsQuery.error?.message}
+        {m.stats_error()}: {subscriptionsQuery.error.message}
       </div>
     )
   }
@@ -162,10 +164,9 @@ const StatsCard = ({
   description?: string
   value: number
   isLoading: boolean
-  userBaseCurrency: string
+  userBaseCurrency: Currency
   breakdown?: BreakdownItem[]
 }) => {
-  const currencySymbol = currencyToSymbol(userBaseCurrency)
   return (
     <Card className="py-5">
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
@@ -193,13 +194,11 @@ const StatsCard = ({
                       <span className="grow text-sm">{item.name}</span>
                       {item.currency !== userBaseCurrency && (
                         <span className="text-sm text-muted-foreground tabular-nums">
-                          ({item.originalPrice.toLocaleString()}
-                          {currencyToSymbol(item.currency)})
+                          ({formatPrice(item.originalPrice, item.currency)})
                         </span>
                       )}
                       <span className="text-sm font-medium tabular-nums">
-                        {item.retainPrice.toLocaleString()}
-                        {currencySymbol}
+                        {formatPrice(item.retainPrice, userBaseCurrency)}
                       </span>
                     </li>
                   ))}
@@ -209,9 +208,20 @@ const StatsCard = ({
           </Popover>
         )}
       </CardHeader>
-      <CardContent className="flex items-center text-2xl font-bold">
-        {isLoading ? <Skeleton className="mr-1 h-6 w-1/4" /> : rounded(value)}
-        {currencyToSymbol(userBaseCurrency)}
+      <CardContent className="flex items-center text-2xl font-bold tabular-nums">
+        {isLoading ? (
+          <Skeleton className="mr-1 h-6 w-1/4" />
+        ) : (
+          <NumberFlow
+            value={value}
+            locales={getLocale()}
+            format={{
+              style: "currency",
+              currency: userBaseCurrency,
+              currencyDisplay: "narrowSymbol",
+            }}
+          />
+        )}
       </CardContent>
     </Card>
   )
@@ -228,7 +238,7 @@ const MonthlyStatsCard = ({
   title: string
   subscriptions: SubscriptionItem[]
   isLoading: boolean
-  userBaseCurrency: string
+  userBaseCurrency: Currency
   categoriesFillColor: Record<string, ChartFillColor>
   filters: { users: string | null }
 }) => {
@@ -249,7 +259,7 @@ const MonthlyStatsCard = ({
     }))
     .reduce(
       (acc, subscription) => {
-        const cat = acc.find((cat) => cat.category === subscription.category)
+        const cat = acc.find((c) => c.category === subscription.category)
         const subPrice = filters.users
           ? subscription.price / subscription.usersLength
           : subscription.price
@@ -337,13 +347,9 @@ const MonthlyStatsCard = ({
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalMonthlySub.toLocaleString()}
+                          {formatPrice(totalMonthlySub)}
                         </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy ?? 0) + 24}
-                          className="fill-muted-foreground"
-                        >
+                        <tspan x={viewBox.cx} y={viewBox.cy + 24} className="fill-muted-foreground">
                           {userBaseCurrency}
                         </tspan>
                       </text>

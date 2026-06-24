@@ -29,7 +29,6 @@ import { createSubscription, editSubscription } from "~/functions/subscriptions.
 import { getUsers } from "~/functions/users.functions"
 import { authClient } from "~/lib/auth-client"
 import { CURRENCY_SYMBOLS, Currencies, SCHEDULES } from "~/lib/constant"
-import { cn } from "~/lib/utils"
 import { m } from "~/paraglide/messages"
 
 type FormSubscription = Omit<SubscriptionItem, "id"> & { id?: number }

@@ -1,8 +1,9 @@
-import { useNavigate, useSearch } from "@tanstack/react-router"
+import { useNavigate, useLocation, useSearch } from "@tanstack/react-router"
 
 export const useFilters = () => {
   const search = useSearch({ from: "/_private" })
-  const navigate = useNavigate()
+  const navigate = useNavigate({ from: "/" })
+  const { pathname } = useLocation()
 
   const filters = {
     schedule: search.schedule ?? null,
@@ -14,6 +15,7 @@ export const useFilters = () => {
 
   const setFilters = (next: Partial<typeof filters>) => {
     navigate({
+      to: pathname,
       search: (prev) => ({
         ...prev,
         ...next,

@@ -2,9 +2,10 @@ import { type ClassValue, clsx } from "clsx"
 import { compareAsc, differenceInDays, format, formatRelative } from "date-fns"
 import { twMerge } from "tailwind-merge"
 
-import { CURRENCY_SYMBOLS, type Sort } from "~/lib/constant"
+import { CURRENCY_SYMBOLS, type Currency, type Sort } from "~/lib/constant"
 import type { Category, PaymentMethod, Subscription, User } from "~/lib/db/schema"
 import type { Filters } from "~/lib/hooks/use-filters"
+import { getLocale } from "~/paraglide/runtime"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -154,4 +155,13 @@ export const sum = (acc: number, price: number, usersLength?: number) => {
     return acc + price / usersLength
   }
   return acc + price
+}
+
+export const formatPrice = (price: number, currency?: Currency) => {
+  if (!currency) return Intl.NumberFormat(getLocale()).format(price)
+  return Intl.NumberFormat(getLocale(), {
+    style: "currency",
+    currency,
+    currencyDisplay: "narrowSymbol",
+  }).format(price)
 }

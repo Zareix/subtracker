@@ -54,7 +54,7 @@ export const deleteUser = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     await requireAdmin()
     const user = await db.query.users.findFirst({
-      where: (tb, { eq }) => eq(tb.id, data.id),
+      where: (tb, { eq: equals }) => equals(tb.id, data.id),
     })
     if (!user) {
       throw new Error("User not found")

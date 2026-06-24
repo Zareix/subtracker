@@ -150,18 +150,16 @@ export const getAllSubscriptionsOfUser = createServerFn({
     }),
   )
   .handler(async ({ data: { userId, baseCurrency } }) => {
-    const [rows, exchangeRates] = await Promise.all([
-      db
-        .select()
-        .from(subscriptions)
-        .innerJoin(usersToSubscriptions, eq(subscriptions.id, usersToSubscriptions.subscriptionId))
-        .innerJoin(users, eq(usersToSubscriptions.userId, users.id))
-        .innerJoin(paymentMethods, eq(subscriptions.paymentMethod, paymentMethods.id))
-        .innerJoin(categories, eq(subscriptions.category, categories.id))
-        .orderBy(asc(subscriptions.name))
-        .all(),
-      db.query.exchangeRates.findMany(),
-    ])
+    const rows = db
+      .select()
+      .from(subscriptions)
+      .innerJoin(usersToSubscriptions, eq(subscriptions.id, usersToSubscriptions.subscriptionId))
+      .innerJoin(users, eq(usersToSubscriptions.userId, users.id))
+      .innerJoin(paymentMethods, eq(subscriptions.paymentMethod, paymentMethods.id))
+      .innerJoin(categories, eq(subscriptions.category, categories.id))
+      .orderBy(asc(subscriptions.name))
+      .all()
+    const exchangeRates = await db.query.exchangeRates.findMany()
 
     const userBaseCurrency = baseCurrency ?? DEFAULT_BASE_CURRENCY
 

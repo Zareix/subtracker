@@ -28,13 +28,14 @@ import {
 import { Separator } from "~/components/ui/separator"
 import type { SubscriptionItem } from "~/functions/subscriptions.functions"
 import { authClient } from "~/lib/auth-client"
-import { type Currencies, DEFAULT_BASE_CURRENCY } from "~/lib/constant"
+import { DEFAULT_BASE_CURRENCY, type Currency } from "~/lib/constant"
 import { useFilters } from "~/lib/hooks/use-filters"
 import { useSort } from "~/lib/hooks/use-sort"
 import {
   cn,
   currencyToSymbol,
   formatNextPaymentDate,
+  formatPrice,
   getFilteredSubscriptions,
   getSortedSubscriptions,
 } from "~/lib/utils"
@@ -59,8 +60,7 @@ export const SubscriptionList = ({ subscriptions }: Props) => {
   const { data: session } = authClient.useSession()
   const [arePreviousPaymentsShown, setArePreviousPaymentsShown] = useState(false)
 
-  const userBaseCurrency =
-    (session?.user?.baseCurrency as (typeof Currencies)[number]) ?? DEFAULT_BASE_CURRENCY
+  const userBaseCurrency = session?.user.baseCurrency ?? DEFAULT_BASE_CURRENCY
 
   const subs = getFilteredSubscriptions(getSortedSubscriptions(subscriptions, sort), filters)
 
@@ -117,7 +117,7 @@ const SubscriptionListItem = ({
   isPrevious = false,
 }: {
   subscription: Subscription
-  userBaseCurrency: string
+  userBaseCurrency: Currency
   isPrevious?: boolean
 }) => {
   const [filters, setFilters] = useFilters()
@@ -154,10 +154,7 @@ const SubscriptionListItem = ({
               )}
             </div>
           </div>
-          <div className="text-lg">
-            {subscription.price}
-            {currencyToSymbol(userBaseCurrency)}
-          </div>
+          <div className="text-lg">{formatPrice(subscription.price, userBaseCurrency)}</div>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -249,7 +246,7 @@ const SubscriptionListItem = ({
           {subscription.currency !== userBaseCurrency && (
             <div className="flex items-center gap-0.5">
               <span className="text-primary">{currencyToSymbol(subscription.currency)}</span>
-              {subscription.originalPrice}
+              {formatPrice(subscription.originalPrice)}
             </div>
           )}
           {subscription.url && (

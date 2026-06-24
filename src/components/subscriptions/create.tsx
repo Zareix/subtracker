@@ -4,7 +4,7 @@ import { EditCreateForm } from "~/components/subscriptions/edit-create-form"
 import { VaulDialog } from "~/components/ui/vaul-dialog"
 import { m } from "~/paraglide/messages"
 
-export const CreateSubscriptionDialog = ({ trigger }: { trigger?: React.ReactNode }) => {
+export const CreateSubscriptionDialog = ({ trigger }: { trigger?: React.ReactElement }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (

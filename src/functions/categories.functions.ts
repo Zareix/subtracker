@@ -63,7 +63,7 @@ export const deleteCategory = createServerFn({ method: "POST" })
       throw new Error("Cannot delete default category")
     }
     const category = await db.query.categories.findFirst({
-      where: (tb, { eq }) => eq(tb.id, data.id),
+      where: (tb, { eq: equals }) => equals(tb.id, data.id),
     })
     if (!category) {
       throw new Error("Category not found")

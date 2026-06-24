@@ -4,13 +4,15 @@ import type { SubscriptionItem } from "~/functions/subscriptions.functions"
 import type { Filters } from "~/lib/hooks/use-filters"
 import { rounded } from "~/lib/utils"
 
+import type { Currency } from "./constant"
+
 export type BreakdownItem = {
   id: number
   image: string | null
   name: string
   retainPrice: number
   originalPrice: number
-  currency: string
+  currency: Currency
 }
 
 const getRetainPrice = (

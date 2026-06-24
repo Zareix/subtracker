@@ -189,7 +189,7 @@ function AdminPage() {
             <Input
               className="absolute top-0 right-0 bottom-0 left-0 cursor-pointer opacity-0 disabled:opacity-0"
               disabled={importDataMutation.isPending}
-              onChange={async (e) => {
+              onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                 const file = e.target.files?.[0]
                 if (!file) return
                 const text = await file.text()

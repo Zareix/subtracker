@@ -23,7 +23,7 @@ import { m } from "~/paraglide/messages"
 const schema = z.object({
   image: z.string().nullish(),
   name: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().optional(),
   role: z.enum(UserRoles),
 })
@@ -99,14 +99,15 @@ export const EditCreateForm = ({
     onError: (err) => toast.error(err.message),
   })
 
+  const defaultValues: z.input<typeof schema> = {
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    image: user?.image,
+    password: "" as string,
+    role: (user?.role ?? "user") as UserRole,
+  }
   const form = useForm({
-    defaultValues: {
-      name: user?.name ?? "",
-      email: user?.email ?? "",
-      image: user?.image ?? (undefined as string | null | undefined),
-      password: "",
-      role: (user?.role ?? "user") as UserRole,
-    },
+    defaultValues,
     validators: {
       onSubmit: schema,
     },

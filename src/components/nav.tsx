@@ -9,7 +9,6 @@ import {
   PlusIcon,
   ShieldIcon,
   TagIcon,
-  UserCircle2Icon,
 } from "lucide-react"
 
 import { UserButton } from "~/components/auth/user/user-button"
@@ -67,14 +66,7 @@ export const NAV_ITEMS = [
     title: m.nav_admin,
     url: "/admin",
     icon: ShieldIcon,
-    role: "admin",
-    keepParams: false,
-  },
-  {
-    title: m.nav_profile,
-    url: "/profile",
-    icon: UserCircle2Icon,
-    role: "user",
+    adminOnly: true,
     keepParams: false,
   },
 ] as const
@@ -188,7 +180,7 @@ export const Navbar = () => {
   const pathname = useRouterState({ select: (s) => s.location.pathname })
   const search = useRouterState({ select: (s) => s.location.search })
 
-  const navBarItems = NAV_ITEMS.filter((item) => ("role" in item ? item.role === "user" : true))
+  const navBarItems = NAV_ITEMS.filter((item) => "adminOnly" in item)
   return (
     <nav className="fixed right-0 bottom-0 left-0 z-10 flex h-14 items-center justify-between border-t border-border bg-background/80 px-4 backdrop-blur md:hidden md:px-8">
       <div className="grid h-full w-full grid-cols-5 content-center items-center justify-around gap-2">

@@ -17,7 +17,7 @@ const searchSchema = z.object({
   users: z.string().optional(),
   categories: z.array(z.number()).optional(),
   search: z.string().optional(),
-  sort: z.enum(SORTS.map((s) => s.key) as [string, ...string[]]).optional(),
+  sort: z.enum(SORTS.map((s) => s.key)).optional(),
 })
 
 export const Route = createFileRoute("/_private")({

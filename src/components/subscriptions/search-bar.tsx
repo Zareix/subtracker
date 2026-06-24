@@ -8,11 +8,13 @@ import { m } from "~/paraglide/messages"
 
 export const SearchBar = () => {
   const search = useSearch({ from: "/_private" })
-  const navigate = useNavigate()
+  const navigate = useNavigate({ from: "/" })
   const value = search.search ?? ""
 
   const setValue = (next: string | null) => {
-    navigate({ search: (prev) => ({ ...prev, search: next ?? undefined }) })
+    navigate({
+      search: (prev) => ({ ...prev, search: next ?? undefined }),
+    })
   }
 
   return (

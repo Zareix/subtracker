@@ -30,7 +30,7 @@ function CategoriesPage() {
   if (categoriesQuery.isError) {
     return (
       <div>
-        {m.settings_error()}: {categoriesQuery.error?.message}
+        {m.settings_error()}: {categoriesQuery.error.message}
       </div>
     )
   }

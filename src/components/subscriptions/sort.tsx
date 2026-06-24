@@ -13,7 +13,6 @@ import {
 } from "~/components/ui/dropdown-menu"
 import { SORTS, type Sort } from "~/lib/constant"
 import { useSort } from "~/lib/hooks/use-sort"
-import { cn } from "~/lib/utils"
 import { m } from "~/paraglide/messages"
 
 const SORT_LABELS: Record<Sort, () => string> = {
@@ -30,12 +29,10 @@ export const SortButton = () => {
       <DropdownMenuTrigger
         render={
           <Button variant="ghost" size="icon-lg">
-            {sort?.endsWith("ASC") ? (
-              <SortAscIcon className={cn(sort ? "fill-primary text-primary" : "text-foreground")} />
+            {sort.endsWith("ASC") ? (
+              <SortAscIcon className="fill-primary text-primary" />
             ) : (
-              <SortDescIcon
-                className={cn(sort ? "fill-primary text-primary" : "text-foreground")}
-              />
+              <SortDescIcon className="fill-primary text-primary" />
             )}
           </Button>
         }
@@ -45,7 +42,7 @@ export const SortButton = () => {
           <DropdownMenuLabel>{m.sort_label()}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuRadioGroup
-            value={sort ?? ""}
+            value={sort}
             onValueChange={(v) => setSort(v === sort ? null : (v as Sort))}
           >
             {SORTS.map((s) => (

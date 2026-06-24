@@ -43,10 +43,8 @@ export const auth = betterAuth({
     },
     resetPasswordTokenExpiresIn: 6 * 60 * 60, // 6 hour
     password: {
-      hash: Bun.password.hash,
-      verify: ({ password, hash }) => {
-        return Bun.password.verify(password, hash)
-      },
+      hash: async (password: string) => Bun.password.hash(password),
+      verify: ({ password, hash }) => Bun.password.verify(password, hash),
     },
   },
   advanced: {
@@ -121,32 +119,32 @@ export const getAuthSession = async () =>
 export const isAuthenticated = async () => !!(await getAuthSession())?.user
 
 export const requireSession = async () => {
-  const session = await getAuthSession()
-  if (!session) throw new Error("Unauthorized")
-  return session
+  const currentSession = await getAuthSession()
+  if (!currentSession) throw new Error("Unauthorized")
+  return currentSession
 }
 
 export const requireAdmin = async () => {
-  const session = await requireSession()
-  if (session.user.role !== "admin") throw new Error("Forbidden")
-  return session
+  const currentSession = await requireSession()
+  if (currentSession.user.role !== "admin") throw new Error("Forbidden")
+  return currentSession
 }
 
 export const verifyApiKey = async (req: Request) => {
   const url = new URL(req.url)
-  const apiKey = req.headers.get("x-api-key") ?? url.searchParams.get("apiKey")
-  if (!apiKey) {
+  const key = req.headers.get("x-api-key") ?? url.searchParams.get("apiKey")
+  if (!key) {
     throw new Error("No API key provided")
   }
 
-  const { valid, key } = await auth.api.verifyApiKey({
-    body: { key: apiKey },
+  const { valid, key: verifiedKey } = await auth.api.verifyApiKey({
+    body: { key },
   })
-  if (!valid || !key) {
+  if (!valid || !verifiedKey) {
     throw new Error("Invalid API key")
   }
 
   return await db.query.users.findFirst({
-    where: (users, { eq }) => eq(users.id, key.referenceId),
+    where: (tb, { eq }) => eq(tb.id, verifiedKey.referenceId),
   })
 }
