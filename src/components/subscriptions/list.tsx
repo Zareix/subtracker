@@ -154,7 +154,9 @@ const SubscriptionListItem = ({
               )}
             </div>
           </div>
-          <div className="text-lg">{formatPrice(subscription.price, userBaseCurrency)}</div>
+          <div className="text-lg tabular-nums">
+            {formatPrice(subscription.price, userBaseCurrency)}
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
@@ -246,7 +248,7 @@ const SubscriptionListItem = ({
           {subscription.currency !== userBaseCurrency && (
             <div className="flex items-center gap-0.5">
               <span className="text-primary">{currencyToSymbol(subscription.currency)}</span>
-              {formatPrice(subscription.originalPrice)}
+              <span className="tabular-nums">{formatPrice(subscription.originalPrice)}</span>
             </div>
           )}
           {subscription.url && (

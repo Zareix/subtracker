@@ -17,10 +17,10 @@ import { Skeleton } from "~/components/ui/skeleton"
 import type { SubscriptionItem } from "~/functions/subscriptions.functions"
 import { getSubscriptions } from "~/functions/subscriptions.functions"
 import { authClient } from "~/lib/auth-client"
-import { CURRENCY_SYMBOLS, DEFAULT_BASE_CURRENCY, type Currency } from "~/lib/constant"
+import { DEFAULT_BASE_CURRENCY, type Currency } from "~/lib/constant"
 import { useFilters } from "~/lib/hooks/use-filters"
 import { type BreakdownItem, getStats } from "~/lib/stats"
-import { currencyToSymbol, formatPrice, getFilteredSubscriptions, rounded } from "~/lib/utils"
+import { formatPrice, getFilteredSubscriptions, rounded } from "~/lib/utils"
 import { m } from "~/paraglide/messages"
 import { getLocale } from "~/paraglide/runtime"
 
@@ -317,10 +317,8 @@ const MonthlyStatsCard = ({
               cursor={false}
               content={
                 <ChartTooltipContent
-                  hideLabel
                   valueFormatter={(value) =>
-                    value.toLocaleString() +
-                    CURRENCY_SYMBOLS[userBaseCurrency as keyof typeof CURRENCY_SYMBOLS]
+                    typeof value === "number" ? formatPrice(value, userBaseCurrency) : null
                   }
                 />
               }
@@ -345,7 +343,7 @@ const MonthlyStatsCard = ({
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          className="fill-foreground text-3xl font-bold tabular-nums"
                         >
                           {formatPrice(totalMonthlySub)}
                         </tspan>

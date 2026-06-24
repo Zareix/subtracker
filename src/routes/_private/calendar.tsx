@@ -7,7 +7,7 @@ import { Calendar, CalendarDayButton } from "~/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover"
 import { getSubscriptions } from "~/functions/subscriptions.functions"
 import { authClient } from "~/lib/auth-client"
-import { cn, currencyToSymbol } from "~/lib/utils"
+import { cn, formatPrice } from "~/lib/utils"
 import { m } from "~/paraglide/messages"
 
 export const Route = createFileRoute("/_private/calendar")({
@@ -103,14 +103,12 @@ function CalendarPage() {
                         )}
                         <h4 className="grow font-semibold">{subscription.name}</h4>
                         {subscription.currency !== userCurrency && (
-                          <span className="text-muted-foreground">
-                            ({subscription.originalPrice}
-                            {currencyToSymbol(subscription.currency)})
+                          <span className="text-muted-foreground tabular-nums">
+                            ({formatPrice(subscription.originalPrice, subscription.currency)})
                           </span>
                         )}
-                        <span>
-                          {subscription.price}
-                          {currencyToSymbol(userCurrency)}
+                        <span className="tabular-nums">
+                          {formatPrice(subscription.price, userCurrency)}
                         </span>
                       </div>
                     ))}
