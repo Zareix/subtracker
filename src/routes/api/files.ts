@@ -3,14 +3,22 @@ import { createFileRoute } from "@tanstack/react-router"
 import { isAuthenticated } from "~/lib/auth"
 import { getFileFromStorage, saveFile } from "~/lib/services/files"
 
-const compressImage = async (blob: Blob): Promise<Blob> => {
+const compressImage = async (
+  blob: Blob,
+): Promise<{
+  blob: Blob
+  name: string
+}> => {
   if (blob.type.startsWith("image/svg+xml")) {
-    return blob
+    return { blob, name: "image.svg" }
   }
-  return await new Bun.Image(blob)
-    .resize(128, 128, { fit: "inside" })
-    .png({ compressionLevel: 6 })
-    .blob()
+  return {
+    blob: await new Bun.Image(blob)
+      .resize(128, 128, { fit: "inside" })
+      .webp({ quality: 80 })
+      .blob(),
+    name: "image.webp",
+  }
 }
 
 export const Route = createFileRoute("/api/files")({
@@ -58,16 +66,14 @@ export const Route = createFileRoute("/api/files")({
             if (!response.ok) {
               return Response.json({ error: "Error fetching image from URL" }, { status: 400 })
             }
-            const blob = await response.blob()
-            const contentType = response.headers.get("Content-Type")
-            if (!contentType?.startsWith("image/")) {
+            if (!response.headers.get("content-type")?.startsWith("image/")) {
               return Response.json({ error: "Invalid image URL" }, { status: 400 })
             }
-            const compressed = await compressImage(blob)
+            const blob = await response.blob()
             formData.set(
               "file",
-              new File([compressed], `image.${contentType.split("/")[1]}`, {
-                type: contentType,
+              new File([blob], `image.${blob.type.split("/")[1]?.split("+")[0]}`, {
+                type: blob.type,
               }),
             )
           }
@@ -81,8 +87,8 @@ export const Route = createFileRoute("/api/files")({
 
           if (file.type.startsWith("image/")) {
             const compressed = await compressImage(file)
-            fileToSave = new File([compressed], file.name.replace(/\.[^/.]+$/, ".png"), {
-              type: "image/png",
+            fileToSave = new File([compressed.blob], compressed.name, {
+              type: compressed.blob.type,
             })
           }
 

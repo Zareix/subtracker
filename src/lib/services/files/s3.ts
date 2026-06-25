@@ -1,7 +1,7 @@
 import type { BunFile } from "bun"
 
 export const saveFile = async (file: File | BunFile) => {
-  const fileName = `s3_${Bun.randomUUIDv7()}.png`
+  const fileName = `s3_${Bun.randomUUIDv7()}.${file.name?.split(".").pop() ?? "webp"}`
 
   try {
     await Bun.s3.file(fileName).write(file)
