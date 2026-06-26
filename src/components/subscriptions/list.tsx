@@ -161,7 +161,7 @@ const SubscriptionListItem = ({
             <DropdownMenuTrigger
               render={
                 <Button size="icon" variant="ghost">
-                  <InfoIcon className="size-5" />
+                  <InfoIcon className="size-5 text-muted-foreground" />
                 </Button>
               }
             />

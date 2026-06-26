@@ -42,7 +42,7 @@ const convertToDefaultCurrency = (
   return price * exchangeRate
 }
 
-const calculateNextPaymentDate = (
+export const calculateNextPaymentDate = (
   schedule: Subscription["schedule"],
   firstPaymentDate: Subscription["firstPaymentDate"],
 ) => {
@@ -65,29 +65,37 @@ const calculateNextPaymentDate = (
 
   switch (schedule) {
     case "Monthly": {
-      const res = new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day)
+      const res = endOfDay(
+        new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day),
+      )
       if (res > currentDateInfo.base) return res
       return addMonths(res, 1)
     }
     case "Quarterly": {
-      const res = new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day)
+      const res = endOfDay(
+        new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day),
+      )
       if (res > currentDateInfo.base) return res
       return addMonths(res, 3)
     }
     case "Semiannual": {
-      const res = new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day)
+      const res = endOfDay(
+        new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day),
+      )
       if (res > currentDateInfo.base) return res
       return addMonths(res, 6)
     }
     case "Yearly": {
-      const res = new Date(
-        currentDateInfo.year,
-        firstPaymentDateDetails.month,
-        firstPaymentDateDetails.day,
-        23,
-        59,
-        59,
-        999,
+      const res = endOfDay(
+        new Date(
+          currentDateInfo.year,
+          firstPaymentDateDetails.month,
+          firstPaymentDateDetails.day,
+          23,
+          59,
+          59,
+          999,
+        ),
       )
       if (res > currentDateInfo.base) return res
       return addYears(res, 1)

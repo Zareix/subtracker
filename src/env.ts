@@ -32,6 +32,8 @@ export const env = createEnv({
     EMAIL_SERVER: z.optional(z.string()),
     EMAIL_FROM: z.optional(z.email()),
 
+    DISCORD_WEBHOOK_URL: z.optional(z.url()),
+
     OAUTH_ENABLED: z._default(
       z.boolean(),
       !!process.env.OAUTH_PROVIDER_ID &&
