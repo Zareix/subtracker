@@ -66,7 +66,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.0",
+    "@biomejs/biome": "2.5.3",
     "@inlang/paraglide-js": "^2.20.1",
     "@tailwindcss/typography": "^0.5.20",
     "@tanstack/devtools-vite": "0.8.0",
