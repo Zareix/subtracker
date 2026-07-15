@@ -1,17 +1,8 @@
 {
   "language_servers": ["!biome", "!eslint", "..."],
-  "lsp": {
-    "oxlint": {
-      "initialization_options": {
-        "settings": {
-          // Temporary since I get error in zed extension with it enabled
-          "typeAware": false
-        }
-      }
-    }
-  },
   "languages": {
     "JavaScript": {
+      "format_on_save": "on",
       "formatter": [
         {
           "language_server": {
@@ -43,6 +34,7 @@
     },
     "TSX": {
       "language_servers": ["tsgo", "oxlint", "oxfmt", "tailwindcss-language-server"],
+      "format_on_save": "on",
       "formatter": [
         {
           "language_server": {
@@ -55,6 +47,7 @@
       }
     },
     "JSON": {
+      "format_on_save": "on",
       "formatter": [
         {
           "language_server": {
@@ -64,6 +57,7 @@
       ]
     },
     "JSONC": {
+      "format_on_save": "on",
       "formatter": [
         {
           "language_server": {
@@ -73,6 +67,7 @@
       ]
     },
     "CSS": {
+      "format_on_save": "on",
       "formatter": [
         {
           "language_server": {
