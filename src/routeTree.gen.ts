@@ -9,27 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as PrivateRouteRouteImport } from './routes/_private/route'
+import { Route as PublicRouteRouteImport } from './routes/_public/route'
 import { Route as PrivateIndexRouteImport } from './routes/_private/index'
-import { Route as ApiStatsRouteImport } from './routes/api/stats'
-import { Route as ApiHealthRouteImport } from './routes/api/health'
-import { Route as ApiFilesRouteImport } from './routes/api/files'
-import { Route as PrivateStatsRouteImport } from './routes/_private/stats'
-import { Route as PrivatePaymentMethodsRouteImport } from './routes/_private/payment-methods'
-import { Route as PrivateCategoriesRouteImport } from './routes/_private/categories'
-import { Route as PrivateCalendarRouteImport } from './routes/_private/calendar'
 import { Route as PrivateAdminRouteImport } from './routes/_private/admin'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as PublicAuthPathRouteImport } from './routes/_public/auth/$path'
+import { Route as PrivateCalendarRouteImport } from './routes/_private/calendar'
+import { Route as PrivateCategoriesRouteImport } from './routes/_private/categories'
+import { Route as PrivatePaymentMethodsRouteImport } from './routes/_private/payment-methods'
+import { Route as PrivateStatsRouteImport } from './routes/_private/stats'
+import { Route as ApiFilesRouteImport } from './routes/api/files'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
+import { Route as ApiStatsRouteImport } from './routes/api/stats'
 import { Route as PrivateSettingsPathRouteImport } from './routes/_private/settings/$path'
+import { Route as PublicAuthPathRouteImport } from './routes/_public/auth/$path'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
-const PublicRouteRoute = PublicRouteRouteImport.update({
-  id: '/_public',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PrivateRouteRoute = PrivateRouteRouteImport.update({
   id: '/_private',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PublicRouteRoute = PublicRouteRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivateIndexRoute = PrivateIndexRouteImport.update({
@@ -37,34 +37,9 @@ const PrivateIndexRoute = PrivateIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
-const ApiStatsRoute = ApiStatsRouteImport.update({
-  id: '/api/stats',
-  path: '/api/stats',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiHealthRoute = ApiHealthRouteImport.update({
-  id: '/api/health',
-  path: '/api/health',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiFilesRoute = ApiFilesRouteImport.update({
-  id: '/api/files',
-  path: '/api/files',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivateStatsRoute = PrivateStatsRouteImport.update({
-  id: '/stats',
-  path: '/stats',
-  getParentRoute: () => PrivateRouteRoute,
-} as any)
-const PrivatePaymentMethodsRoute = PrivatePaymentMethodsRouteImport.update({
-  id: '/payment-methods',
-  path: '/payment-methods',
-  getParentRoute: () => PrivateRouteRoute,
-} as any)
-const PrivateCategoriesRoute = PrivateCategoriesRouteImport.update({
-  id: '/categories',
-  path: '/categories',
+const PrivateAdminRoute = PrivateAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
 const PrivateCalendarRoute = PrivateCalendarRouteImport.update({
@@ -72,25 +47,50 @@ const PrivateCalendarRoute = PrivateCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
-const PrivateAdminRoute = PrivateAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const PrivateCategoriesRoute = PrivateCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
   getParentRoute: () => PrivateRouteRoute,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
+const PrivatePaymentMethodsRoute = PrivatePaymentMethodsRouteImport.update({
+  id: '/payment-methods',
+  path: '/payment-methods',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const PrivateStatsRoute = PrivateStatsRouteImport.update({
+  id: '/stats',
+  path: '/stats',
+  getParentRoute: () => PrivateRouteRoute,
+} as any)
+const ApiFilesRoute = ApiFilesRouteImport.update({
+  id: '/api/files',
+  path: '/api/files',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStatsRoute = ApiStatsRouteImport.update({
+  id: '/api/stats',
+  path: '/api/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivateSettingsPathRoute = PrivateSettingsPathRouteImport.update({
+  id: '/settings/$path',
+  path: '/settings/$path',
+  getParentRoute: () => PrivateRouteRoute,
 } as any)
 const PublicAuthPathRoute = PublicAuthPathRouteImport.update({
   id: '/auth/$path',
   path: '/auth/$path',
   getParentRoute: () => PublicRouteRoute,
 } as any)
-const PrivateSettingsPathRoute = PrivateSettingsPathRouteImport.update({
-  id: '/settings/$path',
-  path: '/settings/$path',
-  getParentRoute: () => PrivateRouteRoute,
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -196,18 +196,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_public': {
-      id: '/_public'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof PublicRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_private': {
       id: '/_private'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof PrivateRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_public': {
+      id: '/_public'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PublicRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_private/': {
@@ -217,46 +217,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateIndexRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
-    '/api/stats': {
-      id: '/api/stats'
-      path: '/api/stats'
-      fullPath: '/api/stats'
-      preLoaderRoute: typeof ApiStatsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/health': {
-      id: '/api/health'
-      path: '/api/health'
-      fullPath: '/api/health'
-      preLoaderRoute: typeof ApiHealthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/files': {
-      id: '/api/files'
-      path: '/api/files'
-      fullPath: '/api/files'
-      preLoaderRoute: typeof ApiFilesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_private/stats': {
-      id: '/_private/stats'
-      path: '/stats'
-      fullPath: '/stats'
-      preLoaderRoute: typeof PrivateStatsRouteImport
-      parentRoute: typeof PrivateRouteRoute
-    }
-    '/_private/payment-methods': {
-      id: '/_private/payment-methods'
-      path: '/payment-methods'
-      fullPath: '/payment-methods'
-      preLoaderRoute: typeof PrivatePaymentMethodsRouteImport
-      parentRoute: typeof PrivateRouteRoute
-    }
-    '/_private/categories': {
-      id: '/_private/categories'
-      path: '/categories'
-      fullPath: '/categories'
-      preLoaderRoute: typeof PrivateCategoriesRouteImport
+    '/_private/admin': {
+      id: '/_private/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof PrivateAdminRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
     '/_private/calendar': {
@@ -266,19 +231,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateCalendarRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
-    '/_private/admin': {
-      id: '/_private/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof PrivateAdminRouteImport
+    '/_private/categories': {
+      id: '/_private/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof PrivateCategoriesRouteImport
       parentRoute: typeof PrivateRouteRoute
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
+    '/_private/payment-methods': {
+      id: '/_private/payment-methods'
+      path: '/payment-methods'
+      fullPath: '/payment-methods'
+      preLoaderRoute: typeof PrivatePaymentMethodsRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    '/_private/stats': {
+      id: '/_private/stats'
+      path: '/stats'
+      fullPath: '/stats'
+      preLoaderRoute: typeof PrivateStatsRouteImport
+      parentRoute: typeof PrivateRouteRoute
+    }
+    '/api/files': {
+      id: '/api/files'
+      path: '/api/files'
+      fullPath: '/api/files'
+      preLoaderRoute: typeof ApiFilesRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stats': {
+      id: '/api/stats'
+      path: '/api/stats'
+      fullPath: '/api/stats'
+      preLoaderRoute: typeof ApiStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_private/settings/$path': {
+      id: '/_private/settings/$path'
+      path: '/settings/$path'
+      fullPath: '/settings/$path'
+      preLoaderRoute: typeof PrivateSettingsPathRouteImport
+      parentRoute: typeof PrivateRouteRoute
     }
     '/_public/auth/$path': {
       id: '/_public/auth/$path'
@@ -287,12 +287,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicAuthPathRouteImport
       parentRoute: typeof PublicRouteRoute
     }
-    '/_private/settings/$path': {
-      id: '/_private/settings/$path'
-      path: '/settings/$path'
-      fullPath: '/settings/$path'
-      preLoaderRoute: typeof PrivateSettingsPathRouteImport
-      parentRoute: typeof PrivateRouteRoute
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
