@@ -1,4 +1,4 @@
-FROM oven/bun:1.4.0 AS builder
+FROM oven/bun:1.4.2 AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN bun run build
 RUN mkdir -p /app/data/
 
 
-FROM oven/bun:1.4.0-distroless AS runner
+FROM oven/bun:1.4.2-distroless AS runner
 
 ENV NODE_ENV=production
 ENV PORT=3000
