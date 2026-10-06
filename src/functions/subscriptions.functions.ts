@@ -21,7 +21,7 @@ import {
 import { searchImages } from "~/lib/services/image-search"
 import { rounded, takeFirstOrNull } from "~/lib/utils"
 
-const convertToDefaultCurrency = (
+export const convertToDefaultCurrency = (
   exchangeRates: Array<ExchangeRate>,
   price: number,
   baseCurrency: string,
@@ -107,7 +107,7 @@ export const calculateNextPaymentDate = (
   }
 }
 
-const calculateSecondNextPaymentDate = (
+export const calculateSecondNextPaymentDate = (
   schedule: Subscription["schedule"],
   nextPaymentDate: Date,
 ) => {
@@ -123,7 +123,7 @@ const calculateSecondNextPaymentDate = (
   }
 }
 
-const calculatePreviousPaymentDate = (
+export const calculatePreviousPaymentDate = (
   schedule: Subscription["schedule"],
   firstPaymentDate: Subscription["firstPaymentDate"],
   nextPaymentDate: Date,
@@ -131,22 +131,22 @@ const calculatePreviousPaymentDate = (
   switch (schedule) {
     case "Yearly": {
       const previousPayment = addYears(nextPaymentDate, -1)
-      if (isBefore(previousPayment, firstPaymentDate)) return firstPaymentDate
+      if (isBefore(previousPayment, firstPaymentDate)) return endOfDay(firstPaymentDate)
       return previousPayment
     }
     case "Quarterly": {
       const previousPayment = addMonths(nextPaymentDate, -3)
-      if (isBefore(previousPayment, firstPaymentDate)) return firstPaymentDate
+      if (isBefore(previousPayment, firstPaymentDate)) return endOfDay(firstPaymentDate)
       return previousPayment
     }
     case "Semiannual": {
       const previousPayment = addMonths(nextPaymentDate, -6)
-      if (isBefore(previousPayment, firstPaymentDate)) return firstPaymentDate
+      if (isBefore(previousPayment, firstPaymentDate)) return endOfDay(firstPaymentDate)
       return previousPayment
     }
     case "Monthly": {
       const previousPayment = addMonths(nextPaymentDate, -1)
-      if (isBefore(previousPayment, firstPaymentDate)) return firstPaymentDate
+      if (isBefore(previousPayment, firstPaymentDate)) return endOfDay(firstPaymentDate)
       return previousPayment
     }
   }
