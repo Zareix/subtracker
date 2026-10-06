@@ -83,7 +83,7 @@
     "@vitejs/plugin-react": "^6.1.1",
     "dotenv": "^18.0.5",
     "jsdom": "^30.1.1",
-    "oxfmt": "^0.71.0",
+    "oxfmt": "^0.72.0",
     "oxlint": "^1.86.0",
     "oxlint-tsgolint": "^7.0.2003",
     "typescript": "^7.0.2",
