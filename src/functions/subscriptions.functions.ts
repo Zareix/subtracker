@@ -64,26 +64,30 @@ export const calculateNextPaymentDate = (
   }
 
   switch (schedule) {
-    case "Monthly": {
-      const res = endOfDay(
-        new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day),
-      )
-      if (res > currentDateInfo.base) return res
-      return addMonths(res, 1)
-    }
-    case "Quarterly": {
-      const res = endOfDay(
-        new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day),
-      )
-      if (res > currentDateInfo.base) return res
-      return addMonths(res, 3)
-    }
+    case "Monthly":
+    case "Quarterly":
     case "Semiannual": {
-      const res = endOfDay(
-        new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day),
+      const monthsPerInterval = { Monthly: 1, Quarterly: 3, Semiannual: 6 }[schedule]
+
+      const monthsSinceFirstPayment =
+        (currentDateInfo.year - firstPaymentDateDetails.year) * 12 +
+        (currentDateInfo.month - firstPaymentDateDetails.month)
+      const monthsIntoInterval = monthsSinceFirstPayment % monthsPerInterval
+
+      // The next payment falls in the current month only when the anniversary
+      // month has arrived and the payment day has not passed yet.
+      if (monthsIntoInterval === 0 && currentDateInfo.day <= firstPaymentDateDetails.day) {
+        return endOfDay(
+          new Date(currentDateInfo.year, currentDateInfo.month, firstPaymentDateDetails.day),
+        )
+      }
+
+      return endOfDay(
+        addMonths(
+          firstPaymentDate,
+          monthsSinceFirstPayment - monthsIntoInterval + monthsPerInterval,
+        ),
       )
-      if (res > currentDateInfo.base) return res
-      return addMonths(res, 6)
     }
     case "Yearly": {
       const res = endOfDay(
