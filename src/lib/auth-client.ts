@@ -2,7 +2,6 @@ import { apiKeyClient } from "@better-auth/api-key/client"
 import { passkeyClient } from "@better-auth/passkey/client"
 import {
   adminClient,
-  genericOAuthClient,
   inferAdditionalFields,
   lastLoginMethodClient,
 } from "better-auth/client/plugins"
@@ -16,7 +15,6 @@ export const authClient = createAuthClient({
     passkeyClient(),
     apiKeyClient(),
     adminClient(),
-    genericOAuthClient(),
     lastLoginMethodClient(),
   ],
 })

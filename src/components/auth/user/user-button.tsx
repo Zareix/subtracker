@@ -1,11 +1,8 @@
 "use client"
 
-import {
-  type MultiSessionAuthClient,
-  useAuth,
-  useSession,
-  useSetActiveSession,
-} from "@better-auth-ui/react"
+import { type MultiSessionAuthClient } from "@better-auth-ui/core/plugins/multi-session"
+import { useAuth, useSession } from "@better-auth-ui/react"
+import { useSetActiveSession } from "@better-auth-ui/react/plugins/multi-session"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { ChevronsUpDown, LanguagesIcon, LogIn, LogOut, Settings, UserPlus2 } from "lucide-react"
 import { type ComponentType, isValidElement, type ReactElement, type ReactNode } from "react"
