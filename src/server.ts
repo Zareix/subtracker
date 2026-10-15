@@ -2,6 +2,7 @@ import handler, { createServerEntry } from "@tanstack/react-start/server-entry"
 
 import { migrateDB } from "~/lib/db/migrate"
 import { seed } from "~/lib/db/seed.js"
+import { sendDueSubscriptionsBarkNotification } from "~/lib/services/bark-notifications"
 import { sendDueSubscriptionsDiscordNotification } from "~/lib/services/discord-notifications"
 import { updateExchangeRates } from "~/lib/services/exchange-rates.js"
 
@@ -17,13 +18,22 @@ try {
   console.error("Failed to update exchange rates", e)
 }
 
-if (env.DISCORD_WEBHOOK_URL) {
-  console.log("Scheduling due subscriptions Discord notification")
+if (env.DISCORD_WEBHOOK_URL || env.BARK_DEVICE_KEY) {
+  console.log("Scheduling due subscriptions notifications")
   Bun.cron("0 7 * * *", async () => {
-    try {
-      await sendDueSubscriptionsDiscordNotification()
-    } catch (e) {
-      console.error("Failed to send due subscriptions Discord notification", e)
+    if (env.DISCORD_WEBHOOK_URL) {
+      try {
+        await sendDueSubscriptionsDiscordNotification()
+      } catch (e) {
+        console.error("Failed to send due subscriptions Discord notification", e)
+      }
+    }
+    if (env.BARK_DEVICE_KEY) {
+      try {
+        await sendDueSubscriptionsBarkNotification()
+      } catch (e) {
+        console.error("Failed to send due subscriptions Bark notification", e)
+      }
     }
   })
 }

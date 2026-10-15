@@ -34,6 +34,9 @@ export const env = createEnv({
 
     DISCORD_WEBHOOK_URL: z.optional(z.url()),
 
+    BARK_URL: z._default(z.url(), "https://api.day.app"),
+    BARK_DEVICE_KEY: z.optional(z.string()),
+
     OAUTH_ENABLED: z._default(
       z.boolean(),
       !!process.env.OAUTH_PROVIDER_ID &&

@@ -20,6 +20,9 @@ services:
       - GOOGLE_SEARCH_KEY=${GOOGLE_SEARCH_KEY} # optional
       - EMAIL_SERVER=${EMAIL_SERVER} # optional
       - EMAIL_FROM=${EMAIL_FROM} # optional
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL} # optional
+      - BARK_URL=${BARK_URL} # optional
+      - BARK_DEVICE_KEY=${BARK_DEVICE_KEY} # optional
     ports:
       - 3000:3000
     volumes:
@@ -28,24 +31,27 @@ services:
 
 ## Config
 
-| Name                 | Description                                                                | Default value               |
-| -------------------- | -------------------------------------------------------------------------- | --------------------------- |
-| TZ                   | Timezone                                                                   | -                           |
-| BETTER_AUTH_SECRET   | Secret key for [better-auth](https://github.com/better-auth/better-auth)   | -                           |
-| ADMIN_EMAIL          | Admin email for default admin user                                         | -                           |
-| BETTER_AUTH_URL      | Your app URL for [better-auth](https://github.com/better-auth/better-auth) | -                           |
-| DATABASE_PATH        | Path to the database file                                                  | /app/data/db.sqlite         |
-| UPLOADS_FOLDER       | Path to the uploads folder                                                 | /app/data/uploads/          |
-| FRANKFURTER_API_URL  | API Url for [Frankfurter](https://frankfurter.dev/)                        | https://api.frankfurter.dev |
-| S3_BUCKET            | S3 bucket name                                                             | -                           |
-| S3_ACCESS_KEY_ID     | S3 access key ID                                                           | -                           |
-| S3_SECRET_ACCESS_KEY | S3 secret access key                                                       | -                           |
-| S3_REGION            | S3 region                                                                  | -                           |
-| S3_ENDPOINT          | S3 endpoint                                                                | -                           |
-| GOOGLE_SEARCH_ID     | Google Custom Search Engine ID                                             | -                           |
-| GOOGLE_SEARCH_KEY    | Google API key for Custom Search Engine                                    | -                           |
-| EMAIL_SERVER         | SMTP server address                                                        | -                           |
-| EMAIL_FROM           | From email address                                                         | -                           |
+| Name                 | Description                                                                                        | Default value               |
+| -------------------- | -------------------------------------------------------------------------------------------------- | --------------------------- |
+| TZ                   | Timezone                                                                                           | -                           |
+| BETTER_AUTH_SECRET   | Secret key for [better-auth](https://github.com/better-auth/better-auth)                           | -                           |
+| ADMIN_EMAIL          | Admin email for default admin user                                                                 | -                           |
+| BETTER_AUTH_URL      | Your app URL for [better-auth](https://github.com/better-auth/better-auth)                         | -                           |
+| DATABASE_PATH        | Path to the database file                                                                          | /app/data/db.sqlite         |
+| UPLOADS_FOLDER       | Path to the uploads folder                                                                         | /app/data/uploads/          |
+| FRANKFURTER_API_URL  | API Url for [Frankfurter](https://frankfurter.dev/)                                                | https://api.frankfurter.dev |
+| S3_BUCKET            | S3 bucket name                                                                                     | -                           |
+| S3_ACCESS_KEY_ID     | S3 access key ID                                                                                   | -                           |
+| S3_SECRET_ACCESS_KEY | S3 secret access key                                                                               | -                           |
+| S3_REGION            | S3 region                                                                                          | -                           |
+| S3_ENDPOINT          | S3 endpoint                                                                                        | -                           |
+| GOOGLE_SEARCH_ID     | Google Custom Search Engine ID                                                                     | -                           |
+| GOOGLE_SEARCH_KEY    | Google API key for Custom Search Engine                                                            | -                           |
+| EMAIL_SERVER         | SMTP server address                                                                                | -                           |
+| EMAIL_FROM           | From email address                                                                                 | -                           |
+| DISCORD_WEBHOOK_URL  | Discord webhook URL for daily due-subscriptions notifications                                      | -                           |
+| BARK_URL             | Server URL for [Bark](https://bark.day.app) push notifications                                     | https://api.day.app         |
+| BARK_DEVICE_KEY      | Bark device key(s) for daily due-subscriptions notifications, comma-separated for multiple devices | -                           |
 
 > [!NOTE]  
 > Default admin password is `password`.
