@@ -36,7 +36,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       { name: "description", content: "Track your subscriptions" },
       { name: "robots", content: "noindex, nofollow" },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/favicon.ico", sizes: "any" },
+      { rel: "manifest", href: "/manifest.json" },
+    ],
   }),
 
   shellComponent: RootDocument,
