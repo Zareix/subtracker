@@ -301,16 +301,12 @@ const MonthlyStatsCard = ({
     )
   }
 
-  if (chartData.length === 0) {
-    return null
-  }
-
   return (
     <Card className="flex flex-col py-3 md:row-span-2">
       <CardHeader className="items-center">
         <CardTitle className="text-lg font-normal md:text-xl">{title}</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1">
+      <CardContent className="relative flex-1">
         <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-60">
           <PieChart>
             <ChartTooltip
@@ -329,6 +325,7 @@ const MonthlyStatsCard = ({
               nameKey="category"
               innerRadius={60}
               strokeWidth={5}
+              isAnimationActive={false}
             >
               <Label
                 content={({ viewBox }) => {
@@ -358,6 +355,12 @@ const MonthlyStatsCard = ({
             </Pie>
           </PieChart>
         </ChartContainer>
+        {chartData.length === 0 && (
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-3xl font-bold tabular-nums">{formatPrice(totalMonthlySub)}</span>
+            <span className="text-xs text-muted-foreground">{userBaseCurrency}</span>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
