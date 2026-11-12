@@ -44,6 +44,7 @@ function StatsPage() {
   const subscriptions = getFilteredSubscriptions(subscriptionsQuery.data ?? [], {
     ...filters,
     schedule: null,
+    search: null,
   })
 
   const monthlySubscriptions = subscriptions.filter((s) => s.schedule === "Monthly")

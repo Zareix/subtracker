@@ -10,7 +10,7 @@ export const useFilters = () => {
     paymentMethods: search.paymentMethods ?? [],
     users: search.users ?? null,
     categories: search.categories ?? [],
-    search: search.search ?? "",
+    search: search.search ?? null,
   }
 
   const setFilters = (next: Partial<typeof filters>) => {
@@ -21,6 +21,7 @@ export const useFilters = () => {
         ...next,
         schedule: next.schedule !== undefined ? (next.schedule ?? undefined) : prev.schedule,
         users: next.users !== undefined ? (next.users ?? undefined) : prev.users,
+        search: next.search !== undefined ? (next.search ?? undefined) : prev.search,
       }),
     })
   }
